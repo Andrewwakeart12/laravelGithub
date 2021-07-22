@@ -32,3 +32,15 @@ Route::get('/sendEmail', function () {
 ];
    Mail::to('andrewwake.art@gmail.com')->send(new \App\Mail\MyTestEmail($data));
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

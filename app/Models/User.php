@@ -16,6 +16,7 @@ class User extends Authenticatable
      *
      * @var array
      */
+    public $directory = "/images/";
     protected $fillable = [
         'name',
         'email',
@@ -45,5 +46,9 @@ class User extends Authenticatable
     ];
     public function role(){
         return $this->belongsTo('App\Models\Role');
+    }
+
+    public function photo(){
+        return $this->belongsTo('App\Models\Photo');
     }
 }

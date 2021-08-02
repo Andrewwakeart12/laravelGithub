@@ -22,6 +22,7 @@
             @foreach ($users as $user)
                 <tr>
                     <td>{{$user->id}}</td>
+                    <td><img height="50" src="{{$user->photo ? $user->photo->file : 'no photo'}}" alt=""></td>
                     <td>{{$user->name}}</td>
                     <td>{{$user->email}}</td>
                     @if ($user->role)
@@ -33,7 +34,7 @@
                     <td>{{$user->is_active== 1 ? 'Active' : 'Not Active'}}</td>
                     <td>{{$user->created_at->diffForHumans()}}</td>
                     <td>{{$user->updated_at->diffForHumans()}}</td>
-
+                    <td><a href="{{route('users.edit' , $user->id)}}">edit user</a></td>
                 </tr>
             @endforeach
             @endif

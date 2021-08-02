@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 @section('content')
     <h1>Create Users</h1>
-    {!! Form::open(['method'=> 'POST', 'action'=> 'App\Http\Controllers\AdminUsersController@store']) !!}
+    {!! Form::open(['method'=> 'POST','route'=> 'users.store', 'files' => true]) !!}
     <div class="form-group">
         {!! Form::label('name', 'Name:') !!}
         {!! Form::text('name', null , ['class'=>'form-control']) !!}
@@ -26,8 +26,8 @@
         {!! Form::select('is_active', [''=> 'Choose options', 1 => 'active', 0 => 'not active' ], ['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
-        {!! Form::label('file', 'Profile picture:') !!}
-        {!! Form::file('file', null , ['class'=>'form-control']) !!}
+        {!! Form::label('photo_id', 'Profile picture:') !!}
+        {!! Form::file('photo_id', null , ['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
       {!! Form::submit('Create User', ['class'=>'btn btn-primary']) !!}

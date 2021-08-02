@@ -52,5 +52,7 @@
             </div>
         @endif
     </div>
-
+    {!! Form::open(['method'=> 'DELETE', 'action' => ['App\Http\Controllers\AdminUsersController@destroy',$user->id]]) !!}
+    {!! Form::submit('Delete User', ['class'=>'btn btn-danger']) !!}
+{!! Form::close() !!}
 @endsection

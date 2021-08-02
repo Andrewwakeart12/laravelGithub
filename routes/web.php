@@ -34,6 +34,9 @@ Route::get('/sendEmail', function () {
 
 Auth::routes();
 
+Route::group(['middleware'=>'admin'], function(){
+    Route::resource('/admin/users',  "App\Http\Controllers\AdminUsersController");
+});
+
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('/admin/users',  "App\Http\Controllers\AdminUsersController");

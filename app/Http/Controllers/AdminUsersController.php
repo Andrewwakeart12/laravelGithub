@@ -108,7 +108,10 @@ class AdminUsersController extends Controller
 
         if(trim($request->password) == ''){
             $input = $request->except('password');
-            $input['photo_id'] = $photo->id;
+            if($file = $request->file('photo_id')){
+                $input['photo_id'] = $photo->id;
+            }
+
 
         }else{
             $input['password'] = bcrypt($input['password']);
@@ -128,7 +131,9 @@ class AdminUsersController extends Controller
     {
         Session::flash('deleted_user', 'The user has been deleted');
         $user = User::findOrFail($id);
-        unlink(public_path() . $user->photo->file );
+        if($user->photo){
+            unlink(public_path() . $user->photo->file );
+        }
         $user->delete();
         return redirect('/admin/users');
     }

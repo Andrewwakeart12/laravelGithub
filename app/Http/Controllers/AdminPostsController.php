@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UsersRequest;
+use App\Models\Category;
 use App\Models\Photo;
-use App\Models\User;
+use Illuminate\Support\Facades\Session;
 class AdminPostsController extends Controller
 {
     /**
@@ -29,7 +30,8 @@ class AdminPostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::pluck('name','id')->all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -53,6 +55,7 @@ class AdminPostsController extends Controller
             $input['photo_id'] = $photo->id;
         }
         $user->posts()->create($input);
+        return redirect('/admin/posts');
 
     }
 
@@ -76,7 +79,8 @@ class AdminPostsController extends Controller
     public function edit($id)
     {
         $post= Post::findOrFail($id);
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::pluck('name','id')->all();
+        return view('admin.posts.edit', compact(['post','categories']));
     }
 
     /**
@@ -88,7 +92,20 @@ class AdminPostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $input= $request->all();
+        $post=Post::findOrFail($id);
+
+        if($file = $request->file('photo_id')){
+            $name = time() . $file->getClientOriginalName();
+
+            $file->move('images', $name);
+
+            $photo = Photo::create(['file'=>$name]);
+
+            $input['photo_id'] = $photo->id;
+        }
+        $post->update($input);
+        return redirect('/admin/posts');
     }
 
     /**
@@ -99,6 +116,12 @@ class AdminPostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Session::flash('deleted_post', 'The post has been deleted');
+        $post = Post::findOrFail($id);
+        if($post->photo && file_exists(public_path() . $post->photo->file)){
+            unlink(public_path() . $post->photo->file );
+        }
+        $post->delete();
+        return redirect('/admin/posts');
     }
 }

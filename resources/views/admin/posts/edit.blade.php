@@ -15,7 +15,7 @@
 
     <div class="form-group">
         {!! Form::label('category_id', 'Category:') !!}
-        {!! Form::select('category_id', array(''=>'options', 1 => 'Dogs'), null ,['class'=>'form-control']) !!}
+        {!! Form::select('category_id', array(''=>'options') + $categories, null ,['class'=>'form-control']) !!}
     </div>
     <div class="form-group">
         {!! Form::label('body', 'Body:') !!}
@@ -23,7 +23,7 @@
     </div>
     <div class="form-group">
         {!! Form::label('photo_id', 'Profile picture:') !!}
-        {!! Form::file('photo_id', null , ['class'=>'form-control']) !!}
+        {!! Form::file('photo_id',['class'=>'form-control'], null) !!}
     </div>
     <div class="form-group">
       {!! Form::submit('Create User', ['class'=>'btn btn-primary','rows'=>3] ) !!}

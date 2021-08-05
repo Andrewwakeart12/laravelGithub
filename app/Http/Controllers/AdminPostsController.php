@@ -96,6 +96,9 @@ class AdminPostsController extends Controller
         $post=Post::findOrFail($id);
 
         if($file = $request->file('photo_id')){
+            if($post->photo && file_exists(public_path() . $post->photo->file)){
+                unlink(public_path() . $post->photo->file );
+            }
             $name = time() . $file->getClientOriginalName();
 
             $file->move('images', $name);

@@ -98,6 +98,9 @@ class AdminUsersController extends Controller
         $user = User::findOrFail($id);
         $input = $request->all();
         if($file = $request->file('photo_id')){
+            if($user->photo && file_exists(public_path() . $user->photo->file)){
+                unlink(public_path() . $user->photo->file );
+            }
             $name = time() . $file->getClientOriginalName();
             $file->move('images', $name);
             $photo = Photo::create(['file' => $name]);
@@ -131,7 +134,7 @@ class AdminUsersController extends Controller
     {
         Session::flash('deleted_user', 'The user has been deleted');
         $user = User::findOrFail($id);
-        if($user->photo){
+        if($user->photo && file_exists(public_path() . $user->photo->file)){
             unlink(public_path() . $user->photo->file );
         }
         $user->delete();

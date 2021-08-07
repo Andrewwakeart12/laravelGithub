@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Comment;
 use Illuminate\Http\Request;
 
 class PostsCommentsController extends Controller
@@ -13,7 +13,7 @@ class PostsCommentsController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.comments.index');
     }
 
     /**
@@ -23,7 +23,7 @@ class PostsCommentsController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.comments.create');
     }
 
     /**

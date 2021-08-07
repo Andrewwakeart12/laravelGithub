@@ -1,6 +1,4 @@
 @extends('layouts.admin')
 @section('content')
-<livewire:message />
+<h1>Create Comments</h1>
 @stop
-
-

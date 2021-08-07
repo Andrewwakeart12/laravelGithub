@@ -21,10 +21,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 Route::get('/sendEmail', function () {
    $data = ['title'=>'hello there :D',
    'body'=>'what ever goes in the content it really doesnt matter'
@@ -32,9 +28,13 @@ Route::get('/sendEmail', function () {
    Mail::to('andrewwake.art@gmail.com')->send(new \App\Mail\MyTestEmail($data));
 });
 
-Auth::routes();
+
 
 Route::group(['middleware'=>'admin'], function(){
+
+    Route::get('/admin', function(){
+        return redirect(route('users.index'));
+    });
     Route::resource('/admin/users',  "App\Http\Controllers\AdminUsersController");
 
     Route::resource('/admin/posts',  "App\Http\Controllers\AdminPostsController");
@@ -44,7 +44,5 @@ Route::group(['middleware'=>'admin'], function(){
     Route::resource('/admin/comments',  "App\Http\Controllers\PostsCommentsController");
     Route::resource('/admin/comments/replies',  "App\Http\Controllers\CommentsRepliesController");
 });
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 

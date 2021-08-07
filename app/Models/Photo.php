@@ -13,6 +13,10 @@ class Photo extends Model
     public function getFileAttribute($photo){
         return $this->uploads . $photo;
 
+
+    }
+    public function comments(){
+        return $this->hasMany('App\Models\Post');
     }
     use HasFactory;
 }

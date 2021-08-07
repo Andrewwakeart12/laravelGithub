@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Http\Requests\AdminCategoriesRequest;
-use Illuminate\Support\Facades\Session;
-class AdminCategoriesController extends Controller
+
+class CommentsRepliesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +13,7 @@ class AdminCategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.categories.index',compact('categories'));
+        //
     }
 
     /**
@@ -26,7 +23,7 @@ class AdminCategoriesController extends Controller
      */
     public function create()
     {
-        return view('admin.categories.index');
+        //
     }
 
     /**
@@ -35,11 +32,9 @@ class AdminCategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(AdminCategoriesRequest $request)
+    public function store(Request $request)
     {
-        $input = $request->all();
-        Category::create($input);
-        return redirect(route('categories.index'));
+        //
     }
 
     /**
@@ -61,8 +56,7 @@ class AdminCategoriesController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
-        return view('admin.categories.edit', compact('category'));
+        //
     }
 
     /**
@@ -74,11 +68,7 @@ class AdminCategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $input = $request->all();
-        $category = Category::findOrFail($id);
-        $category->update($input);
-
-        return redirect(route('categories.index'));
+        //
     }
 
     /**
@@ -89,9 +79,6 @@ class AdminCategoriesController extends Controller
      */
     public function destroy($id)
     {
-        Session::flash('deleted_post', 'The categories has been deleted');
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect(route('categories.index'));
+        //
     }
 }

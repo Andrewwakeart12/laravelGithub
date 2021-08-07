@@ -39,6 +39,10 @@ Route::group(['middleware'=>'admin'], function(){
 
     Route::resource('/admin/posts',  "App\Http\Controllers\AdminPostsController");
     Route::resource('/admin/categories',  "App\Http\Controllers\AdminCategoriesController");
+
+    Route::resource('/admin/media',  "App\Http\Controllers\AdminMediasController");
+    Route::resource('/admin/comments',  "App\Http\Controllers\PostsCommentsController");
+    Route::resource('/admin/comments/replies',  "App\Http\Controllers\CommentsRepliesController");
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Comment;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class PostsCommentsController extends Controller
 {
     /**
@@ -13,7 +13,8 @@ class PostsCommentsController extends Controller
      */
     public function index()
     {
-        return view('admin.comments.index');
+        $comments = Comment::all();
+        return view('admin.comments.index',compact('comments'));
     }
 
     /**
@@ -33,8 +34,20 @@ class PostsCommentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
+
     {
-        //
+        $user = Auth::user();
+        $data = [
+            'post_id' => $request->post_id,
+            'is_active' => $user->is_active,
+            'photo'=> $user->photo->file,
+            'author'=> $user->name,
+            'email'=> $user->email,
+            'body'=> $request->body
+        ];
+        Comment::create($data);
+        Comment::where(['email'=>$data['email']])->update(['photo'=> $user->photo->file]);
+        return redirect("/post/$request->post_id");
     }
 
     /**

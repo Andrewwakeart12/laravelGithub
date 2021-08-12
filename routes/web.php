@@ -28,7 +28,7 @@ Route::get('/sendEmail', function () {
    Mail::to('andrewwake.art@gmail.com')->send(new \App\Mail\MyTestEmail($data));
 });
 
-
+Route::get('/post/{id}', 'App\Http\Controllers\AdminPostsController@post');
 
 Route::group(['middleware'=>'admin'], function(){
 

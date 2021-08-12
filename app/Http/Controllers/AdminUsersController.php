@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use App\Models\Photo;
+use App\Models\Comment;
+use App\Models\CommentReply;
 class AdminUsersController extends Controller
 {
     /**
@@ -111,6 +113,12 @@ class AdminUsersController extends Controller
 
             $input['photo_id'] = $photo->id;
 
+            Comment::where(['email'=>$user->email])->update(['photo'=> $photo->file]);
+
+        }
+        if($user->email != $input['email']){
+            Comment::where(['email'=>$user->email])->update(['email'=> $input['email']]);
+            CommentReply::where(['email'=>$user->email])->update(['email'=> $input['email']]);
         }
 
         if(trim($request->password) == ''){
@@ -125,6 +133,8 @@ class AdminUsersController extends Controller
         }
 
         $user->update($input);
+        Comment::where(['email'=>$user->email])->update(['author'=> $user->name]);
+        CommentReply::where(['email'=>$user->email])->update(['author'=> $user->name]);
         return redirect('/admin/users');
     }
 

@@ -55,7 +55,7 @@ class AdminPostsController extends Controller
             $input['photo_id'] = $photo->id;
         }
         $user->posts()->create($input);
-        return redirect('/admin/posts');
+        return redirect()->back();
 
     }
 
@@ -113,6 +113,12 @@ class AdminPostsController extends Controller
         $post->update($input);
         return redirect('/admin/posts');
     }
+    public function post($id){
+        $post = Post::findOrFail($id);
+        $categories=Category::all();
+        $comments=$post->comments;
+        return view('post', compact(['post','categories','comments']));
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -123,6 +129,7 @@ class AdminPostsController extends Controller
     public function destroy($id)
     {
         Session::flash('deleted_post', 'The post has been deleted');
+
         $post = Post::findOrFail($id);
         if($post->photo && file_exists(public_path() . $post->photo->file)){
             unlink(public_path() . $post->photo->file );

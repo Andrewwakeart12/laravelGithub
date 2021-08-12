@@ -22,7 +22,6 @@
             <link href="{{ asset('css/libs.css') }}" rel="stylesheet">
             <link href="{{ asset('css/basic.min.css') }}" rel="stylesheet">
             <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet">
-            @livewireStyles
         </head>
 
 <body id="admin-page">
@@ -148,12 +147,13 @@
                                     </li>
 
                                     <li>
-                                        <a href="{{route('comments.create')}}">Create Comments</a>
+                                        <a href="{{route('comments.create')}}">Create Comment</a>
                                     </li>
 
                                 </ul>
                                 <!-- /.nav-second-level -->
                             </li>
+
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
@@ -356,7 +356,6 @@
 <!-- /#wrapper -->
 
 <!-- jQuery -->
-@livewireScripts
 <script src="{{asset('js/libs.js')}}"></script>
 <script src="{{asset('js/dropzone.min.js')}}"></script>
 @yield('footer')

@@ -9,7 +9,9 @@
     <p>
         {{$post->body}}
     </p>
-    <td><a href="{{route('posts.edit' , $post->id)}}">edit post</a></td>
+    <td><a href="{{route('posts.edit' , $post->id)}}">edit post</a></td><br>
+    <td><a href="{{'/post/' . $post->id }}">view post</a></td><br>
+    <td><a href="{{route('comments.show', $post->id) }}">view comments</a></td>
 </div>
     @endforeach
 @endsection

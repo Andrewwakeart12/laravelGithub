@@ -54,6 +54,7 @@
                 <!-- Posted Comments -->
 
                 <!-- Comment -->
+                @if (count($comments)> 0)
                 @foreach ($comments as $comment)
                 <div class="media">
 
@@ -67,9 +68,42 @@
                             <small>{{$comment->created_at->diffForHumans()}}</small>
                         </h4>
                         {{$comment->body}}
+
+                        @forelse ($comment->reply as $reply )
+                        <div class="media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object" width="60" src="{{$reply->photo}}" alt="">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading">{{$reply->author}}
+                                    <small>{{$reply->created_at->diffForHumans()}}</small>
+                                </h4>
+                                {{$reply->body}}
+                            </div>
+                        </div>
+                        @empty
+
+                        @endforelse
+                        {!! Form::open(['method'=> 'POST','route'=> 'reply.store', 'files' => true,'class'=>'form']) !!}
+
+                        {!! Form::hidden('comment_id', $comment->id) !!}
+
+                    <div class="form-group">
+                        {!! Form::label('body', 'Reply:') !!}
+                        {!! Form::textarea('body', null, ['class'=>'form-control','rows'=>1]) !!}
+                    </div>
+
+                    <div class="form-group">
+                      {!! Form::submit('Create User', ['class'=>'btn btn-primary'] ) !!}
+                    </div>
+                    {!! Form::close() !!}
+
                     </div>
                 </div>
                 @endforeach
+                @else
+                <h3>Be the first on comment</h3>
+                @endif
                 <!-- Comment -->
 
 

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CommentReply;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class CommentsRepliesController extends Controller
 {
     /**
@@ -34,7 +35,19 @@ class CommentsRepliesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $data = [
+            'comment_id' => $request->comment_id,
+            'is_active' => $user->is_active,
+            'name' => $user->name,
+            'photo'=> $user->photo->file,
+            'author'=> $user->name,
+            'email'=> $user->email,
+            'body'=> $request->body
+        ];
+        CommentReply::create($data);
+        CommentReply::where(['email'=>$data['email']])->update(['photo'=> $user->photo->file]);
+        return redirect()->back();
     }
 
     /**

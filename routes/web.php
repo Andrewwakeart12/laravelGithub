@@ -43,8 +43,12 @@ Route::group(['middleware'=>'admin'], function(){
     Route::resource('/admin/media',  "App\Http\Controllers\AdminMediasController");
     Route::resource('/admin/comments',  "App\Http\Controllers\PostsCommentsController");
     Route::resource('/admin/comments/replies',  "App\Http\Controllers\CommentsRepliesController");
+
 });
 
+Route::group(['middleware'=>'auth'],function(){
+    Route::resource('/comments/reply',  "App\Http\Controllers\CommentsRepliesController");
+});
 
 Route::get('{any}',function(){
     return view('welcome');

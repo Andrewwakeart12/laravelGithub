@@ -19,7 +19,26 @@
                 <td>{{$comment->id}}</td>
                 <td>{{$comment->author}}</td>
                 <td>{{$comment->email}}</td>
+                <td>
+                @if ($comment->is_active == 1)
+                {!! Form::open(['method'=>'PATCH', 'action'=> ['App\Http\Controllers\PostsCommentsController@update', $comment->id]]) !!}
+                    {!! Form::hidden("is_active", 0) !!}
+                    {!! Form::submit('aprove comment', ['class'=>'btn btn-primary']) !!}
+                {!! Form::close() !!}
+                @else
+                {!! Form::open(['method'=>'PATCH', 'action'=> ['App\Http\Controllers\PostsCommentsController@update', $comment->id]]) !!}
+                {!! Form::hidden("is_active", 1) !!}
+                {!! Form::submit('unaprove comment', ['class'=>'btn btn-warning']) !!}
+            {!! Form::close() !!}
+            @endif
+        </td>
+        <td>                {!! Form::open(['method'=>'DELETE', 'action'=> ['App\Http\Controllers\PostsCommentsController@destroy', $comment->id]]) !!}
+            {!! Form::hidden("is_active", 1) !!}
+            {!! Form::submit('Delete comment', ['class'=>'btn btn-danger']) !!}
+        {!! Form::close() !!}</td>
                 <td><a href=" {{ '/post/' . $comment->post->id }}">go to post</a></td>
+
+
             </tr>
                 @endforeach
 

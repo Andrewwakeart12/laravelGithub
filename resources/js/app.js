@@ -4,6 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -20,13 +21,26 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
+Vue.component('comments', require('./components/Comments.vue').default);
+import Vue from 'vue';
+import axios from 'vue-axios';
+import VueAxios from 'axios';
+import VueRouter from 'vue-router';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import ExampleComponent from './components/ExampleComponent.vue';
+import Comments from './components/Comments.vue';
+Vue.use(VueAxios, axios);
+
 const app = new Vue({
-    el: '#app',
+    el: '#appContainer',
+    render: h => h(ExampleComponent)
+});
+const comments = new Vue({
+    el: '#appComments',
+    render: h => h(Comments)
 });

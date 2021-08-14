@@ -40,7 +40,7 @@ class PostsCommentsController extends Controller
         $user = Auth::user();
         $data = [
             'post_id' => $request->post_id,
-            'is_active' => $user->is_active,
+            'is_active' => 0 ,
             'photo'=> $user->photo->file,
             'author'=> $user->name,
             'email'=> $user->email,

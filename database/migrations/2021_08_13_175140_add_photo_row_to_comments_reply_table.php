@@ -25,8 +25,6 @@ class AddPhotoRowToCommentsReplyTable extends Migration
      */
     public function down()
     {
-        Schema::table('comment_replies', function (Blueprint $table) {
-            $table->string('photo');
-        });
+        Schema::dropIfExists('photo');
     }
 }

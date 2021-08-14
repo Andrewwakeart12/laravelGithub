@@ -52,10 +52,10 @@
                 <hr>
 
                 <!-- Posted Comments -->
-
                 <!-- Comment -->
                 @if (count($comments)> 0)
                 @foreach ($comments as $comment)
+                @if ($comment->is_active == 1)
                 <div class="media">
 
                     <a class="pull-left" href="#">
@@ -69,21 +69,30 @@
                         </h4>
                         {{$comment->body}}
 
-                        @forelse ($comment->reply as $reply )
-                        <div class="media">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" width="60" src="{{$reply->photo}}" alt="">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="media-heading">{{$reply->author}}
-                                    <small>{{$reply->created_at->diffForHumans()}}</small>
-                                </h4>
-                                {{$reply->body}}
-                            </div>
-                        </div>
-                        @empty
+                    @foreach ($comment->reply as $reply )
 
-                        @endforelse
+                    @if ($reply->is_active == 1)
+                    <div class="media">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" width="60" src="{{$reply->photo}}" alt="">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{$reply->author}}
+                                <small>{{$reply->created_at->diffForHumans()}}</small>
+                            </h4>
+                            {{$reply->body}}
+                        </div>
+                    </div>
+                    @elseif($reply->is_active == 0 && $reply->email == Auth::user()->email)
+                    <div class="media">
+                        <div class="media-body">
+                            <span>your comment is waiting for moderation</span>
+                        </div>
+                    </div>
+                    @endif
+
+                    @endforeach
+
                         {!! Form::open(['method'=> 'POST','route'=> 'reply.store', 'files' => true,'class'=>'form']) !!}
 
                         {!! Form::hidden('comment_id', $comment->id) !!}
@@ -100,6 +109,16 @@
 
                     </div>
                 </div>
+
+
+                @elseif($comment->is_active == 0 && $comment->email == Auth::user()->email)
+                <div class="meda">
+                    <div class="media-body">
+                        <span>your comment is waiting for moderation</span>
+                    </div>
+                </div>
+                @endif
+
                 @endforeach
                 @else
                 <h3>Be the first on comment</h3>

@@ -48,4 +48,15 @@ class User extends Authenticatable
 public function posts(){
     return $this->hasMany('App\Models\Post');
 }
+public function role(){
+    return $this->belongsTo('App\Models\Role');
+}
+public function isAdmin(){
+    if($this->role->name == 'administrator'){
+    return true;    
+}else {
+    return false;
+}
+    
+}
 }

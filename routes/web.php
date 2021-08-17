@@ -24,7 +24,12 @@ Route::group(['middleware'=>'admin'],function(){
     });
 });
 Route::Get('/mucks', function(){
-return view('admin.index');
+
+});
+Route::group(['middleware'=>'admin'],function(){
+    Route::get('/admin/', function () {
+        return view('admin.index');
+    });
 });
 Auth::routes();
 /*

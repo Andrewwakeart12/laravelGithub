@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 /*
@@ -12,13 +12,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['middleware'=>'auth'],function(){
+    Route::get('/', function () {
+        return view('welcome');
+    });
 });
 
+Route::group(['middleware'=>'admin'],function(){
+    Route::get('/admin', function () {
+        return view('admin');
+    });
+});
+Route::Get('/mucks', function(){
+return view('admin.index');
+});
 Auth::routes();
-
+/*
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/sendEmail', function () {
@@ -49,7 +58,13 @@ Route::group(['middleware'=>'admin'], function(){
 Route::group(['middleware'=>'auth'],function(){
     Route::resource('/comments/reply',  "App\Http\Controllers\CommentsRepliesController");
 });
+*/
 
+/**/
 Route::get('{any}',function(){
     return view('welcome');
 })->where('any', '.*');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

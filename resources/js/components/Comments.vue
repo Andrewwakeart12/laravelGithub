@@ -9,7 +9,8 @@
     <tbody>
         <tr v-for="comment in comments" :key= "comment.id">
             <td>{{comment.id}}</td>
-            <td>{{comment.author}}</td>
+            <td>{{comment.title}}</td>
+            <td>{{comment.categories}}</td>
             <td>{{comment.body}}</td>
         </tr>
     </tbody>
@@ -28,15 +29,15 @@
         ,
         mounted() {
             axios
-                .get('http://localhost:8000/api/comments')
+                .get('http://localhost/b_appLaravel/public/api/Posts?api_token=jR1yWEDuIctMUHARQ4TRWsA4Tjg6vkinojsdwCr5hwOQv2BhksweeNY0tcdr')
                 .then(response=> {this.comments=response.data;});
-                console.log('interval')
+                console.log('initialized')
                 setInterval(this.actualizar, 6000)
 
                 },
         methods:{actualizar(){
              axios
-                .get('http://localhost:8000/api/comments')
+                .get('http://localhost/b_appLaravel/public/api/Posts?api_token=jR1yWEDuIctMUHARQ4TRWsA4Tjg6vkinojsdwCr5hwOQv2BhksweeNY0tcdr')
                 .then(response=> {this.comments=response.data;});
                 console.log('interval')
                 }},

@@ -14,14 +14,14 @@ class PostsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('posts')->delete();
+        DB::table('posts')->truncate();
         Post::create([
             'user_id'=>1,
-            'category_id' => 1,
-            'photo_id'=> 1,
-            'title'=> 'prueba',
+            'categories' => [1,2,3,4],
+            'title'=> 'Prueba',
             'body'=> '1234567890'
         ]);
+
     }
 }
 /*

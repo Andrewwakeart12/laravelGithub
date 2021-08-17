@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\api\ApiPostController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,8 +18,7 @@ use App\Models\Comment;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/comments', function () {
-    $comments = Comment::all();
-    return response()->json($comments);
+Route::group(['middleware'=>['auth:api']], function(){
+    Route::resource('/Posts', ApiPostController::class);
 });
+

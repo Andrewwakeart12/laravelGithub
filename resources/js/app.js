@@ -21,7 +21,12 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('app', require('./App.vue').default);
 Vue.component('comments', require('./components/Comments.vue').default);
+Vue.component('admin', require('./components/Admin.vue').default);
+
+import {routes} from './routes';
+import App from './App.vue';
 import Vue from 'vue';
 import axios from 'vue-axios';
 import VueAxios from 'axios';
@@ -32,15 +37,17 @@ import VueRouter from 'vue-router';
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import ExampleComponent from './components/ExampleComponent.vue';
-import Comments from './components/Comments.vue';
+Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 
+
+const router = new VueRouter({
+    mode:'history',
+    routes: routes
+})
+
 const app = new Vue({
-    el: '#appContainer',
-    render: h => h(ExampleComponent)
-});
-const comments = new Vue({
-    el: '#appComments',
-    render: h => h(Comments)
-});
+    el:'#appAdminPage',
+    router: router,
+    render: h => h(App)
+})

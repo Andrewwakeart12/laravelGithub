@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Illuminate\Support\Facades\Auth;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -18,12 +18,15 @@ class User extends Authenticatable
      */
     public $directory = "/images/";
     protected $fillable = [
-        'name',
+        'username',
+        'firstName',
+        'lastName',
         'email',
         'password',
         'role_id',
         'is_active',
         'photo_id',
+        'api_toke',
     ];
 
     /**
@@ -53,10 +56,10 @@ public function role(){
 }
 public function isAdmin(){
     if($this->role->name == 'administrator'){
-    return true;    
+    return true;
 }else {
     return false;
 }
-    
+
 }
 }

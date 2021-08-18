@@ -2,6 +2,7 @@
 
 @section('content')
 
-    <h1>Admin</h1>
-
+@csrf
+<div id="appAdminPage" hola="HOLA">
+</div>
 @endsection

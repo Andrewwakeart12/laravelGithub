@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
+    "/js/routes.js": "/js/routes.js",
     "/css/app.css": "/css/app.css",
     "/css/sb-admin-2.min.css": "/css/sb-admin-2.min.css",
     "/css/libs.css": "/css/libs.css",

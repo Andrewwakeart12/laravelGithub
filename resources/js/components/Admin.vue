@@ -1,6 +1,7 @@
 <template>
     <div class="container-fluid">
-                    <router-link to="/admin/create">Create User</router-link>
+     <a v-bind:href="PostIndex">PostIndex</a>
+                    <router-link to="/admin/users">Create User</router-link>
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -330,28 +331,35 @@
 </template>
 
 <script>
+    import {route} from '../routes.js';
     export default {
         data() {
             return {
-                comments: []
+                api_key: [],
+                PostIndex:[],
+                users: []
         }
-            },
-            props:['hola']
+            }
         ,
         mounted() {
                     console.log('COMPONENT ADMIN MOUNTED');
+                    this.getApiKey();
+                    },
+        methods:{
+            getApiKey(PostBool){
 
-                },
-        methods:{actualizar(){
-             axios
-                .get('http://localhost/b_appLaravel/public/api/Posts?api_token=jR1yWEDuIctMUHARQ4TRWsA4Tjg6vkinojsdwCr5hwOQv2BhksweeNY0tcdr')
-                .then(response=> {this.comments=response.data;});
-                console.log('interval')
-                }},
-                computed: {
-                    lavoe: function(){
-                        return 'hola'
-                    }
+                       axios
+                .post(route('generated::nn2kwNf5aBRJC4LH'))
+                .then(response=> {this.api_key=response.data;
+                    this.PostIndex = route('Posts.index', this.getTokenJson(this.api_key));
+                });
+
+                    },
+                getTokenJson(apiKey){
+                    var token = apiKey;
+                    console.log('token : ' + token);
+                    return {api_token : token};
                 }
+        }
         }
     </script>

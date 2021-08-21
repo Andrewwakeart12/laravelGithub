@@ -22,10 +22,12 @@ window.Vue = require('vue').default;
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('app', require('./App.vue').default);
-Vue.component('comments', require('./components/Comments.vue').default);
+Vue.component('displayUsers', require('./components/DisplayUsers.vue').default);
+Vue.component('createUser', require('./components/CreateUser.vue').default);
 Vue.component('admin', require('./components/Admin.vue').default);
 
-import {routes} from './routes';
+import {routesVue} from './routesVue';
+import {route} from './routes';
 import App from './App.vue';
 import Vue from 'vue';
 import axios from 'vue-axios';
@@ -43,7 +45,7 @@ Vue.use(VueAxios, axios);
 
 const router = new VueRouter({
     mode:'history',
-    routes: routes
+    routes: routesVue
 })
 
 const app = new Vue({

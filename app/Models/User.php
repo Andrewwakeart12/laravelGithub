@@ -26,7 +26,7 @@ class User extends Authenticatable
         'role_id',
         'is_active',
         'photo_id',
-        'api_toke',
+        'api_token',
     ];
 
     /**

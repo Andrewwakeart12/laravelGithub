@@ -35,3 +35,4 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/libs/scripts.js'
 
     ], 'public/js/libs.js');
+    mix.js('resources/js/routes','public/js')

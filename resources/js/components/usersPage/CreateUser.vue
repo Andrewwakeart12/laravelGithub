@@ -11,7 +11,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Creat a user!</h1>
                             </div>
-                            <form class="user" method="POST" >
+                            <form class="user">
 
                                  <div class="form-group">
                                     <input type="text" class="form-control form-control-user " id="exampleInputEmail"
@@ -48,7 +48,7 @@
 
                                     </div>
                                 </div>
-                                <input type="submit" @click="createUser()"class="btn btn-primary btn-user btn-block" value="Create">
+                                <input @click="createUser()"class="btn btn-primary btn-user btn-block" value="Create">
                             </form>
                         </div>
                     </div>
@@ -71,8 +71,6 @@ import {route} from '../../routes.js';
                 .post(route('getApiKey'))
                 .then(response=> {this.api_key=response.data;   var token =this.getTokenJson(this.api_key);
                     var apiToken = this.api_key;
-                    this.formRoute= route('users.store', {api_token : apiToken});
-
                     });
                 }
                 ,
@@ -83,10 +81,13 @@ import {route} from '../../routes.js';
                     return {api_token : token};
                 },
                 createUser(){
+
+                  var token = this.getTokenJson(this.api_key);
                      axios
-                .post(route('getApiKey'))
-                .then(response=> {this.api_key=response.data;   var token =this.getTokenJson(this.api_key);
-                })}
+                .post(route('users.store', token), this.user)
+                .then(response=> { console.log(this.user) }
+
+                )}
 
             },
 
@@ -94,7 +95,7 @@ import {route} from '../../routes.js';
             return {
                 api_key: [],
                 formRoute: [],
-                user: [],
+                user: {},
             }
         },
         mounted() {

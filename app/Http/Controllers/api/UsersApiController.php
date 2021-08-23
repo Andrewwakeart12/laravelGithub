@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Role;
-
+use Illuminate\Support\Str;
 class UsersApiController extends Controller
 {
     public function index(){
@@ -21,6 +21,9 @@ class UsersApiController extends Controller
         return $options;
     }
      public function store(Request $request){
-        $user = User::create($request->all());
+        $user=$request->all();
+        $user['api_token'] = Str::random(60);
+        $user = User::create($user);
+        return response()->json($user);
      }
 }

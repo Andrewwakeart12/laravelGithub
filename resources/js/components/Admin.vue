@@ -341,15 +341,17 @@
         }
             }
         ,
+        beforeMount(){
+        this.getApiKey();
+        },
         mounted() {
                     console.log('COMPONENT ADMIN MOUNTED');
-                    this.getApiKey();
                     },
         methods:{
             getApiKey(PostBool){
 
                        axios
-                .post(route('generated::nn2kwNf5aBRJC4LH'))
+                .post(route('getApiKey'))
                 .then(response=> {this.api_key=response.data;
                     this.PostIndex = route('Posts.index', this.getTokenJson(this.api_key));
                 });

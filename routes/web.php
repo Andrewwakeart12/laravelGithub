@@ -20,9 +20,7 @@ Route::group(['middleware'=>'auth'],function(){
 });
 
 Route::group(['middleware'=>'admin'],function(){
-    Route::get('/admin', function () {
-        return view('admin');
-    });
+    Route::get('/admin', function () {return view('admin');})->name('adminIndex');
 });
 Route::Get('/mucks', function(){
 
@@ -72,4 +70,4 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('/getApiKey', [PostController::class, 'getApiKey']);
+Route::post('/getApiKey', [PostController::class, 'getApiKey'])->name('getApiKey');

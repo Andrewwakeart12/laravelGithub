@@ -1,7 +1,7 @@
 import Admin from './components/Admin.vue';
-import UserPage from './components/UserPage.vue';
-import DisplayUsers from './components/DisplayUsers.vue';
-import EditUser from './components/EditUser.vue';
+import UserPage from './components/usersPage/UserPage.vue';
+import DisplayUsers from './components/usersPage/DisplayUsers.vue';
+import EditUser from './components/usersPage/EditUser.vue';
 
 export const routesVue = [
     {

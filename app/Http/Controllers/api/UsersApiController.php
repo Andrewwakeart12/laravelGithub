@@ -17,8 +17,10 @@ class UsersApiController extends Controller
         return response()->json($users);
     }
     public function options(){
-        $options = Role::pluck('name','id')->all();
-        return $options;
+        $options = Role::all();
+
+        return response()->json($options);;
+
     }
      public function store(Request $request){
         $user=$request->all();

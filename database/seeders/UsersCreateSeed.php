@@ -23,6 +23,18 @@ class UsersCreateSeed extends Seeder
         ,'role_id'=>1,
         'api_token' => Str::random(60),
     ));
+    User::create(array('username'=>'Obe','firstName'=>'Edgar','lastName'=>'Marquina Ruiz',
+    'email'=>'obet@gmail.com'
+    ,'password'=>Hash::make('12345678')
+    ,'role_id'=>2,
+    'api_token' => Str::random(60),
+));
+User::create(array('username'=>'Obe','firstName'=>'Edgar','lastName'=>'Marquina Ruiz',
+'email'=>'edgarmarquinaruizobe@gmail.com'
+,'password'=>Hash::make('12345678')
+,'role_id'=>3,
+'api_token' => Str::random(60),
+));
 
     }
 }

@@ -22,6 +22,7 @@ window.Vue = require('vue').default;
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
+Vue.component('displayUsers', require('./components/rolesPage/RolesPage.vue').default);
 Vue.component('createUser', require('./components/usersPage/CreateUser.vue').default);
 Vue.component('admin', require('./components/Admin.vue').default);
 

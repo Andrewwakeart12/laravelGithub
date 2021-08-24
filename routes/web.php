@@ -18,17 +18,13 @@ Route::group(['middleware'=>'auth'],function(){
         return view('welcome');
     });
 });
-
-Route::group(['middleware'=>'admin'],function(){
-    Route::get('/admin', function () {return view('admin');})->name('adminIndex');
-});
 Route::Get('/mucks', function(){
 
 });
 Route::group(['middleware'=>'admin'],function(){
     Route::get('/admin/', function () {
         return view('admin.index');
-    });
+    })->name('adminPage');
 });
 Auth::routes();
 /*

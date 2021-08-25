@@ -1,15 +1,33 @@
 <template>
-<div class="container">
-    <ul v-for="user of users">
-        <li>{{user.username}}</li>
-         <li>{{user.firstName +" " + user.lastName}}</li>
-        <li>{{user.email}}</li>
-        <li>{{user.role ? user.role.name : 'role no asignado'}}</li>
-            <li>{{user.api_token}}</li>
-            <li>{{user.is_active}}</li>
-
-    </ul>
-    </div>
+<div class="col-md-auto">
+     <table class="table-dark responsive table-striped ">
+    <thead>
+        <th scope="col">Id</th>
+        <th scope="col">UserName</th>
+        <th scope="col">FirstName</th>
+        <th scope="col">LastName</th>
+        <th scope="col">Email</th>
+        <th scope="col">Role</th>
+        <th scope="col">Is active</th>
+        <th scope="col">Delete</th>
+    </thead>
+    <tbody>
+            <tr v-for="user of users">
+            <td>{{user.id}}</td>
+            <td>{{user.username}}</td>
+            <td>{{user.firstName}}</td>
+            <td>{{user.lastName}}</td>
+            <td>{{user.email}}</td>
+            <td>{{user.role ? user.role.name : 'role no asignado'}}</td>
+            <td>{{user.is_active}}</td>
+            <td>
+            <input class="btn btn-danger m-3 p-2" v-on:click="usersDeleteSet(api_key,user)" type="button" value="Delete">
+            </td>
+            </tr>
+    </tbody>
+</table>
+<br/>
+</div>
 
 </template>
 
@@ -31,6 +49,14 @@ import {route} from '../../routes.js';
                     });
                 },
 
+                    usersDeleteSet(apiKey,user){
+                        var token = {api_token:apiKey, id: user.id }
+                        axios.delete(route('users.show',token)).then(
+                            response=>{
+                                console.log(response.data);
+                            }
+                        )
+                    },
                   getUsers(apiKey)
                   {
                         axios
@@ -48,7 +74,9 @@ import {route} from '../../routes.js';
        data: function(){
            return {
                 api_key: [],
-                users: []
+                users: [],
+                user:[],
+                userDeleteRoute:[]
         }
 
        }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\api\ApiPostController;
 use App\Http\Contollers\ApiTokenController;
+use App\Http\Controllers\api\RolesApiController;
 use App\Http\Controllers\api\UsersApiController;
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware'=>['auth:api']], function(){
     Route::resource('/Posts', ApiPostController::class);
     Route::resource('/users', UsersApiController::class);
+    Route::resource('/roles', RolesApiController::class);
 
 });
 

@@ -29,7 +29,7 @@ class RoleSeeder extends Seeder
                 'roles'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false] ,
                 'users'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false] ,
                 'events'=> ['create' => false, 'read'=> true, 'update'=>false, 'delete'=> false],
-                'taks'=> ['create' => false, 'read'=> true, 'update'=>true, 'delete'=> false],
+                'tasks'=> ['create' => false, 'read'=> true, 'update'=>true, 'delete'=> false],
             ] ] );
             Role::create(['name'=>'user',
             'permissions' => [

@@ -1,8 +1,17 @@
 <template>
 <div class="container-fluid">
 <h1>Roles page</h1>
-
 <div class="tableContainer row col-md-12"  v-for="role of roles">
+ <table class="table table-dark responsive table-striped ">
+    <thead>
+        <th>TestOne</th>
+    </thead>
+    <tbody>
+            <tr>
+            <td contenteditable="true" v-model="dataEditableTest.dataOne" v-on:click="dataTest(dataEditableTest.dataOne)">DATA INSERTABLE</td>
+            </tr>
+    </tbody>
+</table>
     <input class="btn btn-danger m-3 p-2" v-on:click="setPermissions(role)" type="button" value="Actualizar datos">
      <table class="table table-dark responsive table-striped ">
     <thead>
@@ -21,28 +30,37 @@
             </tr>
 
             <tr><th>Events</th>
-            <td ><input type="checkbox" name="permissions-events-create" id="" :checked="role.permissions.events.create">
-            <td ><input type="checkbox" name="permissions-events-read" id="" :checked="role.permissions.events.read"></td>
-            <td ><input type="checkbox" name="permissions-events-update" id="" :checked="role.permissions.events.update"></td>
-            <td ><input type="checkbox" name="permissions-events-delete" id="" :checked="role.permissions.events.delete"></td>
+            <td ><input type="checkbox" v-model="role.permissions.events.create" name="permissions-events-create" id="" :checked="role.permissions.events.create">
+            <td ><input type="checkbox" v-model="role.permissions.events.read" name="permissions-events-read" id="" :checked="role.permissions.events.read"></td>
+            <td ><input type="checkbox" v-model="role.permissions.events.update" name="permissions-events-update" id="" :checked="role.permissions.events.update"></td>
+            <td ><input type="checkbox" v-model="role.permissions.events.delete" name="permissions-events-delete" id="" :checked="role.permissions.events.delete"></td>
             </tr>
             <tr><th>Posts</th>
-            <td ><input type="checkbox" name="permissions-posts-create" id="" :checked="role.permissions.posts.create">
-            <td ><input type="checkbox" name="permissions-posts-read" id="" :checked="role.permissions.posts.read"></td>
-            <td ><input type="checkbox" name="permissions-posts-update" id="" :checked="role.permissions.posts.update"></td>
-            <td ><input type="checkbox" name="permissions-posts-delete" id="" :checked="role.permissions.posts.delete"></td>
+            <td ><input type="checkbox" v-model="role.permissions.posts.create"name="permissions-posts-create" id="" :checked="role.permissions.posts.create">
+            <td ><input type="checkbox" v-model="role.permissions.posts.read"name="permissions-posts-read" id="" :checked="role.permissions.posts.read"></td>
+            <td ><input type="checkbox" v-model="role.permissions.posts.update"name="permissions-posts-update" id="" :checked="role.permissions.posts.update"></td>
+            <td ><input type="checkbox" v-model="role.permissions.posts.delete"name="permissions-posts-delete" id="" :checked="role.permissions.posts.delete"></td>
+
+            </tr>
+
+            <tr><th>Tasks</th>
+            <td ><input type="checkbox" v-model="role.permissions.tasks.create"name="permissions-tasks-create" id="" :checked="role.permissions.tasks.create">
+            <td ><input type="checkbox" v-model="role.permissions.tasks.read"name="permissions-tasks-read" id="" :checked="role.permissions.tasks.read"></td>
+            <td ><input type="checkbox" v-model="role.permissions.tasks.update"name="permissions-tasks-update" id="" :checked="role.permissions.tasks.update"></td>
+            <td ><input type="checkbox" v-model="role.permissions.tasks.delete"name="permissions-tasks-delete" id="" :checked="role.permissions.tasks.delete"></td>
 
             </tr>
             <tr><th>Roles</th>
-             <td ><input type="checkbox" name="permissions-roles-create" id="" :checked="role.permissions.roles.create">
-            <td ><input type="checkbox" name="permissions-roles-read" id="" :checked="role.permissions.roles.read"></td>
-            <td ><input type="checkbox" name="permissions-roles-update" id="" :checked="role.permissions.roles.update"></td>
-            <td ><input type="checkbox" name="permissions-roles-delete" id="" :checked="role.permissions.roles.delete"></td>
+             <td ><input type="checkbox" v-model="role.permissions.roles.create"name="permissions-roles-create" id="" :checked="role.permissions.roles.create">
+            <td ><input type="checkbox"  v-model="role.permissions.roles.read"name="permissions-roles-read" id="" :checked="role.permissions.roles.read"></td>
+            <td ><input type="checkbox"  v-model="role.permissions.roles.update"name="permissions-roles-update" id="" :checked="role.permissions.roles.update"></td>
+            <td ><input type="checkbox"  v-model="role.permissions.roles.delete"name="permissions-roles-delete" id="" :checked="role.permissions.roles.delete"></td>
 
             </tr>
     </tbody>
 </table>
 <br/>
+
 </div>
 
 
@@ -55,37 +73,70 @@
 import {route} from '../../routes.js';
     export default {
 
-            methods:{
-            getApiKey(){
+            methods:
+            {   getApiKey()
+            {
                         axios
-                .post(route('getApiToken'))
-                .then(response=> {this.api_key=response.data;
-                console.log(response.data);
-                });
+                .post(route('getApiKey'))
+                .then(response=> {
+                    this.api_key = response.data;
+                 });
+
                     },
             getRoles(){
                 axios
                 .get(route('options'))
-                .then(response=> {this.roles=response.data;
-                console.log(response.data);});
+                .then(response=> {
+                    this.roles=response.data;
+
+                });
             },
-            setPermissions(role){
-                console.log(role);
-            }
+            dataTest(data){
+                console.log(data);
+            },
+
+            getTokenJson(apiKey,role)
+                {if(role){
+                    var token = apiKey;
+                    return {api_token : token , id : role.id, role: role};
+
+                }else{
+                    var token = apiKey;
+                    console.log('token : ' + token);
+                    return {api_token : token};
+                }
+                },
+                 setPermissions(role){
+                var token = this.getTokenJson(this.api_key,role);
+                 console.log()
+                 axios
+                .patch(route('roles.update', token ),role)
+                .then(response=> {
+                    console.log(response.data);
+                    });
+            },
         },
        data() {
 
             return {
                 api_key: [],
-                roles :this.getRoles(),
+                roles :[],
+                dataEditableTest:{},
 
         }
             }
         ,
+        beforeMount(){
+                this.getRoles();
+                this.getApiKey();
+                console.log('apiKey function executed');
+        }
+        ,
+
         mounted() {
-                    console.log('COMPONENT ADMIN MOUNTED');
-                    this.getApiKey();
-                    this.getRoles();
+
+                    console.log('COMPONENT Role Page MOUNTED');
+
                 },
 
     }

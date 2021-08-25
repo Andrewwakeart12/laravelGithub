@@ -1,5 +1,5 @@
 const routes = {
-    "generated::jfjI0MdsISZuz5rd": {
+    "generated::BHTyyk3BRW3DNqu7": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -44,22 +44,43 @@ const routes = {
     "users.destroy": {
         "uri": "api\/users\/{user}"
     },
+    "roles.index": {
+        "uri": "api\/roles"
+    },
+    "roles.create": {
+        "uri": "api\/roles\/create"
+    },
+    "roles.store": {
+        "uri": "api\/roles"
+    },
+    "roles.show": {
+        "uri": "api\/roles\/{role}"
+    },
+    "roles.edit": {
+        "uri": "api\/roles\/{role}\/edit"
+    },
+    "roles.update": {
+        "uri": "api\/roles\/{role}"
+    },
+    "roles.destroy": {
+        "uri": "api\/roles\/{role}"
+    },
     "options": {
         "uri": "api\/options"
     },
-    "generated::YOji1KRGfxHz62gF": {
+    "generated::nW2qTLnQTkLcAmnh": {
         "uri": "\/"
     },
-    "generated::h20WYQLYgWFBs6fY": {
-        "uri": "admin"
-    },
-    "generated::aUjr1mefrJ0BP9kU": {
+    "generated::YkPHZhYjBc25oAIq": {
         "uri": "mucks"
+    },
+    "adminPage": {
+        "uri": "admin"
     },
     "login": {
         "uri": "login"
     },
-    "generated::6OISfATcbLnZm1ln": {
+    "generated::nvRKnHcipii9xHJD": {
         "uri": "login"
     },
     "logout": {
@@ -68,7 +89,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::YpkPbMbMD9L2CicC": {
+    "generated::TywFaVLwgMDT7Lcj": {
         "uri": "register"
     },
     "password.request": {
@@ -86,7 +107,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::WLRimAlN8h8z22UK": {
+    "generated::izztR1RYldOFIr4B": {
         "uri": "password\/confirm"
     },
     "home": {

@@ -1,7 +1,7 @@
 <template>
 <div class="container-fluid row">
-    <div class="col-md-7"><createUser></createUser></div>
-    <div class="col-md-5">
+    <div><createUser></createUser></div>
+    <div class="responsive">
     <displayUsers v-bind:apiKey="api_key"></displayUsers>
     </div>
 </div>
@@ -23,7 +23,8 @@ import {route} from '../../routes.js';
        data() {
 
             return {
-                api_key: this.getApiKey()
+                api_key: this.getApiKey(),
+                userDeleteRoute:[]
 
         }
             }

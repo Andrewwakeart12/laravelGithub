@@ -69,8 +69,7 @@ import {route} from '../../routes.js';
                 {
                         axios
                 .post(route('getApiKey'))
-                .then(response=> {this.api_key=response.data;   var token =this.getTokenJson(this.api_key);
-                    var apiToken = this.api_key;
+                .then(response=> {this.api_key=response.data;
                     });
                 }
                 ,
@@ -99,7 +98,6 @@ import {route} from '../../routes.js';
             }
         },
         mounted() {
-            this.getApiKey();
             console.log('Component Exaple App mounted.')
         }
     }

@@ -93,7 +93,6 @@ import {route} from '../../routes.js';
         data(){
             return {
                 api_key: [],
-                formRoute: [],
                 user: {},
             }
         },

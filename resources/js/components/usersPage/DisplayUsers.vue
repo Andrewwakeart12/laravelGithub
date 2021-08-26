@@ -21,7 +21,7 @@
             <td>{{user.role ? user.role.name : 'role no asignado'}}</td>
             <td>{{user.is_active}}</td>
             <td>
-            <input class="btn btn-danger m-3 p-2" v-on:click="usersDeleteSet(api_key,user)" type="button" value="Delete">
+            <input class="btn btn-danger m-3 p-2" v-on:click="usersDeleteSet( api_key, user )" type="button" value="Delete">
             </td>
             </tr>
     </tbody>
@@ -50,12 +50,13 @@ import {route} from '../../routes.js';
                 },
 
                     usersDeleteSet(apiKey,user){
-                        var token = {api_token:apiKey, id: user.id }
-                        axios.delete(route('users.show',token)).then(
-                            response=>{
-                                console.log(response.data);
-                            }
-                        )
+                        var token = this.getTokenJson(apiKey, user.id);
+                        var routeR= route('users.destroy', token);
+                        console.log(routeR);
+                        axios
+                        .delete(routeR)
+                        .then(response=> {
+                            console.log(response.data);});
                     },
                   getUsers(apiKey)
                   {
@@ -64,19 +65,26 @@ import {route} from '../../routes.js';
                 .then(response=> {this.users=response.data;});
                     },
 
-                getTokenJson(apiKey)
+                getTokenJson(apiKey,id)
                 {
+                    if(id){
                     var token = apiKey;
+                    console.log('token : ' + token + " id: " + id );
+
+                    return {api_token : token, user: id};
+
+                    }else{
+                        var token = apiKey;
                     console.log('token : ' + token);
                     return {api_token : token};
-                },
+
+                    }
+                   },
                         },
        data: function(){
            return {
                 api_key: [],
                 users: [],
-                user:[],
-                userDeleteRoute:[]
         }
 
        }

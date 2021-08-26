@@ -6,9 +6,12 @@
     <thead>
         <th>TestOne</th>
     </thead>
+            {{dataEditableTest}}
     <tbody>
             <tr>
-            <td contenteditable="true" v-model="dataEditableTest.dataOne" v-on:click="dataTest(dataEditableTest.dataOne)">DATA INSERTABLE</td>
+            <td>
+                <input name="data" class="userInputInTable" placeholder="Enter your username" v-model="dataEditableTest.username" v-on:blur="dataEditableTest"/>
+            </td>
             </tr>
     </tbody>
 </table>
@@ -115,6 +118,10 @@ import {route} from '../../routes.js';
                     console.log(response.data);
                     });
             },
+                getContentEditable(dataEditableTest){
+                    console.log(dataEditableTest);
+                }
+            ,
         },
        data() {
 

@@ -2,19 +2,6 @@
 <div class="container-fluid">
 <h1>Roles page</h1>
 <div class="tableContainer row col-md-12"  v-for="role of roles">
- <table class="table table-dark responsive table-striped ">
-    <thead>
-        <th>TestOne</th>
-    </thead>
-            {{dataEditableTest}}
-    <tbody>
-            <tr>
-            <td>
-                <input name="data" class="userInputInTable" placeholder="Enter your username" v-model="dataEditableTest.username" v-on:blur="dataEditableTest"/>
-            </td>
-            </tr>
-    </tbody>
-</table>
     <input class="btn btn-danger m-3 p-2" v-on:click="setPermissions(role)" type="button" value="Actualizar datos">
      <table class="table table-dark responsive table-striped ">
     <thead>

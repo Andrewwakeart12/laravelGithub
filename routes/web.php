@@ -25,6 +25,10 @@ Route::group(['middleware'=>'admin'],function(){
     Route::get('/admin/', function () {
         return view('admin.index');
     })->name('adminPage');
+    Route::get('/admin/{any}',function(){
+        return view('admin.index');
+    })->where('any', '.*');
+
 });
 Auth::routes();
 /*

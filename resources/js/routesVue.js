@@ -1,7 +1,7 @@
 import Admin from './components/Admin.vue';
 import UserPage from './components/usersPage/UserPage.vue';
 import DisplayUsers from './components/usersPage/DisplayUsers.vue';
-import EditUser from './components/usersPage/EditUser.vue';
+import PostPage from './components/postPage/PostPage.vue';
 import RolesPage from './components/rolesPage/RolesPage.vue';
 
 export const routesVue = [
@@ -16,9 +16,9 @@ export const routesVue = [
         component: UserPage
     },
     {
-        name: 'edit.user',
-        path: '/admin/edit/:id',
-        component: EditUser
+        name: 'posts',
+        path: '/admin/posts',
+        component: PostPage
     },
     {
         name: 'roles',

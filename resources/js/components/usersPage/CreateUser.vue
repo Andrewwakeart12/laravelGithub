@@ -1,63 +1,37 @@
 <template>
-<div class="container">
+<div class="col-md-auto">
+     <table class="table table-dark responsive table-striped ">
 
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Creat a user!</h1>
-                            </div>
-                            <form class="user">
+    <thead>
+        <th>UserName</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Password Confirmation</th>
+        <th>Role</th>
+        <th>Is active</th>
+        <th>Create</th>
+    </thead>
+    <tbody>
+            <tr>
+            <td><input name="usernam" class="userInputInTable" placeholder="username" v-model="user.username" v-on:blur="user"/></td>
+            <td><input name="firstName" class="userInputInTable" placeholder="firstName" v-model="user.firstName" v-on:blur="user"/></td>
 
-                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user " id="exampleInputEmail"
-                                        placeholder="Username" name='username' v-model="user.username"  required autocomplete="username">
+            <td><input name="lastName" class="userInputInTable" placeholder="lastName" v-model="user.lastName" v-on:blur="user" /></td>
 
-
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="exampleFirstName" name="firstName"
-                                            v-model="user.firstName" placeholder="First Name"  required autocomplete="firstName">
-
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control form-control-user " id="exampleLastName"
-                                            placeholder="Last Name" required autocomplete="lastName" v-model="user.lastName" name='lastName'>
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address" name='email' v-model="user.email" required autocomplete="email">
-
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" name="password" class="form-control form-control-user "
-                                            id="exampleInputPassword" placeholder="Password" v-model="user.password" required autocomplete="new-password">
-
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" name="password_confirmation" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" v-model="user.password_confirmation" placeholder="Repeat Password" required autocomplete="new-password">
-
-                                    </div>
-                                </div>
-                                <input @click="createUser()"class="btn btn-primary btn-user btn-block" value="Create">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
+            <td><input name="email" type="email" class="userInputInTable email" placeholder="email" v-model="user.email" v-on:blur="user"/></td>
+            <td><input name="password" type="password" class="userInputInTable email" placeholder="password" v-model="user.password" v-on:blur="user"/></td>
+            <td><input name="password_confirmation" type="password" class="userInputInTable email" placeholder="password_confirmation" v-model="user.password_confirmation" v-on:blur="user"/></td>
+            <td>{{user.role ? user.role.name : 'role no asignado'}}</td>
+            <td contenteditable="false" v-on:click="user.is_active = !user.is_active"> <button class="btn btn-warn">{{user.is_active == true ? 'Desactivar Usuario' : 'Activar usuario'}}</button> </td>
+            <td>
+            <input class="btn btn-danger m-3 p-2" v-on:click="createUser()" type="button" value="Create">
+            </td>
+            </tr>
+    </tbody>
+</table>
+<br/>
 </div>
 </template>
 
@@ -80,7 +54,7 @@ import {route} from '../../routes.js';
                     return {api_token : token};
                 },
                 createUser(){
-
+                console.log(this.user);
                   var token = this.getTokenJson(this.api_key);
                      axios
                 .post(route('users.store', token), this.user)
@@ -93,7 +67,9 @@ import {route} from '../../routes.js';
         data(){
             return {
                 api_key: this.getApiKey(),
-                user: {},
+                user: {
+                    is_active:false,
+                },
             }
         },
         mounted() {

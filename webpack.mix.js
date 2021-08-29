@@ -32,7 +32,9 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/libs/metisMenu.js',
         'resources/js/sb-admin-2.js',
         'resources/js/libs/jquery.js',
-        'resources/js/libs/scripts.js'
+        'resources/js/libs/scripts.js',
+        'resources/vendor/chart.js/Chart.bundle.js',
+        'resources/vendor/chart.js/Chart.js'
 
     ], 'public/js/libs.js');
     mix.js('resources/js/routes','public/js')

@@ -7,3 +7,12 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+.userInputInTable,.userInputInTable:focus {
+    background:none;
+    border:none;
+    outline: none;
+    color:white;
+}
+.userInputInTable::placeholder{
+    color:white;
+}

@@ -10002,3 +10002,21 @@ h3 {
     border-color: #e3e6f0;
   }
 }
+.userInputInTable, .userInputInTable:focus {
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+}
+
+.userInputInTable::-moz-placeholder {
+  color: white;
+}
+
+.userInputInTable:-ms-input-placeholder {
+  color: white;
+}
+
+.userInputInTable::placeholder {
+  color: white;
+}

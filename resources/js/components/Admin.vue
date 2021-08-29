@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-     <a v-bind:href="PostIndex">PostIndex</a>
+                    <router-link to="/admin/posts">Posts</router-link>
                     <router-link to="/admin/users">Create User</router-link>
                     <router-link to="/admin/roles">show roles</router-link>
                     <!-- Page Heading -->

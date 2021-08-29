@@ -1,6 +1,9 @@
 <template>
 <div class="col-md-auto">
-            {{serverMessage}}
+
+     <div class="alert-success" v-if="serverMessage">
+        {{serverMessage.Success}}
+     </div>
      <table class="table table-dark responsive table-striped ">
 
     <thead>
@@ -23,7 +26,13 @@
             <td><input name="lastName" class="userInputInTable" placeholder="username" v-model="user.lastName" v-on:blur="user" /></td>
 
             <td><input name="email" type="email" class="userInputInTable email" placeholder="username" v-model="user.email" v-on:blur="user"/></td>
-            <td>{{user.role ? user.role.name : 'role no asignado'}}</td>
+            <td>
+            <select v-model="user.role_id">
+                <option v-for="role in roles"  :value="role.id">
+                    {{role.name}}
+                </option>
+            </select>
+            </td>
             <td contenteditable="false" v-on:click="user.is_active = !user.is_active"> <button class="btn btn-warn">{{user.is_active == true ? 'Desactivar Usuario' : 'Activar usuario'}}</button> </td>
             <td>
             <input class="btn btn-danger m-3 p-2" v-on:click="usersDelete( api_key, user )" type="button" value="Delete">
@@ -51,8 +60,9 @@ import {route} from '../../routes.js';
                 .then(response=> {
                 this.api_key=response.data;
                     var token =this.getTokenJson(this.api_key);
-                    this.getUsers(token);
 
+                    this.getRoles(token);
+                    this.getUsers(token);
                     console.log("mounted run time " +  this.api_key);
                     console.log('api_key seteada ' + this.api_key )
                     });
@@ -100,12 +110,21 @@ import {route} from '../../routes.js';
 
                     }
                    },
+                   getRoles(token){
+                          axios
+                .get(route('options'))
+                .then(response=> {
+                    this.roles=response.data;
+
+                });
+                   }
                         },
        data: function(){
            return {
                 api_key: [],
                 apiToken: [],
                 users: [],
+                roles:[],
                 serverMessage:null
         }
 

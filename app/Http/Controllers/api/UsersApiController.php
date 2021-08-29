@@ -29,18 +29,19 @@ class UsersApiController extends Controller
         $user=$request->all();
         $user['api_token'] = Str::random(60);
         $user = User::create($user);
-        return response()->json($user);
+        return response()->json(['Success'=> 'User Created']);
      }
      public function update(Request $request, $id)
      {
          $user = User::find($id);
          $user->update($request->all());
 
-         return response()->json('User updated');
+         return response()->json(['Success'=>'User updated']);
 
      }
      public function destroy($id){
          $user = User::findOrFail($id);
-         return response()->json($user);
+         $user->delete();
+         return response()->json(['Success'=> 'User deleted']);
      }
 }

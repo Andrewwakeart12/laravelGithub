@@ -2,8 +2,10 @@
     <div class="container-fluid">
         <h1>Posts</h1>
          <article v-for="post of posts">
-
+            <div class ="card">
             <div v-html="post.body"></div>
+
+            </div>
 
          </article>
         {{this.api_key}}

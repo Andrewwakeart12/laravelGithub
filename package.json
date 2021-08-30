@@ -25,6 +25,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@fullcalendar/core": "^5.9.0",
+        "@fullcalendar/vue": "^5.9.0",
         "chart.js": "^3.5.1",
         "chartjs": "^0.3.24",
         "socket.io-client": "^4.1.3",

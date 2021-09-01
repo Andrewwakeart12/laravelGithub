@@ -3,6 +3,7 @@ import UserPage from './components/usersPage/UserPage.vue';
 import DisplayUsers from './components/usersPage/DisplayUsers.vue';
 import PostPage from './components/postPage/PostPage.vue';
 import RolesPage from './components/rolesPage/RolesPage.vue';
+import TaskPage from './components/taksPage/TaskPage.vue';
 
 export const routesVue = [
     {
@@ -24,5 +25,11 @@ export const routesVue = [
         name: 'roles',
         path: '/admin/roles',
         component: RolesPage
+    },
+
+    {
+        name: 'tasks',
+        path: '/admin/tasks',
+        component: TaskPage
     }
 ];

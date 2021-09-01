@@ -23,6 +23,7 @@ window.Vue = require('vue').default;
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
 Vue.component('menuOptions', require('./components/shared/MenuOptions.vue').default);
+Vue.component('calendar', require('./components/shared/Calendar.vue').default);
 Vue.component('adminMenu', require('./components/AdminMenu.vue').default);
 Vue.component('rolePage', require('./components/rolesPage/RolesPage.vue').default);
 Vue.component('postPage', require('./components/postPage/PostPage.vue').default);

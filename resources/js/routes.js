@@ -1,5 +1,5 @@
 const routes = {
-    "generated::BHTyyk3BRW3DNqu7": {
+    "generated::GN8SvDmnEwfBsZlR": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -68,19 +68,25 @@ const routes = {
     "options": {
         "uri": "api\/options"
     },
-    "generated::nW2qTLnQTkLcAmnh": {
+    "events": {
+        "uri": "api\/eventos"
+    },
+    "generated::VqSj252rN7HeGAHS": {
         "uri": "\/"
     },
-    "generated::YkPHZhYjBc25oAIq": {
+    "generated::3OGuZOqVJLcz2515": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
+    "generated::7iY5yBhlXk9UbFzV": {
+        "uri": "admin\/{any}"
+    },
     "login": {
         "uri": "login"
     },
-    "generated::nvRKnHcipii9xHJD": {
+    "generated::d5EXFdlu6Kba3IXD": {
         "uri": "login"
     },
     "logout": {
@@ -89,7 +95,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::TywFaVLwgMDT7Lcj": {
+    "generated::GbgE7vxjHkW6Udye": {
         "uri": "register"
     },
     "password.request": {
@@ -107,7 +113,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::izztR1RYldOFIr4B": {
+    "generated::vczaghqfzPus9SJQ": {
         "uri": "password\/confirm"
     },
     "home": {

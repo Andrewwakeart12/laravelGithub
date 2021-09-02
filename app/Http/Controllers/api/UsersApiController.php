@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 class UsersApiController extends Controller
 {
     public function index(){
@@ -26,22 +27,42 @@ class UsersApiController extends Controller
 
     }
      public function store(Request $request){
-        $user=$request->all();
-        $user['api_token'] = Str::random(60);
-        $user = User::create($user);
-        return response()->json(['Success'=> 'User Created']);
-     }
+        $permissions= Auth::user()->role->permissions;
+        if($permissions['users']['create']){
+            $user=$request->all();
+            $user['api_token'] = Str::random(60);
+
+            $user = User::create($user);
+            return response()->json(['Success'=> 'User Created']);
+        }else{
+            return response()->json(['Error'=> 'You dont have permission to create users']);
+
+        }
+        }
      public function update(Request $request, $id)
      {
-         $user = User::find($id);
-         $user->update($request->all());
+         $permissions= Auth::user()->role->permissions;
+         if($permissions['users']['update']){
+            $user = User::find($id);
+            $user->update($request->all());
 
-         return response()->json(['Success'=>'User updated']);
+            return response()->json(['Success'=>'User updated']);
+
+         }else{
+             return response()->json(['Success' => 'No tienes permisos para cambiar la informacion de usuario']);
+         }
+
 
      }
      public function destroy($id){
-         $user = User::findOrFail($id);
-         $user->delete();
-         return response()->json(['Success'=> 'User deleted']);
-     }
+
+        $permissions= Auth::user()->role->permissions;
+         if($permissions['users']['delete']){
+            $user = User::findOrFail($id);
+            $user->delete();
+            return response()->json(['Success'=> 'User deleted']);
+         }else{
+            return response()->json(['Error'=> 'You cant delete users']);
+         }
+         }
 }

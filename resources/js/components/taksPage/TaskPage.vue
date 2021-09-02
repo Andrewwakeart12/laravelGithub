@@ -1,6 +1,7 @@
 <template>
     <div class="container-fluid">
         <h1> Tasks </h1>
+        <calendar></calendar>
     </div>
 </template>
 

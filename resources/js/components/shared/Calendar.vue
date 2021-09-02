@@ -18,11 +18,8 @@ import {route} from '../../routes.js';
             FullCalendar
         },
         methods:{
-                    handleClick : function(arg){
-                        console.log(arg);
-                    },
-                     handleClickEvent : function(arg){
-                        console.log(arg);
+                     handleClickEvent(e){
+                         console.log(e);
                     },
                     getApiKey(){
                     axios
@@ -50,6 +47,7 @@ import {route} from '../../routes.js';
             return {
                 api_key:[],
                 calendarOptions: {
+
                     plugins:[dayGridPlugin, interactionPlugin],
                     initialView:'dayGridMonth',
                     dateClick: this.handleClick,

@@ -4,6 +4,9 @@
      <div class="alert-success" v-if="serverMessage">
         {{serverMessage.Success}}
      </div>
+      <div class="alert-danger" v-if="serverMessage">
+        {{serverMessage.Error}}
+     </div>
      <table class="table table-dark responsive table-striped ">
 
     <thead>
@@ -75,7 +78,7 @@ import {route} from '../../routes.js';
                         axios
                         .delete(routeR)
                         .then(response=> {
-                            console.log(response.data);});
+                            this.serverMessage=response.data;});
                     },
 
                     usersUpdate(apiKey,user){

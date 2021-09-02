@@ -55,7 +55,7 @@ public function role(){
     return $this->belongsTo('App\Models\Role');
 }
 public function isAdmin(){
-    if($this->role->name == 'administrator'){
+    if($this->role->permissions['especials']['isAdmin']){
     return true;
 }else {
     return false;

@@ -21,7 +21,8 @@ class RoleSeeder extends Seeder
             'roles'=> ['create' => true, 'read'=> true, 'update'=>true, 'delete'=> true] ,
             'users'=> ['create' => true, 'read'=> true, 'update'=>true, 'delete'=> true] ,
             'events'=> ['create' => true, 'read'=> true, 'update'=>true, 'delete'=> true],
-            'tasks'=> ['create' => true, 'read'=> true, 'update'=>true, 'delete'=> true]
+            'tasks'=> ['create' => true, 'read'=> true, 'update'=>true, 'delete'=> true],
+            'especials' => ['isAdmin' => true, 'hasBannedCapability'=> true],
             ] ] );
             Role::create(['name'=>'staff',
             'permissions' => [
@@ -30,6 +31,7 @@ class RoleSeeder extends Seeder
                 'users'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false] ,
                 'events'=> ['create' => false, 'read'=> true, 'update'=>false, 'delete'=> false],
                 'tasks'=> ['create' => false, 'read'=> true, 'update'=>true, 'delete'=> false],
+                'especials' => ['isAdmin' => true, 'hasBannedCapability'=> true],
             ] ] );
             Role::create(['name'=>'user',
             'permissions' => [
@@ -38,6 +40,7 @@ class RoleSeeder extends Seeder
                 'users'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false] ,
                 'events'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false],
                 'tasks'=> ['create' => false, 'read'=> false, 'update'=>false, 'delete'=> false],
+                'especials' => ['isAdmin' => false, 'hasBannedCapability'=> false],
             ] ] );
     }
 }

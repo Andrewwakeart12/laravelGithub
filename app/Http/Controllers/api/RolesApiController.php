@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 class RolesApiController extends Controller
 {
     /**
@@ -69,10 +70,16 @@ class RolesApiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::findOrFail($request->get('id'));
-        $role->update($request->all());
-        return response()->json(['success' => 'true']);
-    }
+        $permissions= Auth::user()->role->permissions;
+        if($permissions['roles']['update']){
+            $role = Role::findOrFail($request->get('id'));
+            $role->update($request->all());
+            return response()->json(['Success' => 'Role Updated']);
+        }else
+        {
+            return response()->json(['Error' => 'you cant change roles info']);
+        }
+        }
 
     /**
      * Remove the specified resource from storage.

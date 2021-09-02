@@ -47,6 +47,12 @@
             <td ><input type="checkbox"  v-model="role.permissions.roles.delete"name="permissions-roles-delete" id="" :checked="role.permissions.roles.delete"></td>
 
             </tr>
+            <br/>
+             <tr><th>Especials</th>
+             <td >IsAdmin :  <input type="checkbox" v-model="role.permissions.especials.isAdmin" id="" :checked="role.permissions.especials.isAdmin">
+             <td >has Ban Capability :  <input type="checkbox" v-model="role.permissions.especials.hasBannedCapability" id="" :checked="role.permissions.especials.hasBannedCapability">
+            </td >
+            </tr>
     </tbody>
 </table>
 <br/>

@@ -51,6 +51,7 @@ import {route} from '../../routes.js';
                     plugins:[dayGridPlugin, interactionPlugin],
                     initialView:'dayGridMonth',
                     dateClick: this.handleClick,
+                    dayMaxEvents: 2,
                     eventClick: this.handleClickEvent,
                     events : this.getEvents()
                 }

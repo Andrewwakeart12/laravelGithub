@@ -36,7 +36,8 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Options: </h6>
-                        <router-link class="collapse-item" to="/admin/users">Create User</router-link>
+                        <router-link class="collapse-item" to="/admin/users">User</router-link>
+                         <router-link class="collapse-item"  to="/admin/roles">Roles</router-link>
                         <router-link  class="collapse-item" to="/admin/posts">Posts</router-link>
                        <router-link  class="collapse-item" to="/admin/tasks">Tasks</router-link>
 

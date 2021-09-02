@@ -22,7 +22,8 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/css/libs/bootstrap.css',
         'resources/css/libs/font-awesome.css',
         'resources/css/libs/metisMenu.css',
-        'resources/css/libs/sb-admin-2.css'
+        'resources/css/libs/sb-admin-2.css',
+        'resources/css/sandbox.css',
 
     ], 'public/css/libs.css');
 
@@ -34,7 +35,8 @@ mix.js('resources/js/app.js', 'public/js')
         'resources/js/libs/jquery.js',
         'resources/js/libs/scripts.js',
         'resources/vendor/chart.js/Chart.bundle.js',
-        'resources/vendor/chart.js/Chart.js'
+        'resources/vendor/chart.js/Chart.js',
+        'resources/js/sandbox.js',
 
     ], 'public/js/libs.js');
     mix.js('resources/js/routes','public/js')

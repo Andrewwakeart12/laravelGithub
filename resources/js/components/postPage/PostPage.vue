@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <h1>Posts</h1>
-         <article v-for="post of posts">
+         <article data-editable v-for="post of posts">
             <div class ="card">
             <div v-html="post.body"></div>
 
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+
+
 import {route} from '../../routes.js';
     export default {
                     methods:

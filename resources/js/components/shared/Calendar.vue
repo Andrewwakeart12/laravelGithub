@@ -10,6 +10,7 @@
 <script>
     import '@fullcalendar/core/vdom';
 import FullCalendar from  '@fullcalendar/vue';
+import listPlugin from  '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import {route} from '../../routes.js';
@@ -48,8 +49,8 @@ import {route} from '../../routes.js';
                 api_key:[],
                 calendarOptions: {
 
-                    plugins:[dayGridPlugin, interactionPlugin],
-                    initialView:'dayGridMonth',
+                    plugins:[listPlugin, interactionPlugin],
+                    initialView:'listWeek',
                     dateClick: this.handleClick,
                     dayMaxEvents: 2,
                     eventClick: this.handleClickEvent,

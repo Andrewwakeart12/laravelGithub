@@ -1,5 +1,5 @@
 const routes = {
-    "generated::P7CUGnf4yYzuQ7sN": {
+    "generated::2abrtWlIWkCuVlpq": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -71,22 +71,43 @@ const routes = {
     "events": {
         "uri": "api\/eventos"
     },
-    "generated::BvF4R8LF9cTx830N": {
+    "task.index": {
+        "uri": "api\/task"
+    },
+    "task.create": {
+        "uri": "api\/task\/create"
+    },
+    "task.store": {
+        "uri": "api\/task"
+    },
+    "task.show": {
+        "uri": "api\/task\/{task}"
+    },
+    "task.edit": {
+        "uri": "api\/task\/{task}\/edit"
+    },
+    "task.update": {
+        "uri": "api\/task\/{task}"
+    },
+    "task.destroy": {
+        "uri": "api\/task\/{task}"
+    },
+    "generated::tCOXG98nnWkdxMP1": {
         "uri": "\/"
     },
-    "generated::asDXO1LuPqr7Wb1F": {
+    "generated::M0LjOdNxxFyssnF4": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
-    "generated::eqwEBHkRQ8QU4vQC": {
+    "generated::zwIjd5BAqhoWiTwC": {
         "uri": "admin\/{any}"
     },
     "login": {
         "uri": "login"
     },
-    "generated::lCJQZiNi9cd0vamF": {
+    "generated::6tDw1iaQ1HFCCCAh": {
         "uri": "login"
     },
     "logout": {
@@ -95,7 +116,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::08P7wATa3wIAK3xX": {
+    "generated::Igw2qCJDtpNI91R6": {
         "uri": "register"
     },
     "password.request": {
@@ -113,7 +134,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::bKYvRBNVv3XkTWZy": {
+    "generated::NwptL9zhSM9I39Zt": {
         "uri": "password\/confirm"
     },
     "home": {

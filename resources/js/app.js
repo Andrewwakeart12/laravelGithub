@@ -63,3 +63,4 @@ const menuOptions = new Vue({
     router: router,
     render: h => h(MenuOptions)
 })
+

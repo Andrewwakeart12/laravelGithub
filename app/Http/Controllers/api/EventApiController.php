@@ -8,7 +8,7 @@ use App\Models\Event;
 class EventApiController extends Controller
 {
     public function calendarEvents(){
-        $eventos = Event::get(['title','date']);
+        $eventos = Event::get(['title','description','date']);
         return response()->json(["Events"=> $eventos]);
     }
 }

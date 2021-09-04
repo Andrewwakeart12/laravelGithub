@@ -1,10 +1,8 @@
 
 
 <template>
-<div width="200">
     <FullCalendar :options="calendarOptions" :events="calendarOptions.events"></FullCalendar>
 
-</div>
 </template>
 
 <script>
@@ -27,16 +25,29 @@ import {route} from '../../routes.js';
                     .post(route('getApiKey'))
                     .then(response=> {
                     this.api_key = response.data;
-                    this.getEvents();
+                    this.getTasks();
                     });
                     }
                     ,
-                    getEvents(){
+                    getTasks(){
                          axios
-                    .get(route('events'))
+                    .get(route('task.index'))
                     .then(response=> {
-                    this.calendarOptions.events = response.data.Events;
-                    console.log(response.data.Events);
+                         var events = []
+                    response.data.events.forEach(element => {
+                        var jsonEvents= {
+                            id: 'eventId_'+element.id,
+                             title : element.event_name ,
+                             start : element.event_start,
+                              end: element.event_end,
+                              allDay : false,
+                              editable : true,
+                              description : element.event_description
+                              }
+                        events.push(jsonEvents);
+
+                            });
+                        this.calendarOptions.events = events ;
                     });
                     },
                     getTokenJson(ApiKey){
@@ -49,12 +60,15 @@ import {route} from '../../routes.js';
                 api_key:[],
                 calendarOptions: {
 
-                    plugins:[listPlugin, interactionPlugin],
-                    initialView:'listWeek',
+                    plugins:[dayGridPlugin, interactionPlugin],
                     dateClick: this.handleClick,
                     dayMaxEvents: 2,
                     eventClick: this.handleClickEvent,
-                    events : this.getEvents()
+                    events : [],
+                    eventDidMount : function(info){
+                        console.log(info);
+                    },
+                    height : 400
                 }
             }
         },

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
        $categories = new CategoriesSeeder();
        $posts = new PostsSeeder();
        $role = new RoleSeeder();
-
+        $tasks = new TasksSeeder();
        $categories->run();
        $this->command->info('categories table seeded');
        $posts->run();
@@ -30,5 +30,7 @@ class DatabaseSeeder extends Seeder
        $users->run();
        $this->command->info('users table seeded');
 
+       $tasks->run();
+       $this->command->info('tasks table seeded');
     }
 }

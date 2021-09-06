@@ -19,6 +19,9 @@ window.Vue = require('vue').default;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
@@ -43,7 +46,8 @@ import VueRouter from 'vue-router';
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 

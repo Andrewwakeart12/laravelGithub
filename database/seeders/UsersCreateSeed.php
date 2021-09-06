@@ -16,7 +16,7 @@ class UsersCreateSeed extends Seeder
      */
     public function run()
     {
-        DB::table('users')->truncate();
+        DB::table('users')->delete();
         User::create(array('username'=>'Obe','firstName'=>'Edgar','lastName'=>'Marquina Ruiz',
         'email'=>'andrewwake.art@gmail.com'
         ,'password'=>Hash::make('12345678')

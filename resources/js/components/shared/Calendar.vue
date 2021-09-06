@@ -1,7 +1,14 @@
 
 
 <template>
-    <FullCalendar :options="calendarOptions" :events="calendarOptions.events"></FullCalendar>
+    <div class>
+ <FullCalendar :options="calendarOptions" :events="calendarOptions.events"></FullCalendar>
+<div>
+
+<b-modal v-model="modalShow">Hello From modal</b-modal>
+</div>
+
+</div>
 
 </template>
 
@@ -18,7 +25,8 @@ import {route} from '../../routes.js';
         },
         methods:{
                      handleClickEvent(e){
-                         console.log(e);
+                         console.log(e.event.start)
+                         this.modalShow = true;
                     },
                     getApiKey(){
                     axios
@@ -57,6 +65,7 @@ import {route} from '../../routes.js';
         },
         data(){
             return {
+                modalShow:false,
                 api_key:[],
                 calendarOptions: {
 
@@ -66,7 +75,7 @@ import {route} from '../../routes.js';
                     eventClick: this.handleClickEvent,
                     events : [],
                     eventDidMount : function(info){
-                        console.log(info);
+                        console.log(info.event.start);
                     },
                     height : 400
                 }

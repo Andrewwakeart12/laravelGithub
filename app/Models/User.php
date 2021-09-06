@@ -62,4 +62,7 @@ public function isAdmin(){
 }
 
 }
+public function tasks(){
+    return $this->hasMany('App\Models\Task');
+}
 }

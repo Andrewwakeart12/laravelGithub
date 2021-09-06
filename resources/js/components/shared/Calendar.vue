@@ -5,7 +5,15 @@
  <FullCalendar :options="calendarOptions" :events="calendarOptions.events"></FullCalendar>
 <div>
 
-<b-modal v-model="modalShow">Hello From modal</b-modal>
+<b-modal v-model="modalShow">
+    <div class="col-12 row">
+        <h2>{{this.event.title}}</h2>
+        </br>
+        <p v-if="this.event.extendedProps">{{this.event.extendedProps.description}}</p>
+        <b-form-datepicker v-model="this.event.start"></b-form-datepicker>
+        <b-form-datepicker v-model="this.event.end"></b-form-datepicker>
+    </div>
+</b-modal>
 </div>
 
 </div>
@@ -17,6 +25,7 @@
 import FullCalendar from  '@fullcalendar/vue';
 import listPlugin from  '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import {formatDate} from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import {route} from '../../routes.js';
     export default {
@@ -25,7 +34,8 @@ import {route} from '../../routes.js';
         },
         methods:{
                      handleClickEvent(e){
-                         console.log(e.event.start)
+                         this.event=e.event;
+                         console.log(e.event.extendedProps);
                          this.modalShow = true;
                     },
                     getApiKey(){
@@ -67,6 +77,7 @@ import {route} from '../../routes.js';
             return {
                 modalShow:false,
                 api_key:[],
+                event:[],
                 calendarOptions: {
 
                     plugins:[dayGridPlugin, interactionPlugin],

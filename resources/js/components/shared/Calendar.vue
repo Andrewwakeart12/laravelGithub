@@ -9,9 +9,9 @@
     <div class="col-12 row">
         <h2>{{this.event.title}}</h2>
         </br>
-        <p v-if="this.event.extendedProps">{{this.event.extendedProps.description}}</p>
-        <b-form-datepicker v-model="this.event.start"></b-form-datepicker>
-        <b-form-datepicker v-model="this.event.end"></b-form-datepicker>
+        <p v-if="this.task.extendedProps">{{this.task}}</p>
+        <b-form-datepicker  v-model="task.start" @input="tChange"></b-form-datepicker>
+        <b-form-datepicker  v-model="task.end" @input="tChange"></b-form-datepicker>
     </div>
 </b-modal>
 </div>
@@ -32,19 +32,38 @@ import {route} from '../../routes.js';
         components: {
             FullCalendar
         },
+
         methods:{
+                tChange(){
+                    this.calendarOptions.events.forEach(element =>{
+                        if(element.id == this.task.id){
+                             console.log('watcher: ' + this.task.start);
+                            element.start = this.task.start;
+                            element.end = this.task.end;
+                            console.log(element.start);
+                        }
+                    });
+
+        },
                      handleClickEvent(e){
+                         if(e.event){
                          this.event=e.event;
-                         console.log(e.event.extendedProps);
+                         this.$set(this.task, 'id', e.event.id);
+                         this.$set(this.task, 'extendedProps', e.event.extendedProps);
+                         this.$set(this.task, 'start', e.event.start);
+                         this.$set(this.task, 'end', e.event.end);
+                         }
                          this.modalShow = true;
                     },
-                    getApiKey(){
-                    axios
-                    .post(route('getApiKey'))
-                    .then(response=> {
-                    this.api_key = response.data;
-                    this.getTasks();
-                    });
+                    getApiKey()
+                    {
+                        axios
+                        .post(route('getApiKey'))
+                        .then(response=>
+                            {
+                                this.api_key = response.data;
+                                this.getTasks();
+                            });
                     }
                     ,
                     getTasks(){
@@ -54,7 +73,7 @@ import {route} from '../../routes.js';
                          var events = []
                     response.data.events.forEach(element => {
                         var jsonEvents= {
-                            id: 'eventId_'+element.id,
+                            id: 'eventId_'+ element.id,
                              title : element.event_name ,
                              start : element.event_start,
                               end: element.event_end,
@@ -78,6 +97,8 @@ import {route} from '../../routes.js';
                 modalShow:false,
                 api_key:[],
                 event:[],
+                task:{
+                },
                 calendarOptions: {
 
                     plugins:[dayGridPlugin, interactionPlugin],

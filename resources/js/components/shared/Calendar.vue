@@ -9,7 +9,8 @@
     <div class="col-12 row">
         <h2>{{this.event.title}}</h2>
         </br>
-        <p v-if="this.task.extendedProps">{{this.task}}</p>
+        <input  type="hidden" v-if="this.task.extendedProps" v-model="task.extendedProps.db_id" />
+        <p v-if="this.task.extendedProps">{{this.task.extendedProps.description}}</p>
         <b-form-datepicker  v-model="task.start" @input="tChange"></b-form-datepicker>
         <b-form-datepicker  v-model="task.end" @input="tChange"></b-form-datepicker>
     </div>
@@ -34,13 +35,23 @@ import {route} from '../../routes.js';
         },
 
         methods:{
+                deleteTask(id){
+                     this.calendarOptions.events.forEach(element =>{
+                        if(element.db_id == id){
+                            element = null;
+                        }
+                    });
+                    this.modalShow= false;
+
+                },
                 tChange(){
+                    console.log(this.calendarOptions.events);
                     this.calendarOptions.events.forEach(element =>{
                         if(element.id == this.task.id){
                              console.log('watcher: ' + this.task.start);
                             element.start = this.task.start;
                             element.end = this.task.end;
-                            console.log(element.start);
+                            console.log(element.db_id);
                         }
                     });
 
@@ -79,7 +90,8 @@ import {route} from '../../routes.js';
                               end: element.event_end,
                               allDay : false,
                               editable : true,
-                              description : element.event_description
+                              description : element.event_description,
+                              db_id : element.id
                               }
                         events.push(jsonEvents);
 

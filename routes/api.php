@@ -27,10 +27,8 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::resource('/Posts', ApiPostController::class);
     Route::resource('/users', UsersApiController::class);
     Route::resource('/roles', RolesApiController::class);
-
+    Route::resource('/task', ApiTaskController::class);
 });
-
-Route::get('/options', [UsersApiController::class, 'options'])->name('options');
 Route::get('/eventos', [EventApiController::class, 'calendarEvents'])->name('events');
 
-Route::resource('/task', ApiTaskController::class);
+

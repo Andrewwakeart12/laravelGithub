@@ -26,7 +26,7 @@ Route::group(['middleware'=>'admin'],function(){
         return view('admin.index');
     })->name('adminPage');
     Route::get('/admin/{any}',function(){
-        return view('admin.index');
+        return redirect(route('adminPage'));
     })->where('any', '.*');
 
 });

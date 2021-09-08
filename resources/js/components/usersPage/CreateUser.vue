@@ -45,14 +45,7 @@
 import {route} from '../../routes.js';
     export default {
         methods:
-        { getApiKey()
-                {
-                        axios
-                .post(route('getApiKey'))
-                .then(response=> {this.api_key=response.data;
-                    });
-                }
-                ,
+        {
                  getTokenJson(apiKey)
                 {
                     var token = apiKey;
@@ -61,7 +54,7 @@ import {route} from '../../routes.js';
                 },
                 createUser(){
                 console.log(this.user);
-                  var token = this.getTokenJson(this.api_key);
+                  var token = this.getTokenJson(this.$apiKey);
                      axios
                 .post(route('users.store', token), this.user)
                 .then(response=> { this.ServerMessage = response.data }
@@ -72,7 +65,6 @@ import {route} from '../../routes.js';
 
         data(){
             return {
-                api_key: this.getApiKey(),
                 user: {
                     is_active:false,
                 },

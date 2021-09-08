@@ -8,7 +8,6 @@
             </div>
 
          </article>
-        {{this.api_key}}
     </div>
 </template>
 
@@ -19,18 +18,8 @@ import {route} from '../../routes.js';
     export default {
                     methods:
             {
-            getApiKey()
-            {
-                        axios
-                .post(route('getApiKey'))
-                .then(response=> {
-                    this.api_key = response.data;
-                    var token = this.getTokenJson(this.api_key);
-                    this.getPosts(token);
-                 });
-
-                    },
-            getPosts(token){
+            getPosts(){
+                var token = this.getTokenJson(this.$apiKey);
                      axios
                 .get(route('Posts.index',token))
                 .then(response=> {
@@ -47,16 +36,15 @@ import {route} from '../../routes.js';
             data() {
 
             return {
-                api_key: [],
                 posts:[],
 
         }
             },
              beforeMount(){
-            this.getApiKey();
+            this.getPosts();
         },
         mounted() {
-            console.log('Component Exaple App mounted.')
+            console.log('Component Posts  mounted.')
         }
     }
 </script>

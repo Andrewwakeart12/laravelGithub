@@ -65,21 +65,13 @@ import {route} from '../../routes.js';
                          this.$set(this.task, 'end', e.event.end);
                          }
                          this.modalShow = true;
-                    },
-                    getApiKey()
-                    {
-                        axios
-                        .post(route('getApiKey'))
-                        .then(response=>
-                            {
-                                this.api_key = response.data;
-                                this.getTasks();
-                            });
                     }
                     ,
                     getTasks(){
+                        var token = this.getTokenJson();
+                        console.log(token);
                          axios
-                    .get(route('task.index'))
+                    .get(route('task.index', token))
                     .then(response=> {
                          var events = []
                     response.data.events.forEach(element => {
@@ -99,8 +91,8 @@ import {route} from '../../routes.js';
                         this.calendarOptions.events = events ;
                     });
                     },
-                    getTokenJson(ApiKey){
-                        var token = {api_tokne: ApiKey};
+                    getTokenJson(){
+                        var token = {api_token: this.$apiKey};
                         return token;
                     }
         },
@@ -137,7 +129,7 @@ import {route} from '../../routes.js';
             }
         },
         beforeMount(){
-            this.getApiKey();
+            this.getTasks();
         },
         mounted(){
             console.log('prop = ' + this.pri);

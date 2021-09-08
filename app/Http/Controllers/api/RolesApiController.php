@@ -15,7 +15,12 @@ class RolesApiController extends Controller
      */
     public function index()
     {
+        $options = Role::all();
+        /*RECUERDA CONVERTIR EL OBJETO EN STRING ANTES DE HACER MODIFICACIONES EN LOS PERMISOS DE LOS ROLES
+        $options = $options->toArray();
+        $options['permissions']['posts']['create'] = false;*/
 
+        return $options;
     }
 
     /**

@@ -70,18 +70,11 @@ import {route} from '../../routes.js';
     export default {
 
             methods:
-            {   getApiKey()
             {
-                        axios
-                .post(route('getApiKey'))
-                .then(response=> {
-                    this.api_key = response.data;
-                 });
-
-                    },
             getRoles(){
+                var token = this.getTokenJson(this.$apiKey);
                 axios
-                .get(route('options'))
+                .get(route('roles.index',token))
                 .then(response=> {
                     this.roles=response.data;
 

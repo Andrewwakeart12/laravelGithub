@@ -56,19 +56,11 @@ import {route} from '../../routes.js';
     export default {
           methods:
           {
-            getApiKey()
+            setViewData()
                 {
-                        axios
-                .post(route('getApiKey'))
-                .then(response=> {
-                this.api_key=response.data;
-                    var token =this.getTokenJson(this.api_key);
-
+                        var token =this.getTokenJson(this.$apiKey);
                     this.getRoles(token);
                     this.getUsers(token);
-                    console.log("mounted run time " +  this.api_key);
-                    console.log('api_key seteada ' + this.api_key )
-                    });
                 },
 
                     usersDelete(apiKey,user){
@@ -124,7 +116,7 @@ import {route} from '../../routes.js';
                         },
        data: function(){
            return {
-                api_key: [],
+                api_key: this.$apiKey,
                 apiToken: [],
                 users: [],
                 roles:[],
@@ -134,7 +126,7 @@ import {route} from '../../routes.js';
        }
         ,
         beforeMount(){
-            this.getApiKey();
+            this.setViewData();
             var token = this.api_token;
                     console.log(token);
         }

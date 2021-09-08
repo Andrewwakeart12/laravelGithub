@@ -343,10 +343,8 @@
         }
             }
         ,
-        beforeMount(){
-        this.getApiKey();
-        },
         mounted() {
+            this.getApiKey();
                     console.log('COMPONENT ADMIN MOUNTED');
                     },
         methods:{
@@ -354,8 +352,11 @@
 
                        axios
                 .post(route('getApiKey'))
-                .then(response=> {this.api_key=response.data;
+                .then(response=> {
+                    Vue.prototype.$apiKey = response.data;
+                    this.api_key=response.data;
                     this.PostIndex = route('Posts.index', this.getTokenJson(this.api_key));
+                    console.log('apiKey "global : "' + ' ' + this.$apiKey);
                 });
 
                     },

@@ -104,11 +104,13 @@ import {route} from '../../routes.js';
                         return token;
                     }
         },
+        props:['prop'],
         data(){
             return {
                 modalShow:false,
                 api_key:[],
                 event:[],
+                pri: this.prop,
                 task:{
                 },
                 calendarOptions: {
@@ -118,8 +120,17 @@ import {route} from '../../routes.js';
                     dayMaxEvents: 2,
                     eventClick: this.handleClickEvent,
                     events : [],
-                    eventDidMount : function(info){
-                        console.log(info.event.start);
+                    eventStartEditable: true,
+                    eventDrop : function(element){
+                        var task= {
+                            id:element.event.extendedProps.db_id,
+                             title : element.event.title ,
+                             start : element.event.start,
+                              end: element.event.end,
+                              description : element.event.extendedProps.description,
+
+                              }
+                        console.log(task);
                     },
                     height : 400
                 }
@@ -127,6 +138,9 @@ import {route} from '../../routes.js';
         },
         beforeMount(){
             this.getApiKey();
+        },
+        mounted(){
+            console.log('prop = ' + this.pri);
         }
     }
 </script>

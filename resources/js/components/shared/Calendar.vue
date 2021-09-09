@@ -11,8 +11,8 @@
         </br>
         <input  type="hidden" v-if="this.task.extendedProps" v-model="task.extendedProps.db_id" />
         <p                    v-if="this.task.extendedProps">{{this.task.extendedProps.description}}</p>
-        <b-form-datepicker    v-if="task.start" v-model="task.start" @input="tChange"></b-form-datepicker>
-        <b-form-datepicker    v-if="task.end" v-model="task.end" @input="tChange"></b-form-datepicker>
+        <b-form-datepicker     v-model="task.start" @input="tChange"></b-form-datepicker>
+        <b-form-datepicker     v-model="task.end" @input="tChange"></b-form-datepicker>
     </div>
 </b-modal>
 <b-modal title="Create Task"v-model="createTaskModal" >
@@ -33,7 +33,8 @@
     </div>
 <template #modal-footer="{guardar,cancel}">
     <b-button size="sm" variant="success" @click="save()">Guardar</b-button>
-    <b-button size="sm" variant="warning" @click="cancel()">Cancel</b-button>
+    <b-button size="sm" variant="warning" @click="cancel()">Cancelar</b-button>
+    <b-button size="sm" variant="warning" @click="deleteTask()">Delete</b-button>
 </template>
 </b-modal>
 </div>
@@ -57,8 +58,14 @@ import {route} from '../../routes.js';
 
         methods:{
                 save(){
-                    console.log('GUARDADO');
-                },
+                                        this.task.db_id = this.calendarOptions.events.length + 1;
+                                        this.task.id = 'eventId_'+  this.calendarOptions.events.length + 1;
+                                        this.calendarOptions.events.push(this.task) ;
+                                         this.$set(this.calendarOptions.events);
+                                        console.log(this.calendarOptions.events);
+                                         this.$set(this.task, 'id');
+                                         this.task = {};
+                   },
                 deleteTask(id){
                      this.calendarOptions.events.forEach(element =>{
                         if(element.db_id == id){
@@ -69,11 +76,12 @@ import {route} from '../../routes.js';
 
                 },
                 tChange(){
-                    console.log(this.calendarOptions.events);
+                    console.log('task: ')
+;                    console.log(this.task);
                     if(this.task.extendedProps){
 
                     this.calendarOptions.events.forEach(element =>{
-                        if(element.id == this.task.id){
+                        if(element.db_id == this.task.extendedProps.db_id){
                              console.log('watcher: ' + this.task.start);
                             element.start = this.task.start;
                             element.end = this.task.end;
@@ -87,6 +95,7 @@ import {route} from '../../routes.js';
         },
                      handleClickEvent(e){
                          if(e.event){
+                             this.task={};
                          this.event=e.event;
                          this.$set(this.task, 'id', e.event.id);
                          this.$set(this.task, 'title', e.event.title);
@@ -94,6 +103,7 @@ import {route} from '../../routes.js';
                          this.$set(this.task, 'start', e.event.start);
                          this.$set(this.task, 'end', e.event.end);
                          }
+                         console.log(e.event);
                          this.modalShow = true;
                     }
                     ,

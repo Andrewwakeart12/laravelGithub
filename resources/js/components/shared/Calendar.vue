@@ -6,14 +6,35 @@
 <div>
 
 <b-modal v-model="modalShow">
-    <div class="col-12 row">
-        <h2>{{this.event.title}}</h2>
+    <div class="col-12 row" >
+        <h2 v-if="this.task.title">{{this.event.title}}</h2>
         </br>
         <input  type="hidden" v-if="this.task.extendedProps" v-model="task.extendedProps.db_id" />
-        <p v-if="this.task.extendedProps">{{this.task.extendedProps.description}}</p>
-        <b-form-datepicker  v-model="task.start" @input="tChange"></b-form-datepicker>
-        <b-form-datepicker  v-model="task.end" @input="tChange"></b-form-datepicker>
+        <p                    v-if="this.task.extendedProps">{{this.task.extendedProps.description}}</p>
+        <b-form-datepicker    v-if="task.start" v-model="task.start" @input="tChange"></b-form-datepicker>
+        <b-form-datepicker    v-if="task.end" v-model="task.end" @input="tChange"></b-form-datepicker>
     </div>
+</b-modal>
+<b-modal title="Create Task"v-model="createTaskModal" >
+    <div class="form" >
+
+        <h2>{{this.event.title}}</h2>
+        </br>
+        <input  type="hidden" v-if="this.task.extendedProps"  v-model="task.extendedProps.db_id" />
+        <b-form-label for="title">Title</b-form-label>
+        <b-form-input @input="tChange" class="form-group h3" type="text" v-model="task.title" placeholdre="title"/>
+        <b-form-label for="description">Description</b-form-label>
+        <b-form-textarea @input="tChange" name="description" v-model="task.description" cols="50" rows="5" max-rows="10"></b-form-textarea>
+
+            <b-form-datepicker  class="m-2"   v-model="task.start" @input="tChange"></b-form-datepicker>
+        <b-form-datepicker  class="m-2"   v-model="task.end" @input="tChange"></b-form-datepicker>
+
+
+    </div>
+<template #modal-footer="{guardar,cancel}">
+    <b-button size="sm" variant="success" @click="save()">Guardar</b-button>
+    <b-button size="sm" variant="warning" @click="cancel()">Cancel</b-button>
+</template>
 </b-modal>
 </div>
 
@@ -35,6 +56,9 @@ import {route} from '../../routes.js';
         },
 
         methods:{
+                save(){
+                    console.log('GUARDADO');
+                },
                 deleteTask(id){
                      this.calendarOptions.events.forEach(element =>{
                         if(element.db_id == id){
@@ -46,6 +70,8 @@ import {route} from '../../routes.js';
                 },
                 tChange(){
                     console.log(this.calendarOptions.events);
+                    if(this.task.extendedProps){
+
                     this.calendarOptions.events.forEach(element =>{
                         if(element.id == this.task.id){
                              console.log('watcher: ' + this.task.start);
@@ -54,17 +80,31 @@ import {route} from '../../routes.js';
                             console.log(element.db_id);
                         }
                     });
+                    }else{
+                         console.log(this.task);
+                    }
 
         },
                      handleClickEvent(e){
                          if(e.event){
                          this.event=e.event;
                          this.$set(this.task, 'id', e.event.id);
+                         this.$set(this.task, 'title', e.event.title);
                          this.$set(this.task, 'extendedProps', e.event.extendedProps);
                          this.$set(this.task, 'start', e.event.start);
                          this.$set(this.task, 'end', e.event.end);
                          }
                          this.modalShow = true;
+                    }
+                    ,
+                    handleClickDate(e){
+                         console.log(e)
+                         this.$set(this.task, 'id');
+                         this.$set(this.task, 'title');
+                         this.$set(this.task, 'extendedProps');
+                         this.$set(this.task, 'start',e.date);
+                         this.$set(this.task, 'end');
+                         this.createTaskModal = true;
                     }
                     ,
                     getTasks(){
@@ -99,6 +139,7 @@ import {route} from '../../routes.js';
         props:['prop'],
         data(){
             return {
+                createTaskModal:false,
                 modalShow:false,
                 api_key:[],
                 event:[],
@@ -108,7 +149,7 @@ import {route} from '../../routes.js';
                 calendarOptions: {
 
                     plugins:[dayGridPlugin, interactionPlugin],
-                    dateClick: this.handleClick,
+                    dateClick: this.handleClickDate,
                     dayMaxEvents: 2,
                     eventClick: this.handleClickEvent,
                     events : [],

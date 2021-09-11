@@ -14,7 +14,7 @@ class ApiTaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::get(['id','event_name','event_description','event_start','event_end']);
+        $tasks = Task::get(['id','event_name','event_description','event_start','event_end', 'user_id']);
         return response()->json(["events"=> $tasks]);
     }
 
@@ -36,7 +36,8 @@ class ApiTaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $task = Task::create($request);
+
     }
 
     /**

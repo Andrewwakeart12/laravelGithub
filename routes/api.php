@@ -26,6 +26,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['middleware'=>['auth:api']], function(){
     Route::resource('/Posts', ApiPostController::class);
     Route::resource('/users', UsersApiController::class);
+    Route::get('/getRoles', [UsersApiController::class, 'getRoles'] )->name('getRoles');
+    Route::get('/getUsers', [UsersApiController::class, 'getUsersInfo'] )->name('getUsers');
     Route::resource('/roles', RolesApiController::class);
     Route::resource('/task', ApiTaskController::class);
 });

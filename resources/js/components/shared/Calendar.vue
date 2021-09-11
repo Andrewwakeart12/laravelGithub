@@ -2,6 +2,7 @@
 
 <template>
     <div class>
+    {{this.users}}
  <FullCalendar :options="calendarOptions" :events="calendarOptions.events"></FullCalendar>
 <div>
 
@@ -14,8 +15,13 @@
         <label for="title">Title</label>
         <b-form-input @input="tChange" class="form-group h3" type="text" v-model="task.title" placeholdre="title"/>
         <label for="description">Description</label>
-        <b-form-textarea @input="tChange" name="description" v-if="task.description" v-model="task.description" cols="50" rows="5" max-rows="10"></b-form-textarea>
-{{this.task}}
+        <b-form-textarea @input="tChange" name="description" placeholder="Task description" v-model="task.description" cols="50" rows="5" max-rows="10"></b-form-textarea>
+<label for="taskId">Title</label>
+   <b-form-select name="taskId" class="m-2" v-model="task.user_id">
+                <option v-for="user in users"  :value="user.id">
+                    {{user.email}}
+                </option>
+            </b-form-select>
             <b-form-datepicker  class="m-2"   v-model="task.start" @input="tChange"></b-form-datepicker>
         <b-form-datepicker  class="m-2"   v-model="task.end" @input="tChange"></b-form-datepicker>
 
@@ -37,9 +43,8 @@
         <label for="title">Title</label>
         <b-form-input @input="tChange" class="form-group h3" type="text" v-model="task.title" placeholdre="title"/>
         <label for="description">Description</label>
-        <b-form-textarea @input="tChange" name="description"  v-model="task.description" cols="50" rows="5" max-rows="10"></b-form-textarea>
-        {{this.task}}
-            <b-form-datepicker  class="m-2"   v-model="task.start" @input="tChange"></b-form-datepicker>
+        <b-form-textarea @input="tChange" name="description"  v-model="task.description" placeholder="Task description" cols="50" rows="5" max-rows="10"></b-form-textarea>
+        <b-form-datepicker  class="m-2"   v-model="task.start" @input="tChange"></b-form-datepicker>
         <b-form-datepicker  class="m-2"   v-model="task.end" @input="tChange"></b-form-datepicker>
 
 
@@ -71,6 +76,16 @@ import {route} from '../../routes.js';
         },
 
         methods:{
+            getUsers(){
+                  var token=this.$apiKey;
+                      var token = {api_token : token};
+                          axios
+                .get(route('getUsers', token))
+                .then(response=> {
+                    this.users=response.data;
+
+                });
+            },
             //verifica si los datos existen en el arreglo de Fullcalendar, si existen isInArray = true si no :
             //guarda los datos en el arreglo principal
                 save(){
@@ -156,7 +171,7 @@ import {route} from '../../routes.js';
                          this.$set(this.task, 'title', e.event.title);
                          this.$set(this.task, 'description', e.event.extendedProps.description);
                          this.$set(this.task, 'db_id', e.event.extendedProps.db_id);
-
+                         this.$set(this.task, 'user_id', e.event.extendedProps.user_id);
                          this.$set(this.task, 'start', e.event.start);
                          this.$set(this.task, 'end', e.event.end);
                          }
@@ -192,7 +207,8 @@ import {route} from '../../routes.js';
                               allDay : false,
                               editable : true,
                               description : element.event_description,
-                              db_id : element.id
+                              db_id : element.id,
+                              user_id: element.user_id
                               }
                         events.push(jsonEvents);
 
@@ -209,9 +225,12 @@ import {route} from '../../routes.js';
         },
         data(){
             return {
+                users: [],
+                user:[],
+                task:[],
                 createTaskModal:false,
                 modalShow:false,
-                api_key:[],
+                api_key:this.$apiKey,
                 event:[],
                 pri: this.prop,
                 task:{
@@ -241,9 +260,10 @@ import {route} from '../../routes.js';
         },
         beforeMount(){
             this.getTasks();
+            this.getUsers();
         },
         mounted(){
-            console.log('prop = ' + this.pri);
+            console.log(this.users);
         }
     }
 

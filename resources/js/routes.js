@@ -1,5 +1,5 @@
 const routes = {
-    "generated::2abrtWlIWkCuVlpq": {
+    "generated::aVhuZEujKxHk1l2l": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -44,6 +44,12 @@ const routes = {
     "users.destroy": {
         "uri": "api\/users\/{user}"
     },
+    "getRoles": {
+        "uri": "api\/getRoles"
+    },
+    "getUsers": {
+        "uri": "api\/getUsers"
+    },
     "roles.index": {
         "uri": "api\/roles"
     },
@@ -64,12 +70,6 @@ const routes = {
     },
     "roles.destroy": {
         "uri": "api\/roles\/{role}"
-    },
-    "options": {
-        "uri": "api\/options"
-    },
-    "events": {
-        "uri": "api\/eventos"
     },
     "task.index": {
         "uri": "api\/task"
@@ -92,22 +92,25 @@ const routes = {
     "task.destroy": {
         "uri": "api\/task\/{task}"
     },
-    "generated::tCOXG98nnWkdxMP1": {
+    "events": {
+        "uri": "api\/eventos"
+    },
+    "generated::FvTKK2XzSNOUrIL4": {
         "uri": "\/"
     },
-    "generated::M0LjOdNxxFyssnF4": {
+    "generated::KB7yWXkzTG8dOBSp": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
-    "generated::zwIjd5BAqhoWiTwC": {
+    "generated::KGegBALcTff3uqgz": {
         "uri": "admin\/{any}"
     },
     "login": {
         "uri": "login"
     },
-    "generated::6tDw1iaQ1HFCCCAh": {
+    "generated::uc8UQMkodYv2ivVS": {
         "uri": "login"
     },
     "logout": {
@@ -116,7 +119,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::Igw2qCJDtpNI91R6": {
+    "generated::8j90OXzCTQQMm2vC": {
         "uri": "register"
     },
     "password.request": {
@@ -134,7 +137,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::NwptL9zhSM9I39Zt": {
+    "generated::oVELLmbjsoJgqs6K": {
         "uri": "password\/confirm"
     },
     "home": {

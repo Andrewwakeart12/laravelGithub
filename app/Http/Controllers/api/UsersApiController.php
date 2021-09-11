@@ -17,8 +17,8 @@ class UsersApiController extends Controller
         }
         return response()->json($users);
     }
-    public function options(){
-        $options = Role::all();
+    public function getRoles(){
+        $options = Role::all(['id','name']);
         /*RECUERDA CONVERTIR EL OBJETO EN STRING ANTES DE HACER MODIFICACIONES EN LOS PERMISOS DE LOS ROLES
         $options = $options->toArray();
         $options['permissions']['posts']['create'] = false;*/
@@ -53,6 +53,16 @@ class UsersApiController extends Controller
          }
 
 
+     }
+     public function getUsersInfo(){
+
+            $users = User::all(['email', 'id','role_id']);
+            foreach($users as $user){
+                $user->role = Role::find($user->role_id);
+                $user->tasks = $user->tasks;
+                $user->isThisUser = $user->isThisUser($user->id);
+            }
+            return $users;
      }
      public function destroy($id){
 

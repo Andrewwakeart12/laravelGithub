@@ -62,6 +62,15 @@ public function isAdmin(){
 }
 
 }
+
+public function isThisUser($userID){
+    if($userID == Auth::user()->id){
+        return true;
+    }else{
+        return false;
+    }
+
+}
 public function tasks(){
     return $this->hasMany('App\Models\Task');
 }

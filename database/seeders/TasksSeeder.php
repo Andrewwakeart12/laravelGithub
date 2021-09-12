@@ -19,7 +19,7 @@ class TasksSeeder extends Seeder
         Task::create([
             'event_name' => 'Event 1'
             ,'event_description' => 'Testing Event 1',
-            'user_id'=> 1
+            'user_id'=> 2
             , 'event_start'=>Carbon::now(),
             'event_end' => new Carbon('tomorrow')
         ]);

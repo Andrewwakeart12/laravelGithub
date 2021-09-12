@@ -10,51 +10,70 @@ import {route} from '../../routes.js';
         components: {
             FullCalendar
         },
+        data(){
+            return {
+                users: [],
+                user:[],
+                thisUser: [],
+                task:[],
+                createTaskModal:false,
+                modalShow:false,
+                api_key:this.$apiKey,
+                event:[],
+                pri: this.prop,
+                task:{
+                },
+                calendarOptions: {
 
+                    plugins:[dayGridPlugin, interactionPlugin],
+                    dateClick: this.handleClickDate,
+                    dayMaxEvents: 2,
+                    eventClick: this.handleClickEvent,
+                    events : [],
+                    eventStartEditable: true,
+                    eventDrop : function(element){
+                        var task = {
+                            id:element.event.extendedProps.db_id,
+                             title : element.event.title ,
+                             start : element.event.start,
+                              end: element.event.end,
+                              description : element.event.extendedProps.description,
+
+                              }
+                    },
+                    height : 400
+                }
+            }
+        },
         methods:{
+
             //verifica si los datos existen en el arreglo de Fullcalendar, si existen isInArray = true si no :
             //guarda los datos en el arreglo principal
                 save(){
                   var isInArray = false;
                     var i = 0;
-                    while(isInArray == false || i <= this.calendarOptions.events.length - 1){
-                        console.log(this.task);
-                        console.log(i);
-                        if(this.task.db_id){
+                    if(this.task.db_id){
 
+                    while(isInArray == false || i <= this.calendarOptions.events.length - 1){
                             if(this.calendarOptions.events[i].db_id == this.task.db_id){
                                     this.$set(this.calendarOptions.events[i], this.task);
-                                    console.log(this.calendarOptions.events[i]);
-                                    console.log('el objeto esta en el array');
-                                    console.log(this.calendarOptions.events[i]);
                                     this.task = {};
                                     this.modalShow= false;
                                     return isInArray = true;
 
                                 }
-                        }else{
-                             isInArray = false;
-                        }
+
                         i++;
                         }
-
+                    }
                         if(isInArray == false){
-                            console.log('comprobacion 1 exitosa');
-                        }
-
-                        if(isInArray === false){
-                            console.log('comprobacion 2 exitosa');
-                        }
-                       console.log(isInArray);
-                        if(isInArray == false){
-                            console.log('funcion de creacion iniciada');
                             this.task.db_id = this.calendarOptions.events.length + 1;
                             this.task.id = 'eventId_'+  this.calendarOptions.events.length + 1;
                             this.calendarOptions.events.push(this.task) ;
                             this.$set(this.calendarOptions.events);
                             this.$set(this.task, 'id');
                             this.task = {};
-                            console.log('objeto creado');
+
                         }
                    },
               //borra la tarea del arreglo principal, verificando por id si existe
@@ -71,22 +90,23 @@ import {route} from '../../routes.js';
                 //tambien verifica si task tiene extended props de modo que no regresa un error si no lo hay, de no existir hay un error en el codigo
                 //y regresa la informacion de la tarea por consola para verificar los datos
                 tChange(){
-                    if(this.task.db_id){
-                    this.$set(this.calendarOptions.events);
-                    this.calendarOptions.events.forEach(element =>{
-                        if(element.db_id == this.task.db_id){
+                    if(this.thisUser.role.permissions.tasks.update){
+                        if(this.task.db_id)
+                        {
+                        this.$set(this.calendarOptions.events);
+                        this.calendarOptions.events.forEach(element =>{
+                        if(element.db_id == this.task.db_id)
+                        {
                             element.title = this.task.title;
-                            console.log('task: ');
-                            console.log(this.task);
                             element.description = this.task.description;
+                            element.user_id = this.task.user_id;
                             element.start = this.task.start;
                             element.end = this.task.end;
-                            console.log(element.db_id);
                         }
                     });
-                    }else{
-                         console.log(this.task);
-                    }
+                    }}else{
+                        console.log('actualizacion fallida');
+                   }
 
         },
         //al hacer click en un evento configura las propiedades de task y las hace reactivas,
@@ -98,11 +118,10 @@ import {route} from '../../routes.js';
                          this.$set(this.task, 'title', e.event.title);
                          this.$set(this.task, 'description', e.event.extendedProps.description);
                          this.$set(this.task, 'db_id', e.event.extendedProps.db_id);
-
+                         this.$set(this.task, 'user_id', e.event.extendedProps.user_id);
                          this.$set(this.task, 'start', e.event.start);
                          this.$set(this.task, 'end', e.event.end);
                          }
-                         console.log(this.task);
                          this.modalShow = true;
                     }
                     ,
@@ -134,7 +153,8 @@ import {route} from '../../routes.js';
                               allDay : false,
                               editable : true,
                               description : element.event_description,
-                              db_id : element.id
+                              db_id : element.id,
+                              user_id: element.user_id
                               }
                         events.push(jsonEvents);
 
@@ -147,44 +167,33 @@ import {route} from '../../routes.js';
                     getTokenJson(){
                         var token = {api_token: this.$apiKey};
                         return token;
-                    }
-        },
-        data(){
-            return {
-                createTaskModal:false,
-                modalShow:false,
-                api_key:[],
-                event:[],
-                pri: this.prop,
-                task:{
-                },
-                calendarOptions: {
-
-                    plugins:[dayGridPlugin, interactionPlugin],
-                    dateClick: this.handleClickDate,
-                    dayMaxEvents: 2,
-                    eventClick: this.handleClickEvent,
-                    events : [],
-                    eventStartEditable: true,
-                    eventDrop : function(element){
-                        var task = {
-                            id:element.event.extendedProps.db_id,
-                             title : element.event.title ,
-                             start : element.event.start,
-                              end: element.event.end,
-                              description : element.event.extendedProps.description,
-
-                              }
-                        console.log(task);
                     },
-                    height : 400
-                }
-            }
+                    getUsers(){
+                        var token=this.$apiKey;
+                            var token = {api_token : token};
+                                axios
+                      .get(route('getUsers', token))
+                      .then(response=> {
+                          this.users=response.data;
+                          this.getThisUser();
+
+                      });
+                  },
+                    getThisUser(){
+                        this.users.forEach(element =>{
+                            if(element.isThisUser){
+                                this.thisUser = element;
+                                console.log(element);
+                            }
+                        })
+                    }
         },
         beforeMount(){
             this.getTasks();
+            this.getUsers();
         },
         mounted(){
-            console.log('prop = ' + this.pri);
+            console.log(this.users);
         }
     }
+

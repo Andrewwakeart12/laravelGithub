@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Carbon;
 class ApiTaskController extends Controller
 {
     /**
@@ -15,6 +16,13 @@ class ApiTaskController extends Controller
     public function index()
     {
         $tasks = Task::get(['id','event_name','event_description','event_start','event_end', 'user_id']);
+        foreach($tasks as $task){
+            $task['event_start'] = $task['event_start']->format('Y/m/d h:m:s');
+        if($task['event_end']){
+        $task['event_end'] =$task['event_end']->format('Y/m/d h:m:s');
+
+        }
+        }
         return response()->json(["events"=> $tasks]);
     }
 
@@ -36,7 +44,13 @@ class ApiTaskController extends Controller
      */
     public function store(Request $request)
     {
-        $task = Task::create($request->all());
+        $task= $request->all();
+        $task['event_start'] = Carbon::create($task['event_start'])->format('Y/m/d');
+        if(isset($task['event_end'])){
+        $task['event_end'] = Carbon::create($task['event_end'])->format('Y/m/d');
+
+        }
+        $task= Task::create($task);
         return $task;
     }
 

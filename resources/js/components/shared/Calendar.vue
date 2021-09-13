@@ -154,6 +154,7 @@ import {route} from '../../routes.js';
                             axios.post(route('task.store', token), dbTask).then(
                                 response =>{
                                     console.log(response.data)
+                                    this.getTasks();
                                 }
                             )
                             this.task = {};
@@ -212,6 +213,7 @@ import {route} from '../../routes.js';
                          this.$set(this.task, 'user_id', e.event.extendedProps.user_id);
                          this.$set(this.task, 'start', e.event.start);
                          this.$set(this.task, 'end', e.event.end);
+                         console.log(this.task);
                          }
                          this.modalShow = true;
                     }

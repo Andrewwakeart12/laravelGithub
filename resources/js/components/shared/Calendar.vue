@@ -124,11 +124,12 @@ import {route} from '../../routes.js';
 
                     while(isInArray == false || i <= this.calendarOptions.events.length - 1){
                             if(this.calendarOptions.events[i].db_id == this.task.db_id){
-                                    this.$set(this.calendarOptions.events[i], this.task);
+
+                                if(this.thisUser.role.permissions.tasks.create){    this.$set(this.calendarOptions.events[i], this.task);
                                     this.update(this.task);
                                     this.task = {};
                                     this.modalShow= false;
-                                    return isInArray = true;
+                                    return isInArray = true;}
 
                                 }
 
@@ -136,36 +137,46 @@ import {route} from '../../routes.js';
                         }
                     }
                         if(isInArray == false){
-                            this.task.db_id = this.calendarOptions.events.length + 1;
-                            this.task.id = 'eventId_'+  this.calendarOptions.events.length + 1;
-                            this.calendarOptions.events.push(this.task) ;
-                            this.$set(this.calendarOptions.events);
-                            this.$set(this.task, 'id');
-                             var token = this.$apiKey;
+                            if(this.thisUser.role.permissions.tasks.update){
+                                    this.task.db_id = this.calendarOptions.events.length + 1;
+                                    this.task.id = 'eventId_'+  this.calendarOptions.events.length + 1;
+                                    this.calendarOptions.events.push(this.task) ;
+                                    this.$set(this.calendarOptions.events);
+                                    this.$set(this.task, 'id');
+                                    var token = this.$apiKey;
 
-                            var dbTask = {
-                                event_name : this.task.title,
-                                event_description: this.task.description,
-                                event_start: this.task.start,
-                                user_id : this.task.user_id,
-                                event_end : this.task.end,
-                            };
-                            token = {api_token: token};
-                            axios.post(route('task.store', token), dbTask).then(
-                                response =>{
-                                    console.log(response.data)
-                                    this.getTasks();
-                                }
+                                    var dbTask = {
+                                        event_name : this.task.title,
+                                        event_description: this.task.description,
+                                        event_start: this.task.start,
+                                        user_id : this.task.user_id,
+                                        event_end : this.task.end,
+                                    };
+                                    token = {api_token: token};
+                                    axios.post(route('task.store', token), dbTask).then(
+                                        response =>{
+                                            console.log(response.data)
+                                            this.getTasks();
+                                        }
                             )
+                            }
                             this.task = {};
 
                         }
                    },
                    update(task){
                        var token = this.$apiKey;
+                       var dbTask = {
+                                event_name : task.title,
+                                event_description: task.description,
+                                event_start: task.start,
+                                user_id : task.user_id,
+                                event_end : task.end,
+                            };
                        token = { task : task.db_id , api_token: token};
-                       axios.patch(route('task.update', token)).then(response => {
+                       axios.patch(route('task.update', token),dbTask).then(response => {
                            console.log(response.data);
+                           this.getTasks();
                        })
                    },
               //borra la tarea del arreglo principal, verificando por id si existe

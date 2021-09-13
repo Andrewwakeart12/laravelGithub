@@ -86,7 +86,8 @@ class ApiTaskController extends Controller
     public function update(Request $request, $id)
     {
         $task = Task::find($id);
-        return response()->json(['response'=> $task]);
+        $task->update($request->all());
+        return response()->json(['response'=> $request->all()]);
     }
 
     /**

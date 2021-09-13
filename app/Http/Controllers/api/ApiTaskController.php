@@ -36,8 +36,8 @@ class ApiTaskController extends Controller
      */
     public function store(Request $request)
     {
-        $task = Task::create($request);
-
+        $task = Task::create($request->all());
+        return $task;
     }
 
     /**
@@ -71,7 +71,8 @@ class ApiTaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $task = Task::find($id);
+        return response()->json(['response'=> $task]);
     }
 
     /**

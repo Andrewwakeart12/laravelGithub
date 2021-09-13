@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import {formatDate} from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import {route} from '../../routes.js';
+import { axios } from 'vue/types/umd';
 
     export default {
         components: {
@@ -33,7 +34,7 @@ import {route} from '../../routes.js';
                     eventStartEditable: true,
                     eventDrop : function(element){
                         var task = {
-                            id:element.event.extendedProps.db_id,
+                            db_id:element.event.extendedProps.db_id,
                              title : element.event.title ,
                              start : element.event.start,
                               end: element.event.end,
@@ -57,6 +58,7 @@ import {route} from '../../routes.js';
                     while(isInArray == false || i <= this.calendarOptions.events.length - 1){
                             if(this.calendarOptions.events[i].db_id == this.task.db_id){
                                     this.$set(this.calendarOptions.events[i], this.task);
+                                    this.update(this.task);
                                     this.task = {};
                                     this.modalShow= false;
                                     return isInArray = true;
@@ -72,9 +74,22 @@ import {route} from '../../routes.js';
                             this.calendarOptions.events.push(this.task) ;
                             this.$set(this.calendarOptions.events);
                             this.$set(this.task, 'id');
-                            this.task = {};
-
-                        }
+                            'event_name','event_description', 'event_start','event_end','user_id';
+                            var token = this.$apiKey;
+                            token = {api_token: token};
+                            var dbTask = {
+                                event_name : this.task.title,
+                                event_description: this.task.description,
+                                event_start: this.task.start,
+                                event_end : this.task.end,
+                            }
+                   },
+                   update(task){
+                       var token = this.$apiKey;
+                       token = { task : task.db_id , api_token: token};
+                       axios.patch(route('task.update', token)).then(response => {
+                           console.log(response.data);
+                       })
                    },
               //borra la tarea del arreglo principal, verificando por id si existe
                    deleteTask(id){
@@ -196,4 +211,5 @@ import {route} from '../../routes.js';
             console.log(this.users);
         }
     }
+
 

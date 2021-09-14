@@ -32,11 +32,13 @@ Vue.component('rolePage', require('./components/rolesPage/RolesPage.vue').defaul
 Vue.component('postPage', require('./components/postPage/PostPage.vue').default);
 Vue.component('createUser', require('./components/usersPage/CreateUser.vue').default);
 Vue.component('admin', require('./components/Admin.vue').default);
+Vue.component('notifications', require('./components/shared/Notifications.vue').default);
 
 import {routesVue} from './routesVue';
 import {route} from './routes';
 import App from './App.vue';
 import MenuOptions from './components/shared/MenuOptions';
+import Notifications from './components/shared/Notifications';
 import Vue from 'vue';
 import axios from 'vue-axios';
 import VueAxios from 'axios';
@@ -67,4 +69,9 @@ const menuOptions = new Vue({
     router: router,
     render: h => h(MenuOptions)
 })
+const notifications = new Vue({
+    el : '#notifications',
+    router:router,
+    render : h => h(Notifications)
+});
 

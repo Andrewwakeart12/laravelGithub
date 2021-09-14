@@ -107,7 +107,7 @@ import {route} from '../../routes.js';
                    },
                    getRoles(token){
                       var token=this.$apiKey;
-                      var token = {api_token : token};
+                       token = {api_token : token};
                           axios
                 .get(route('getRoles', token))
                 .then(response=> {

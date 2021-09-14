@@ -5,7 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Task;
-
+use App\Notifications\TaskNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Carbon;
 class NotifyAboutTask extends Command
 {
     /**
@@ -39,6 +41,14 @@ class NotifyAboutTask extends Command
      */
     public function handle()
     {
-        return 0;
+        $usersHasTask= [];
+        $tasks = Task::whereNotNull('user_id')->get();
+        foreach($tasks as $task){
+            $diffInDays = $task->event_start= $task->event_start->diff(Carbon::now())->days;
+
+            array_push($usersHasTask, $task->user);
+        }
+
+        Notification::send($usersHasTask, new TaskNotification($tasks));
     }
 }

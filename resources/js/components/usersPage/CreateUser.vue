@@ -29,7 +29,12 @@
             <td><input name="email" type="email" class="userInputInTable email" placeholder="email" v-model="user.email" /></td>
             <td><input name="password" type="password" class="userInputInTable email" placeholder="password" v-model="user.password" /></td>
             <td><input name="password_confirmation" type="password" class="userInputInTable email" placeholder="password_confirmation" v-model="user.password_confirmation" /></td>
-            <td>{{user.role ? user.role.name : 'role no asignado'}}</td>
+            <td>
+            <select v-model="user.role_id">
+                <option v-for="role in roles"  :value="role.id">
+                    {{role.name}}
+                </option>
+            </select></td>
             <td contenteditable="false" v-on:click="user.is_active = !user.is_active"> <button class="btn btn-warn">{{user.is_active == true ? 'Desactivar Usuario' : 'Activar usuario'}}</button> </td>
             <td>
             <input class="btn btn-danger m-3 p-2" v-on:click="createUser()" type="button" value="Create">
@@ -59,7 +64,17 @@ import {route} from '../../routes.js';
                 .post(route('users.store', token), this.user)
                 .then(response=> { this.ServerMessage = response.data }
 
-                )}
+                )},
+                  getRoles(){
+                      var token=this.$apiKey;
+                       token = {api_token : token};
+                          axios
+                .get(route('getRoles', token))
+                .then(response=> {
+                    this.roles=response.data;
+
+                });
+                   }
 
             },
 
@@ -67,11 +82,15 @@ import {route} from '../../routes.js';
             return {
                 user: {
                     is_active:false,
+                    role_id:[]
                 },
+                role: [],
+                roles:[],
                 ServerMessage: []
             }
         },
         mounted() {
+            this.getRoles();
             console.log('Component Exaple App mounted.')
         }
     }

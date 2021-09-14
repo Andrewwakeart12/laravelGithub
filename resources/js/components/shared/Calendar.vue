@@ -99,16 +99,7 @@ import {route} from '../../routes.js';
                     eventClick: this.handleClickEvent,
                     events : [],
                     eventStartEditable: true,
-                    eventDrop : function(element){
-                        var task = {
-                            db_id:element.event.extendedProps.db_id,
-                             title : element.event.title ,
-                             start : element.event.start,
-                              end: element.event.end,
-                              description : element.event.extendedProps.description,
-
-                              }
-                    },
+                    eventDrop : this.dropTask,
                     height : 400
                 }
             }
@@ -117,6 +108,20 @@ import {route} from '../../routes.js';
 
             //verifica si los datos existen en el arreglo de Fullcalendar, si existen isInArray = true si no :
             //guarda los datos en el arreglo principal
+                dropTask(element){
+                        var dbTask = {
+                            db_id:element.event.extendedProps.db_id,
+                             event_start : element.event.start,
+                              event_end: element.event.end,
+
+                              };
+                        var token = this.$apiKey;
+                        token = { task : element.event.extendedProps.db_id , api_token: token};
+                        axios.patch(route('task.update', token),dbTask).then(response => {
+                           console.log(response.data);
+                           this.getTasks();
+                       })
+                    },
                 save(){
                   var isInArray = false;
                     var i = 0;

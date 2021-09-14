@@ -29,7 +29,7 @@
 <template #modal-footer="{guardar,cancel}">
     <b-button size="sm" variant="success" @click="save()">Guardar</b-button>
     <b-button size="sm" variant="warning" @click="cancel()">Cancelar</b-button>
-    <b-button size="sm" variant="warning" @click="deleteTask()">Delete</b-button>
+    <b-button size="sm" variant="danger" @click="deleteTask(task.db_id)">Delete</b-button>
 </template>
 </b-modal>
 
@@ -181,11 +181,13 @@ import {route} from '../../routes.js';
                    },
               //borra la tarea del arreglo principal, verificando por id si existe
                    deleteTask(id){
-                     this.calendarOptions.events.forEach(element =>{
-                        if(element.db_id == id){
-                            element = null;
-                        }
-                    });
+                       console.log(id);
+                       var token = this.$apiKey;
+                       token = {api_token: token, task: id };
+                       axios.delete(route('task.destroy', token)).then(response =>{
+                           console.log(response.data);
+                           this.getTasks();
+                       });
                     this.modalShow= false;
 
                 },

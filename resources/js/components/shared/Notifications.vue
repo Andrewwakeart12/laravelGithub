@@ -21,6 +21,7 @@
                                     <div>
                                         <div class="small text-gray-500">December 12, 2019</div>
                                         <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                        {{this.unreadNotifications}}
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -51,9 +52,47 @@
 </template>
 
 <script>
+import {route} from '../../routes.js';
     export default {
+        data(){
+            return {
+                api_key : this.$apiKey,
+                unreadNotifications: []
+            }
+        },
+        methods:{
+              getApiKey(){
+
+                       axios
+                .post(route('getApiKey'))
+                .then(response=> {
+                    Vue.prototype.$apiKey = response.data;
+                    this.getUnreadNotifications();
+
+                });
+
+                    },
+            getTokenJson(){
+                var token = this.$apiKey;
+                token= {api_token: token};
+                return token;
+            },
+            getUnreadNotifications(){
+                var token = this.$apiKey;
+                token= {api_token: token};
+
+                axios.get(route('getUnreadNotifications', token )).then(response =>{
+                    this.unreadNotifications = response.data;
+                    console.log(response);
+                })
+                 this.getTokenJson();
+            }
+        },
+        beforeMount(){
+        },
         mounted() {
-            console.log('Component Exaple App mounted.')
+            this.getApiKey();
+            console.log('Component Notifications mounted.')
         }
     }
 </script>

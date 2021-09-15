@@ -15,7 +15,7 @@ class NotifyAboutTask extends Command
      *
      * @var string
      */
-    protected $signature = 'command:notifyUsersAboutTasks';
+    protected $signature = 'notify:notifyUsersAboutTasks';
 
     /**
      * The console command description.
@@ -41,14 +41,15 @@ class NotifyAboutTask extends Command
      */
     public function handle()
     {
-        $usersHasTask= [];
-        $tasks = Task::whereNotNull('user_id')->get();
-        foreach($tasks as $task){
-            $diffInDays = $task->event_start= $task->event_start->diff(Carbon::now())->days;
-
-            array_push($usersHasTask, $task->user);
+        $users = User::whereNotNull(['role_id'])->get()->all();
+        $Admins= [];
+        foreach ( $users as $user){
+            if($user->isAdmin()){
+                array_push($Admins, $user);
+            }
         }
 
-        Notification::send($usersHasTask, new TaskNotification($tasks));
+
+        Notification::send($Admins, new TaskNotification());
     }
 }

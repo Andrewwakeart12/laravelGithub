@@ -57,12 +57,25 @@ class UsersApiController extends Controller
      public function getUsersInfo(){
 
             $users = User::all(['email', 'id','role_id']);
+            $finalUsers = [];
             foreach($users as $user){
-                $user->role = Role::find($user->role_id);
-                $user->tasks = $user->tasks;
-                $user->isThisUser = $user->isThisUser($user->id);
-            }
-            return $users;
+                if($user->isAdmin()){
+                    $user->role = Role::find($user->role_id);
+                    $user->tasks = $user->tasks;
+                    $user->isThisUser = $user->isThisUser($user->id);
+                    array_push($finalUsers, $user);
+                }
+               }
+            return $finalUsers;
+     }
+     public function getUnreadNotifications(){
+         $notifications = Auth::user()->unreadNotifications->all();
+         $unreadNotifications = [];
+         foreach ($notifications as $notification){
+             array_push($unreadNotifications,$notification->data);
+
+         }
+         return response()->json(['unreadNotifications' => $unreadNotifications]);
      }
      public function destroy($id){
 

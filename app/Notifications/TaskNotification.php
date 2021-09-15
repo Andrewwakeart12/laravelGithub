@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Carbon;
+use SebastianBergmann\Environment\Console;
 
 class TaskNotification extends Notification
 {
@@ -16,12 +18,10 @@ class TaskNotification extends Notification
      *
      * @return void
      */
-    public function __construct($tasks)
+       public function __construct()
     {
-        $this->tasks = $tasks;
         //
     }
-
     /**
      * Get the notification's delivery channels.
      *
@@ -48,14 +48,32 @@ class TaskNotification extends Notification
      */
     public function toArray($notifiable)
     {
-$arrayInf = [];
-        foreach($this->tasks as $task){
+        $arrayInf = [];
 
-            array_push($arrayInf ,['title' => $task->event_title,
-            'end' => $task->event_end]);
+        foreach($notifiable->tasks as $task){
+
+            if($task->event_end != null){
+                $deadline = $task->event_end->diff(Carbon::now())->days;
+                array_push($arrayInf ,
+                    ['title' => $task->event_name,
+                'deadline' => "You have $deadline Days before the deadline",
+                'id'=> $task->id, 'type'=>'task', 'daysLeft' =>  $task->event_end->diff(Carbon::now())->days]
+            );
+            }else{
+                $deadline = $task->event_start->diff(Carbon::now())->days;
+                array_push($arrayInf ,
+
+                    ['title' => $task->event_name,
+                'deadline' => "You have $deadline Days before the event start",
+                'id'=> $task->id, 'type'=>'task','daysLeft' =>  $task->event_start->diff(Carbon::now())->days]);
+            }
+
+
+
 
         }
 
-        return $arrayInf;
-    }
+    return $arrayInf;
+}
+
 }

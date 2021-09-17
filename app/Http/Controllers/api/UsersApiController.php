@@ -75,7 +75,7 @@ class UsersApiController extends Controller
              array_push($unreadNotifications,$notification->data);
 
          }
-         return response()->json(['unreadNotifications' => $unreadNotifications]);
+         return response()->json($unreadNotifications);
      }
      public function destroy($id){
 

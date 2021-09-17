@@ -14,3 +14,4 @@ yarn-error.log
 /.idea
 /.vscode
 /public/img
+laravel-echo-server.json

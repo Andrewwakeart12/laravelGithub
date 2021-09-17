@@ -56,8 +56,10 @@ class TaskNotification extends Notification
                 $deadline = $task->event_end->diff(Carbon::now())->days;
                 array_push($arrayInf ,
                     ['title' => $task->event_name,
-                'deadline' => "You have $deadline Days before the deadline",
-                'id'=> $task->id, 'type'=>'task', 'daysLeft' =>  $task->event_end->diff(Carbon::now())->days]
+                    'date'=>Carbon::now()->format('Y M/d '),
+                    'deadline' => "You have $deadline Days before the deadline",
+                'id'=> $task->id, 'type'=>'task', 'daysLeft' =>  $task->event_end->diff(Carbon::now())->days,
+                ]
             );
             }else{
                 $deadline = $task->event_start->diff(Carbon::now())->days;
@@ -65,6 +67,7 @@ class TaskNotification extends Notification
 
                     ['title' => $task->event_name,
                 'deadline' => "You have $deadline Days before the event start",
+                'date'=>Carbon::now()->format('Y M/d '),
                 'id'=> $task->id, 'type'=>'task','daysLeft' =>  $task->event_start->diff(Carbon::now())->days]);
             }
 

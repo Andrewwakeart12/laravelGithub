@@ -77,7 +77,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::post('/getApiKey', [PostController::class, 'getApiKey'])->name('getApiKey');
 Route::get('/test',function(){
    event(new \App\Events\News('message'));
-   dd('event-fired');
+   $notifications = Auth::user()->notifications;
+   dd("$notifications");
 });
 
 Broadcast::routes();

@@ -72,6 +72,11 @@ import {route} from '../../routes.js';
         beforeMount(){
         },
         mounted() {
+
+        window.Echo.channel('news').listen('News', (e) =>{
+            console.log("connection  : ");
+            console.log(e);
+        });
             this.getApiKey();
 
 

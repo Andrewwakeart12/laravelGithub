@@ -70,10 +70,6 @@ import Echo from 'laravel-echo';
     console.log('io connected');
     console.log(window.Echo);
  }
- window.Echo.channel('news').listen('News', (e) =>{
-    console.log("connection  : ");
-    console.log(e.news);
-});
 
 const app = new Vue({
     el:'#appAdminPage',

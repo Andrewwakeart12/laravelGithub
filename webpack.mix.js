@@ -40,3 +40,5 @@ mix.js('resources/js/app.js', 'public/js')
 
     ], 'public/js/libs.js');
     mix.js('resources/js/routes','public/js')
+    mix.js('resources/js/laravel-echo','public/js')
+    mix.js('resources/js/bootstrap.js','public/js');

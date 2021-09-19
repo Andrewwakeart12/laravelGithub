@@ -32,6 +32,7 @@
 </template>
 
 <script>
+
 import {route} from '../../routes.js';
     export default {
         data(){
@@ -63,15 +64,17 @@ import {route} from '../../routes.js';
 
                 axios.get(route('getUnreadNotifications', token )).then(response =>{
                     this.unreadNotifications = response.data;
-                    console.log(response);
                 })
                  this.getTokenJson();
-            }
+            },
         },
+
         beforeMount(){
         },
         mounted() {
             this.getApiKey();
+
+
             console.log('Component Notifications mounted.')
         }
     }

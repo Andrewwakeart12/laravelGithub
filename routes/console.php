@@ -1,6 +1,7 @@
 <?php
 
 use App\Events\messagePush;
+use App\Events\News;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -20,6 +21,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('news',function(){
-    broadcast(new messagePush('message'));
+    broadcast(new News('message'));
     $this->comment("news sent");
 })->describe('Send News');

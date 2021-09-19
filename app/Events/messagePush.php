@@ -32,6 +32,6 @@ class messagePush implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('App.Models.User.1');
+        return new Channel('news');
     }
 }

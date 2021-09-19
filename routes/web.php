@@ -3,6 +3,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Redis;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -71,3 +75,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/getApiKey', [PostController::class, 'getApiKey'])->name('getApiKey');
+Route::get('/test',function(){
+   event(new \App\Events\News('message'));
+   dd('event-fired');
+});
+
+Broadcast::routes();

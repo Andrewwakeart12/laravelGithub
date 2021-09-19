@@ -23,6 +23,7 @@ import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
+
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
 Vue.component('menuOptions', require('./components/shared/MenuOptions.vue').default);
@@ -58,6 +59,21 @@ const router = new VueRouter({
     mode:'history',
     routes: routesVue
 })
+import Echo from 'laravel-echo';
+ window.io = require('socket.io-client');
+  if(io !==undefined){
+    window.Echo = new Echo({
+        broadcaster: 'socket.io',
+        forceTLS: false,
+        host :window.location.hostname + ':6001',
+    });
+    console.log('io connected');
+    console.log(window.Echo);
+ }
+ window.Echo.channel('news').listen('News', (e) =>{
+    console.log("connection  : ");
+    console.log(e.news);
+});
 
 const app = new Vue({
     el:'#appAdminPage',

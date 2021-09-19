@@ -5,18 +5,14 @@ window._ = require('lodash');
  * for JavaScript based Bootstrap features such as modals and tabs. This
  * code may be modified to fit the specific needs of your application.
  */
-import Echo from 'laravel-echo';
-window.io = require('socket.io-client');
-if (typeof io !== 'undefined'){
-    window.Echo = new Echo ({broadcaster: 'socket.io', host:window.location.hostname + ':6001'});
-}
+
+
 try {
-    window.Popper = require('popper.js').default;
+     window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
 } catch (e) {}
-
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the

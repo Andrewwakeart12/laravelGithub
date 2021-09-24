@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Carbon;
@@ -18,9 +19,9 @@ class TaskNotification extends Notification
      *
      * @return void
      */
-       public function __construct()
+       public function __construct($task_inf)
     {
-        //
+        $this->task = $task_inf;
     }
     /**
      * Get the notification's delivery channels.
@@ -30,7 +31,7 @@ class TaskNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     /**
@@ -46,37 +47,53 @@ class TaskNotification extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toBroadcast($notifiable)
     {
-        $arrayInf = [];
+            if($this->task->event_end != null)
+            {
+                $deadline = $this->task->event_end->diff(Carbon::now())->days;
 
-        foreach($notifiable->tasks as $task){
-
-            if($task->event_end != null){
-                $deadline = $task->event_end->diff(Carbon::now())->days;
-                array_push($arrayInf ,
-                    ['title' => $task->event_name,
+              return      ['title' => $this->task->event_name,
                     'date'=>Carbon::now()->format('Y M/d '),
                     'deadline' => "You have $deadline Days before the deadline",
-                'id'=> $task->id, 'type'=>'task', 'daysLeft' =>  $task->event_end->diff(Carbon::now())->days,
-                ]
-            );
-            }else{
-                $deadline = $task->event_start->diff(Carbon::now())->days;
-                array_push($arrayInf ,
+                'id'=> $this->task->id, 'type'=>'task', 'daysLeft' =>  $this->task->event_end->diff(Carbon::now())->days,
+            ];
+            }else
+                {
+                    $deadline = $this->task->event_start->diff(Carbon::now())->days;
 
-                    ['title' => $task->event_name,
+                    return    ['title' => $this->task->event_name,
+                    'deadline' => "You have $deadline Days before the event start",
+                    'date'=>Carbon::now()->format('Y M/d '),
+                    'id'=> $this->task->id, 'type'=>'task','daysLeft' =>  $this->task->event_start->diff(Carbon::now())->days];
+                }
+
+    }
+    public function toArray($notifiable)
+    {
+
+        if($this->task->event_end != null)
+        {
+            $deadline = $this->task->event_end->diff(Carbon::now())->days;
+
+          return      ['title' => $this->task->event_name,
+                'date'=>Carbon::now()->format('Y M/d '),
+                'deadline' => "You have $deadline Days before the deadline",
+            'id'=> $this->task->id, 'type'=>'task', 'daysLeft' =>  $this->task->event_end->diff(Carbon::now())->days,
+        ];
+        }else
+            {
+                $deadline = $this->task->event_start->diff(Carbon::now())->days;
+
+                return    ['title' => $this->task->event_name,
                 'deadline' => "You have $deadline Days before the event start",
                 'date'=>Carbon::now()->format('Y M/d '),
-                'id'=> $task->id, 'type'=>'task','daysLeft' =>  $task->event_start->diff(Carbon::now())->days]);
+                'id'=> $this->task->id, 'type'=>'task','daysLeft' =>  $this->task->event_start->diff(Carbon::now())->days];
             }
 
 
 
 
         }
-
-    return $arrayInf;
-}
 
 }

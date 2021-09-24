@@ -45,11 +45,17 @@ class NotifyAboutTask extends Command
         $Admins= [];
         foreach ( $users as $user){
             if($user->isAdmin()){
+                if($user->tasks->all()){
                 array_push($Admins, $user);
+                }
             }
         }
 
+        foreach($Admins as $user){
+            foreach($user->tasks as $task){
+                Notification::send($user, new TaskNotification($task));
+            }
+        }
 
-        Notification::send($Admins, new TaskNotification());
     }
 }

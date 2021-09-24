@@ -1,10 +1,10 @@
 <template>
-<li class="nav-item dropdown no-arrow mx-1">
+<li class="nav-item dropdown no-arrow mx-1" @click="readNotifications">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span class="badge badge-danger badge-counter" v-if="this.newNotificationsNumber  > 0">{{this.newNotificationsNumber}}</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -12,7 +12,7 @@
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#" v-for="notification of this.unreadNotifications[0]">
+                                <a class="dropdown-item d-flex align-items-center" href="#" v-for="notification of this.unreadNotifications">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
                                             <i class="fas fa-file-alt text-white"></i>
@@ -24,7 +24,6 @@
 
                                     </div>
                                 </a>
-
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
 
                             </div>
@@ -38,10 +37,24 @@ import {route} from '../../routes.js';
         data(){
             return {
                 api_key : this.$apiKey,
-                unreadNotifications: []
+                unreadNotifications: [],
+                thisUserId:[],
+                newNotificationsNumber : []  ,
             }
         },
         methods:{
+            readNotifications(){
+
+                this.unreadNotifications.forEach(e =>{
+                    var token = this.$apiKey;
+                    token= {api_token: token, notifications : e.id_noty};
+                    axios.get(route('readNotifications', token)).then(response =>{
+                    console.log(response.data);
+                })
+                })
+
+                this.newNotificationsNumber = 0;
+            },
               getApiKey(){
 
                        axios
@@ -50,6 +63,7 @@ import {route} from '../../routes.js';
                     Vue.prototype.$apiKey = response.data;
                     this.getUnreadNotifications();
 
+            this.getThisUserId();
                 });
 
                     },
@@ -63,21 +77,69 @@ import {route} from '../../routes.js';
                 token= {api_token: token};
 
                 axios.get(route('getUnreadNotifications', token )).then(response =>{
+
                     this.unreadNotifications = response.data;
+                    console.log(response.data);
+                    this.newNotificationsNumber = this.unreadNotifications.length;
                 })
                  this.getTokenJson();
             },
+            getThisUserId(){
+             var token = this.$apiKey;
+                token= {api_token: token};
+
+                axios.get(route('thisUserId',token)).then(response =>{
+                this.thisUserId = response.data;
+                this.socket();
+                console.log(response.data)
+                })
+            },
+            socket(){
+                var id = this.thisUserId;
+                console.log("id: " + id)
+                    let channel ="App.Models.User." + id;
+                window.Echo.private(channel).notification( e =>{
+                    var i = 0;
+                    var nextIndex = true;
+                    console.log(e[3]);
+                    while ( nextIndex != false )
+                    {
+                        if (e[i] != undefined)
+                            {
+
+                                var isInArray = false;
+                                this.unreadNotifications.forEach(notification =>{
+                                    if(notification.id == e[i].id){
+                                        isInArray = true;
+                                    }
+                                    notification = e[i];
+                                });
+                                if(isInArray == false){
+                                    console.log(this.unreadNotifications);
+                                    this.unreadNotifications.push(e[i]);
+                                }
+
+                            }
+
+                        if(e[i+1] != undefined)
+                        {
+                            i++;
+                        }
+                            else if(e[i+1] === undefined)
+                                {
+                                    nextIndex = false;
+                                }
+
+                    }
+                    console.log(e[0])
+                });
+            }
         },
 
         beforeMount(){
+            this.getApiKey();
         },
         mounted() {
-
-        window.Echo.channel('news').listen('News', (e) =>{
-            console.log("connection  : ");
-            console.log(e);
-        });
-            this.getApiKey();
 
 
             console.log('Component Notifications mounted.')

@@ -54,6 +54,10 @@ class UsersApiController extends Controller
 
 
      }
+     public function getThisUserId(){
+        $userID=Auth::user()->id;
+         return response()->json($userID);
+     }
      public function getUsersInfo(){
 
             $users = User::all(['email', 'id','role_id']);
@@ -69,14 +73,23 @@ class UsersApiController extends Controller
             return $finalUsers;
      }
      public function getUnreadNotifications(){
-         $notifications = Auth::user()->unreadNotifications->all();
+         $notifications = Auth::user()->unreadNotifications()->paginate(3);
          $unreadNotifications = [];
          foreach ($notifications as $notification){
-             array_push($unreadNotifications,$notification->data);
+             $id_noty = $notification->id;
+             $data = $notification->data;
+             $data['id_noty']= $id_noty;
+             array_push($unreadNotifications,$data);
 
          }
          return response()->json($unreadNotifications);
      }
+
+     public function readNotifications($notifications){
+          $notification= Auth::user()->notifications()->where(['id' => $notifications])->get();
+                $notification->markAsRead();
+             return response()->json($notification);
+    }
      public function destroy($id){
 
         $permissions= Auth::user()->role->permissions;

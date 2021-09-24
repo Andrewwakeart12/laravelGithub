@@ -20,3 +20,7 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('news', function($user,$id){
     return true;
 });
+
+Broadcast::channel('notifications-tasks.{id}', function($id){
+    return true;
+});

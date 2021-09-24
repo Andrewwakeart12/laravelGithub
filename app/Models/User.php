@@ -74,4 +74,8 @@ public function isThisUser($userID){
 public function tasks(){
     return $this->hasMany('App\Models\Task');
 }
+
+public function receiveBroadcastNotificationOn(){
+    return 'notifications-tasks.' . $this->id;
+}
 }

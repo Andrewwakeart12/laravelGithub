@@ -12,7 +12,7 @@
                                 <h6 class="dropdown-header">
                                     Alerts Center
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#" v-for="notification of this.unreadNotifications">
+                                <a class="dropdown-item d-flex align-items-center" href="#" v-for="notification of this.notifications">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-primary">
                                             <i class="fas fa-file-alt text-white"></i>
@@ -37,7 +37,7 @@ import {route} from '../../routes.js';
         data(){
             return {
                 api_key : this.$apiKey,
-                unreadNotifications: [],
+                notifications: [],
                 thisUserId:[],
                 newNotificationsNumber : []  ,
             }
@@ -45,12 +45,15 @@ import {route} from '../../routes.js';
         methods:{
             readNotifications(){
 
-                this.unreadNotifications.forEach(e =>{
+                this.notifications.forEach(e =>{
+                    if(e.isRead == null){
+
                     var token = this.$apiKey;
                     token= {api_token: token, notifications : e.id_noty};
                     axios.get(route('readNotifications', token)).then(response =>{
                     console.log(response.data);
                 })
+                    }
                 })
 
                 this.newNotificationsNumber = 0;
@@ -61,7 +64,7 @@ import {route} from '../../routes.js';
                 .post(route('getApiKey'))
                 .then(response=> {
                     Vue.prototype.$apiKey = response.data;
-                    this.getUnreadNotifications();
+                    this.getNotifications();
 
             this.getThisUserId();
                 });
@@ -72,15 +75,15 @@ import {route} from '../../routes.js';
                 token= {api_token: token};
                 return token;
             },
-            getUnreadNotifications(){
+            getNotifications(){
                 var token = this.$apiKey;
                 token= {api_token: token};
 
-                axios.get(route('getUnreadNotifications', token )).then(response =>{
+                axios.get(route('getNotifications', token )).then(response =>{
 
-                    this.unreadNotifications = response.data;
+                    this.notifications = response.data;
                     console.log(response.data);
-                    this.newNotificationsNumber = this.unreadNotifications.length;
+                    this.newNotificationsNumber = this.notifications.length;
                 })
                  this.getTokenJson();
             },
@@ -99,7 +102,7 @@ import {route} from '../../routes.js';
                 console.log("id: " + id)
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
-                    this.unreadNotifications.push(e)
+                    this.notifications.push(e)
                                 });
             }
         },

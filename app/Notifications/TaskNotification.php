@@ -56,7 +56,7 @@ class TaskNotification extends Notification
               return      ['title' => $this->task->event_name,
                     'date'=>Carbon::now()->format('Y M/d '),
                     'deadline' => "You have $deadline Days before the deadline",
-                'id'=> $this->task->id, 'type'=>'task', 'daysLeft' =>  $this->task->event_end->diff(Carbon::now())->days,
+                'id'=> $this->task->id, 'type'=>'task', 'daysLeft' =>  $this->task->event_end->diff(Carbon::now(),false)->days,
             ];
             }else
                 {
@@ -65,7 +65,7 @@ class TaskNotification extends Notification
                     return    ['title' => $this->task->event_name,
                     'deadline' => "You have $deadline Days before the event start",
                     'date'=>Carbon::now()->format('Y M/d '),
-                    'id'=> $this->task->id, 'type'=>'task','daysLeft' =>  $this->task->event_start->diff(Carbon::now())->days];
+                    'id'=> $this->task->id, 'type'=>'task','daysLeft' =>  $this->task->event_start->diff(Carbon::now(),false)->days];
                 }
 
     }

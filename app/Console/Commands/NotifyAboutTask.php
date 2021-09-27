@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Notifications\TaskNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 class NotifyAboutTask extends Command
 {
     /**
@@ -96,26 +97,26 @@ class NotifyAboutTask extends Command
     foreach($Admins as $user){
 
         foreach($user->tasks as $task){
-            $taskIsInNotifications = false;
-                $notificationsLength = $user->notifications->count() - 1;
-                $counter = 0;
-                while ($taskIsInNotifications == false && $counter <= $notificationsLength){
-
-                while ($counter <= $notificationsLength){
-                    if($user->notifications[$counter]->data['id'] == $task->id){
-                        $taskIsInNotifications = true;
-                        break;
-                    }
-                    print($counter);
-                    $counter++;
-                }
-
-            }
-            if($taskIsInNotifications == true){
-                print('coincide');
-            }else{
+            $taskInNotifications = DB::table('notifications')->where('data->id', $task->id)->get();
+            if($taskInNotifications->isEmpty()){
                 Notification::send($user, new TaskNotification($task));
+            }else{
+
+                $lastNotification = json_decode($taskInNotifications->first()->data);
+                    if($task->event_end != null){
+                        $deadline = $task->event_end->diff(Carbon::now())->days;
+                    }else{
+                        $deadline = $task->event_start->diff(Carbon::now())->days;
+                    }
+                    if( $deadline != $lastNotification->daysLeft ){
+                        Notification::send($user, new TaskNotification($task));
+                    }
+                    else{
+                        print('deadline : ' . $deadline . ' es diferente de : ' . $lastNotification->deadline);
+                    }
+
             }
+
         }
         }
     }

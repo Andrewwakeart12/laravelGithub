@@ -72,17 +72,18 @@ class UsersApiController extends Controller
                }
             return $finalUsers;
      }
-     public function getUnreadNotifications(){
-         $notifications = Auth::user()->unreadNotifications()->paginate(3);
-         $unreadNotifications = [];
-         foreach ($notifications as $notification){
+     public function getNotifications(){
+         $Dbnotifications = Auth::user()->notifications()->orderBy('created_at')->limit(4)->get();
+         $notifications = [];
+         foreach ($Dbnotifications as $notification){
              $id_noty = $notification->id;
              $data = $notification->data;
              $data['id_noty']= $id_noty;
-             array_push($unreadNotifications,$data);
+             $data['isRead'] = $notification->read_at;
+             array_push($notifications,$data);
 
          }
-         return response()->json($unreadNotifications);
+         return response()->json($notifications);
      }
 
      public function readNotifications($notifications){

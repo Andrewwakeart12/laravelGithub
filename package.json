@@ -33,6 +33,7 @@
         "bootstrap-vue": "^2.21.2",
         "chart.js": "^3.5.1",
         "chartjs": "^0.3.24",
+        "js-cookie": "^3.0.1",
         "laravel-echo": "^1.11.2",
         "laravel-echo-server": "^1.6.2",
         "portal-vue": "^2.1.7",

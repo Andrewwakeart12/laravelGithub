@@ -6,7 +6,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Redis;
-
+use App\Models\User;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -80,5 +80,9 @@ Route::get('/test',function(){
    $notifications = Auth::user()->notifications;
    dd("$notifications");
 });
+Route::get('/testingCicle', function () {
 
+
+
+});
 Broadcast::routes();

@@ -99,40 +99,8 @@ import {route} from '../../routes.js';
                 console.log("id: " + id)
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
-                    var i = 0;
-                    var nextIndex = true;
-                    console.log(e[3]);
-                    while ( nextIndex != false )
-                    {
-                        if (e[i] != undefined)
-                            {
-
-                                var isInArray = false;
-                                this.unreadNotifications.forEach(notification =>{
-                                    if(notification.id == e[i].id){
-                                        isInArray = true;
-                                    }
-                                    notification = e[i];
+                    this.unreadNotifications.push(e)
                                 });
-                                if(isInArray == false){
-                                    console.log(this.unreadNotifications);
-                                    this.unreadNotifications.push(e[i]);
-                                }
-
-                            }
-
-                        if(e[i+1] != undefined)
-                        {
-                            i++;
-                        }
-                            else if(e[i+1] === undefined)
-                                {
-                                    nextIndex = false;
-                                }
-
-                    }
-                    console.log(e[0])
-                });
             }
         },
 

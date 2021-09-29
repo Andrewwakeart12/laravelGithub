@@ -65,8 +65,7 @@ import {route} from '../../routes.js';
                 .then(response=> {
                     Vue.prototype.$apiKey = response.data;
                     this.getNotifications();
-
-            this.getThisUserId();
+                    this.getThisUserId();
                 });
 
                     },
@@ -83,7 +82,11 @@ import {route} from '../../routes.js';
 
                     this.notifications = response.data;
                     console.log(response.data);
-                    this.newNotificationsNumber = this.notifications.length;
+                    this.notifications.forEach(e =>{
+                        if(e.isRead == null){
+                            this.newNotificationsNumber++;
+                        }
+                    })
                 })
                  this.getTokenJson();
             },
@@ -103,6 +106,7 @@ import {route} from '../../routes.js';
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
                     this.notifications.push(e)
+                    this.newNotificationsNumber++;
                                 });
             }
         },

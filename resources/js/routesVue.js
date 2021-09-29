@@ -4,7 +4,6 @@ import DisplayUsers from './components/usersPage/DisplayUsers.vue';
 import PostPage from './components/postPage/PostPage.vue';
 import RolesPage from './components/rolesPage/RolesPage.vue';
 import TaskPage from './components/taksPage/TaskPage.vue';
-
 export const routesVue = [
     {
         name: 'admin',
@@ -31,5 +30,5 @@ export const routesVue = [
         name: 'tasks',
         path: '/admin/tasks',
         component: TaskPage
-    }
+    },
 ];

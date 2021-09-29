@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ChatController;
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Redis;
 use App\Models\User;
 /*
@@ -18,6 +20,7 @@ use App\Models\User;
 |
 */
 Route::group(['middleware'=>'auth'],function(){
+
     Route::get('/', function () {
         return view('welcome');
     });
@@ -26,12 +29,12 @@ Route::Get('/mucks', function(){
 
 });
 Route::group(['middleware'=>'admin'],function(){
+
+
+
     Route::get('/admin/', function () {
         return view('admin.index');
     })->name('adminPage');
-    Route::get('/admin/{any}',function(){
-        return redirect(route('adminPage'));
-    })->where('any', '.*');
 
 });
 Auth::routes();
@@ -80,9 +83,12 @@ Route::get('/test',function(){
    $notifications = Auth::user()->notifications;
    dd("$notifications");
 });
-Route::get('/testingCicle', function () {
+Route::get('/chat/{id}', [ChatController::class, 'chat'])->name('chat');
+Route::get('/group/chat/{id}',[ChatController::class, 'groupChat'])->name('group.chat');
+Route::post('/chat/message/send',[ChatController::class, 'send'])->name('chat.send');
+Route::post('/chat/message/send/file', [ChatController::class, 'sendFilesInConversation'])->name('chat.send.file');
+Route::post('/group/chat/message/send', [ChatController::class, 'groupSend'])->name('group.send');
+Route::post('/group/chat/message/send/file',[ChatController::class, 'sendFilesInGroupConversation'])->name('group.send.file');
+Route::get('/home', 'HomeController@index')->name('home');
 
-
-
-});
 Broadcast::routes();

@@ -22,7 +22,16 @@ window.Vue = require('vue').default;
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-
+import {routesVue} from './routesVue';
+import {route} from './routes';
+import App from './App.vue';
+import MenuOptions from './components/shared/MenuOptions';
+import ChatRoom from './components/laravel-video-chat/ChatRoom';
+import Notifications from './components/shared/Notifications';
+import Vue from 'vue';
+import axios from 'vue-axios';
+import VueAxios from 'axios';
+import VueRouter from 'vue-router';
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
@@ -35,15 +44,14 @@ Vue.component('createUser', require('./components/usersPage/CreateUser.vue').def
 Vue.component('admin', require('./components/Admin.vue').default);
 Vue.component('notifications', require('./components/shared/Notifications.vue').default);
 
-import {routesVue} from './routesVue';
-import {route} from './routes';
-import App from './App.vue';
-import MenuOptions from './components/shared/MenuOptions';
-import Notifications from './components/shared/Notifications';
-import Vue from 'vue';
-import axios from 'vue-axios';
-import VueAxios from 'axios';
-import VueRouter from 'vue-router';
+
+try {
+    window.Popper = require('popper.js').default;
+   window.$ = window.jQuery = require('jquery');
+
+   require('bootstrap');
+} catch (e) {}
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -55,10 +63,12 @@ Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 
 
+
 const router = new VueRouter({
     mode:'history',
     routes: routesVue
 })
+
 import Echo from 'laravel-echo';
  window.io = require('socket.io-client');
   if(io !==undefined){
@@ -75,7 +85,7 @@ const app = new Vue({
     el:'#appAdminPage',
     router: router,
     render: h => h(App)
-})
+});
 const menuOptions = new Vue({
     el:'#appMenuOptions',
     router: router,

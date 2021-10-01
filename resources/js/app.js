@@ -32,6 +32,8 @@ import Vue from 'vue';
 import axios from 'vue-axios';
 import VueAxios from 'axios';
 import VueRouter from 'vue-router';
+import VueChatScroll from 'vue-chat-scroll';
+import VueTimeago from 'vue-timeago';
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);
@@ -43,6 +45,10 @@ Vue.component('postPage', require('./components/postPage/PostPage.vue').default)
 Vue.component('createUser', require('./components/usersPage/CreateUser.vue').default);
 Vue.component('admin', require('./components/Admin.vue').default);
 Vue.component('notifications', require('./components/shared/Notifications.vue').default);
+Vue.component('chat-room', require('./components/laravel-video-chat/ChatRoom').default);
+Vue.component('group-chatroom', require('./components/laravel-video-chat/GroupChatRoom').default);
+
+Vue.component('video-section', require('./components/laravel-video-chat/VideoSection').default);
 
 
 try {
@@ -58,10 +64,18 @@ try {
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 Vue.use(BootstrapVue);
+Vue.use(VueChatScroll);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
-
+Vue.use(VueTimeago, {
+    name: 'timeago', // component name, `timeago` by default
+    locale: 'en-US',
+    locales: {
+        // you will need json-loader in webpack 1
+        'en-US': require('vue-timeago/locales/en-US.json')
+    }
+})
 
 
 const router = new VueRouter({
@@ -97,3 +111,6 @@ const notifications = new Vue({
     render : h => h(Notifications)
 });
 
+const chat = new Vue({
+    el : '#container'
+});

@@ -87,16 +87,8 @@
     </div>
 </template>
 <script>
-     window.$ = window.jQuery = require('jquery');
-    $(function () {
-        var localVideo = document.getElementById('localVideo');
-        var remoteVideo = document.getElementById('remoteVideo');
-        var answerButton = document.getElementById('answerCallButton');
 
-        answerButton.onclick = answerCall;
 
-        $('input[type=file]').on('change', prepareUpload);
-    });
 
     var files;
 
@@ -200,6 +192,15 @@
             Cookies.set('conversationID', this.conversationId);
         },
         mounted() {
+                $(function () {
+        var localVideo = document.getElementById('localVideo');
+        var remoteVideo = document.getElementById('remoteVideo');
+        var answerButton = document.getElementById('answerCallButton');
+
+        answerButton.onclick = answerCall;
+
+        $('input[type=file]').on('change', prepareUpload);
+    });
             this.listenForNewMessage();
         }
     }

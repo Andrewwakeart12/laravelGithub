@@ -2,5 +2,7 @@
 
 @section('content')
 @csrf
-{{$conversation}}
+<div id="container">
+    <chat-room :conversation="{{ $conversation }}" :current-user="{{ auth()->user() }}"></chat-room>
+</div>
 @endsection

@@ -1,5 +1,5 @@
 <template>
-<li class="nav-item dropdown no-arrow mx-1" @click="readNotifications">
+<li class="nav-item dropdown no-arrow mx-1" id="notificationContainer" @click="readNotifications">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
@@ -31,8 +31,11 @@
 </template>
 
 <script>
-
+var notificationContainer = document.getElementById("notificationContainer");
+console.log(notificationContainer);
 import {route} from '../../routes.js';
+
+
     export default {
         data(){
             return {
@@ -115,7 +118,6 @@ import {route} from '../../routes.js';
             this.getApiKey();
         },
         mounted() {
-
 
             console.log('Component Notifications mounted.')
         }

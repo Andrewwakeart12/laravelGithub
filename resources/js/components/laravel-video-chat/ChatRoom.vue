@@ -85,6 +85,7 @@
             </div>
         </div>
     </div>
+
 </template>
 <script>
 
@@ -123,7 +124,7 @@
         },
         methods: {
             startVideoCallToUser (id) {
-
+                console.log(this.conversation.conversationID)
                 Cookies.set('remoteUUID', id);
 
                 window.remoteUUID = id;
@@ -154,7 +155,7 @@
                 });
 
                 data.append('conversationId' , this.conversationId);
-
+    console.log(data);
                 axios.post('/chat/message/send/file', data);
             },
             listenForNewMessage: function () {
@@ -188,10 +189,7 @@
             },
         },
         beforeMount () {
-            Cookies.set('uuid', this.currentUser.id);
-            Cookies.set('conversationID', this.conversationId);
-        },
-        mounted() {
+
                 $(function () {
         var localVideo = document.getElementById('localVideo');
         var remoteVideo = document.getElementById('remoteVideo');
@@ -201,6 +199,10 @@
 
         $('input[type=file]').on('change', prepareUpload);
     });
+            Cookies.set('uuid', this.currentUser.id);
+            Cookies.set('conversationID', this.conversationId);
+        },
+        mounted() {
             this.listenForNewMessage();
         }
     }

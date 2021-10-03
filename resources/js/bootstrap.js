@@ -20,7 +20,7 @@ try {
  */
 
 window.axios = require('axios');
-require('webrtc-adapter');
+
 window.Cookies = require('js-cookie');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 

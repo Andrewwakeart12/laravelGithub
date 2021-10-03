@@ -34,6 +34,7 @@ import VueAxios from 'axios';
 import VueRouter from 'vue-router';
 import VueChatScroll from 'vue-chat-scroll';
 import VueTimeago from 'vue-timeago';
+require('webrtc-adapter');
 
 Vue.component('app', require('./App.vue').default);
 Vue.component('displayUsers', require('./components/usersPage/DisplayUsers.vue').default);

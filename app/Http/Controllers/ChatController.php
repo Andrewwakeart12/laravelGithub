@@ -87,7 +87,6 @@ class ChatController extends Controller
     public function chat($id)
     {
         $conversation = Chat::getConversationMessageById($id);
-
         return view('admin.chat', compact('conversation'));
     }
 

@@ -8,6 +8,7 @@
             </div>
 
          </article>
+         <chat></chat>
     </div>
 </template>
 

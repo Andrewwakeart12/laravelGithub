@@ -4,6 +4,8 @@ import DisplayUsers from './components/usersPage/DisplayUsers.vue';
 import PostPage from './components/postPage/PostPage.vue';
 import RolesPage from './components/rolesPage/RolesPage.vue';
 import TaskPage from './components/taksPage/TaskPage.vue';
+import Chat from './components/shared/Chat.vue';
+
 export const routesVue = [
     {
         name: 'admin',
@@ -31,4 +33,9 @@ export const routesVue = [
         path: '/admin/tasks',
         component: TaskPage
     },
+    {
+        name: 'chat',
+        path: '/admin/chat/',
+        component: Chat
+    }
 ];

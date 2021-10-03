@@ -91,9 +91,6 @@ class UsersApiController extends Controller
                 $notification->markAsRead();
              return response()->json($notification);
     }
-    public function getLastNotification(){
-
-    }
      public function destroy($id){
 
         $permissions= Auth::user()->role->permissions;

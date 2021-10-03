@@ -10038,15 +10038,11 @@ body{margin-top:20px;}
 ************************************************/
 
 .chat-search-box {
-    -webkit-border-radius: 3px 0 0 0;
-    -moz-border-radius: 3px 0 0 0;
     border-radius: 3px 0 0 0;
     padding: .75rem 1rem;
 }
 
 .chat-search-box .input-group .form-control {
-    -webkit-border-radius: 2px 0 0 2px;
-    -moz-border-radius: 2px 0 0 2px;
     border-radius: 2px 0 0 2px;
     border-right: 0;
 }
@@ -10056,8 +10052,6 @@ body{margin-top:20px;}
 }
 
 .chat-search-box .input-group .input-group-btn .btn {
-    -webkit-border-radius: 0 2px 2px 0;
-    -moz-border-radius: 0 2px 2px 0;
     border-radius: 0 2px 2px 0;
     margin: 0;
 }
@@ -10086,9 +10080,7 @@ body{margin-top:20px;}
     padding: 1rem 0;
     border-right: 1px solid #e6ecf3;
     height: 100%;
-    display: -ms-flexbox;
     display: flex;
-    -ms-flex-direction: column;
     flex-direction: column;
 }
 
@@ -10114,15 +10106,10 @@ body{margin-top:20px;}
 .users .person:hover {
     background-color: #ffffff;
     /* Fallback Color */
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#e9eff5), to(#ffffff));
     /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(right, #e9eff5, #ffffff);
     /* Chrome 10+, Saf5.1+, iOS 5+ */
-    background-image: -moz-linear-gradient(right, #e9eff5, #ffffff);
     /* FF3.6 */
-    background-image: -ms-linear-gradient(right, #e9eff5, #ffffff);
     /* IE10 */
-    background-image: -o-linear-gradient(right, #e9eff5, #ffffff);
     /* Opera 11.10+ */
     background-image: linear-gradient(right, #e9eff5, #ffffff);
 }
@@ -10130,15 +10117,10 @@ body{margin-top:20px;}
 .users .person.active-user {
     background-color: #ffffff;
     /* Fallback Color */
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#f7f9fb), to(#ffffff));
     /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(right, #f7f9fb, #ffffff);
     /* Chrome 10+, Saf5.1+, iOS 5+ */
-    background-image: -moz-linear-gradient(right, #f7f9fb, #ffffff);
     /* FF3.6 */
-    background-image: -ms-linear-gradient(right, #f7f9fb, #ffffff);
     /* IE10 */
-    background-image: -o-linear-gradient(right, #f7f9fb, #ffffff);
     /* Opera 11.10+ */
     background-image: linear-gradient(right, #f7f9fb, #ffffff);
 }
@@ -10156,16 +10138,12 @@ body{margin-top:20px;}
 .users .person .user img {
     width: 48px;
     height: 48px;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
     border-radius: 50px;
 }
 
 .users .person .user .status {
     width: 10px;
     height: 10px;
-    -webkit-border-radius: 100px;
-    -moz-border-radius: 100px;
     border-radius: 100px;
     background: #e6ecf3;
     position: absolute;
@@ -10228,8 +10206,6 @@ body{margin-top:20px;}
     min-height: 64px;
     line-height: 64px;
     border-bottom: 1px solid #e6ecf3;
-    -webkit-border-radius: 0 3px 0 0;
-    -moz-border-radius: 0 3px 0 0;
     border-radius: 0 3px 0 0;
 }
 
@@ -10257,8 +10233,6 @@ body{margin-top:20px;}
 .chat-container li img {
     width: 48px;
     height: 48px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
     border-radius: 30px;
 }
 
@@ -10283,8 +10257,6 @@ body{margin-top:20px;}
 
 .chat-container li .chat-text {
     padding: .4rem 1rem;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
     border-radius: 4px;
     background: #ffffff;
     font-weight: 300;
@@ -10392,9 +10364,8 @@ ul {
 .card {
     border: 0;
     background: #f4f5fb;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
     border-radius: 2px;
     margin-bottom: 2rem;
     box-shadow: none;
 }
+

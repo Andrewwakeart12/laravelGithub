@@ -3,7 +3,7 @@
         <h1>Posts</h1>
          <article data-editable v-for="post of posts">
             <div class ="card">
-            <div v-html="post.body"></div>
+                <textarea id="mytextarea"></textarea>
 
             </div>
 
@@ -14,7 +14,7 @@
 
 <script>
 
-
+require('../../tinymce.min.js');
 import {route} from '../../routes.js';
     export default {
                     methods:
@@ -45,6 +45,9 @@ import {route} from '../../routes.js';
             this.getPosts();
         },
         mounted() {
+            tinymce.init({
+                selector:'#mytextarea'
+            })
             console.log('Component Posts  mounted.')
         }
     }

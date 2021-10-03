@@ -74,8 +74,7 @@ import Echo from 'laravel-echo';
 
 const app = new Vue({
     el:'#appAdminPage',
-    router: router,
-    render: h => h(App)
+    router: router
 })
 const menuOptions = new Vue({
     el:'#appMenuOptions',

@@ -121,7 +121,6 @@ import {route} from '../../routes.js';
         ,
         beforeMount(){
                 this.getRoles();
-                this.getApiKey();
                 console.log('apiKey function executed');
         }
         ,

@@ -344,7 +344,6 @@
             }
         ,
         mounted() {
-            this.getApiKey();
                     console.log('COMPONENT ADMIN MOUNTED');
                     },
         methods:{

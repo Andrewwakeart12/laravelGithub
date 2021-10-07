@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Broadcast Channels
@@ -27,20 +27,10 @@ Broadcast::channel('notifications-tasks.{id}', function($id){
 Broadcast::channel('notifications-tasks.{id}', function($id){
     return true;
 });
-Broadcast::channel(
-    $this->app['config']->get('laravel-video-chat.channel.chat_room').'-{conversationId}',
-    function ($user, $conversationId) {
-        if ($this->app['conversation.repository']->canJoinConversation($user, $conversationId)) {
-            return $user;
-        }
-    }
-);
 
-Broadcast::channel(
-    $this->app['config']->get('laravel-video-chat.channel.group_chat_room').'-{groupConversationId}',
-    function ($user, $groupConversationId) {
-        if ($this->app['group.conversation.repository']->canJoinGroupConversation($user, $groupConversationId)) {
-            return $user;
-        }
+Broadcast::channel('chat.{roomId}', function($user,$roomId){
+    $user = Auth::user();
+    if($user->canJoinRoom($roomId)){
+        return ['id' => $user->id, 'name' => $user->username];
     }
-);
+});

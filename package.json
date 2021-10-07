@@ -30,6 +30,7 @@
         "@fullcalendar/interaction": "^5.9.0",
         "@fullcalendar/list": "^5.9.0",
         "@fullcalendar/vue": "^5.9.0",
+        "@tinymce/tinymce-vue": "^3.2.8",
         "bootstrap-vue": "^2.21.2",
         "chart.js": "^3.5.1",
         "chartjs": "^0.3.24",

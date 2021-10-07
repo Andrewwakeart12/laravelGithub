@@ -27,7 +27,7 @@ class UsersCreateSeed extends Seeder
         ,'role_id'=>1,
         'api_token' => Str::random(60),
     ));
-    User::create(array('username'=>'Obe','firstName'=>'Edgar','lastName'=>'Marquina Ruiz',
+    User::create(array('username'=>'NoObe','firstName'=>'Edgar','lastName'=>'Marquina Ruiz',
     'email'=>'obet@gmail.com'
     ,'password'=>Hash::make('12345678')
     ,'role_id'=>2,
@@ -40,21 +40,7 @@ User::create(array('username'=>'Obe','firstName'=>'Edgar','lastName'=>'Marquina 
 'api_token' => Str::random(60),
 ));
 
-$conversation = new Conversation();
-$conversation->first_user_id = 1;
-$conversation->second_user_id = 2;
-$conversation->save();
 
-$conversation->messages()->create([
-    'user_id'   => 1,
-    'text'      => 'Hello'
-]);
-
-$group = new GroupConversation();
-$group->name = 'Test';
-$group->save();
-
-$group->users()->attach([ 1,2,3 ]);
 
     }
 }

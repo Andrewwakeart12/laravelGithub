@@ -8,15 +8,26 @@
             </div>
 
          </article>
-         <chat></chat>
+        <editor api-key="no-api-key" :init="{
+            height:500,
+            plugins:['advlist autolink lists link image charmap print preview anchor',
+            'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | bold italic backcolor|\
+            alignleft aligncenter alignright alignjustify |\
+            bullist nulist outdent indent | removeformat | help'
+        }"/>
     </div>
 </template>
 
 <script>
 
-require('../../tinymce.min.js');
 import {route} from '../../routes.js';
+import Editor from '@tinymce/tinymce-vue';
     export default {
+         components:{
+             'editor' : Editor
+         },
                     methods:
             {
             getPosts(){
@@ -42,12 +53,12 @@ import {route} from '../../routes.js';
         }
             },
              beforeMount(){
+
             this.getPosts();
         },
         mounted() {
-            tinymce.init({
-                selector:'#mytextarea'
-            })
+
+
             console.log('Component Posts  mounted.')
         }
     }

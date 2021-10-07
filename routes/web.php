@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Broadcast;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ChatController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Redis;
@@ -36,6 +35,9 @@ Route::group(['middleware'=>'admin'],function(){
         $api_token= Auth::user()->api_token;
         return view('admin.index',compact('api_token'));
     })->name('adminPage');
+    Route::get('/admin/{any}',function(){
+        return redirect(route('adminPage'));
+    })->where('any', '.*');
 
 });
 /*

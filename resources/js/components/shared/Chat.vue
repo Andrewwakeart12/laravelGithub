@@ -1,17 +1,6 @@
 <template>
 <div class="container">
 
-    <!-- Page header start -->
-    <div class="page-title">
-        <div class="row gutters">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                <h5 class="title">Chat App</h5>
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12"> </div>
-        </div>
-    </div>
-    <!-- Page header end -->
-
     <!-- Content wrapper start -->
     <div class="content-wrapper">
 
@@ -36,65 +25,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <ul class="users">
-                                    <li class="person" data-chat="person1">
+                                <ul class="users" v-for="user of this.chatUsers">
+                                  <li class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
                                         <div class="user">
                                             <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
                                             <span class="status busy"></span>
                                         </div>
                                         <p class="name-time">
-                                            <span class="name">Steve Bangalter</span>
-                                            <span class="time">15/02/2019</span>
-                                        </p>
-                                    </li>
-                                    <li class="person" data-chat="person1">
-                                        <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <span class="status offline"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">Steve Bangalter</span>
-                                            <span class="time">15/02/2019</span>
-                                        </p>
-                                    </li>
-                                    <li class="person active-user" data-chat="person2">
-                                        <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <span class="status away"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">Peter Gregor</span>
-                                            <span class="time">12/02/2019</span>
-                                        </p>
-                                    </li>
-                                    <li class="person" data-chat="person3">
-                                        <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <span class="status busy"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">Jessica Larson</span>
-                                            <span class="time">11/02/2019</span>
-                                        </p>
-                                    </li>
-                                    <li class="person" data-chat="person4">
-                                        <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <span class="status offline"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">Lisa Guerrero</span>
-                                            <span class="time">08/02/2019</span>
-                                        </p>
-                                    </li>
-                                    <li class="person" data-chat="person5">
-                                        <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <span class="status away"></span>
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">Michael Jordan</span>
-                                            <span class="time">05/02/2019</span>
+                                            <span class="name">{{user.username}} </span>
+                                            <span class="time">({{user.firstName + " " + user.lastName}})</span>
                                         </p>
                                     </li>
                                 </ul>
@@ -106,34 +45,7 @@
                             </div>
                             <div class="chat-container">
                                 <ul class="chat-box chatContainerScroll">
-                                    <li class="chat-left">
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Russell</div>
-                                        </div>
-                                        <div class="chat-text">Hello, I'm Russell.
-                                            <br>How can I help you today?</div>
-                                        <div class="chat-hour">08:55 <span class="fa fa-check-circle"></span></div>
-                                    </li>
-                                    <li class="chat-right">
-                                        <div class="chat-hour">08:56 <span class="fa fa-check-circle"></span></div>
-                                        <div class="chat-text">Hi, Russell
-                                            <br> I need more information about Developer Plan.</div>
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Sam</div>
-                                        </div>
-                                    </li>
-                                    <li class="chat-left">
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Russell</div>
-                                        </div>
-                                        <div class="chat-text">Are we meeting today?
-                                            <br>Project has been already finished and I have results to show you.</div>
-                                        <div class="chat-hour">08:57 <span class="fa fa-check-circle"></span></div>
-                                    </li>
-                                    <li class="chat-right">
+                                 <li class="chat-right">
                                         <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
                                         <div class="chat-text">Well I am not sure.
                                             <br>I have results to show you.</div>
@@ -150,27 +62,9 @@
                                         <div class="chat-text">The rest of the team is not here yet.
                                             <br>Maybe in an hour or so?</div>
                                         <div class="chat-hour">08:57 <span class="fa fa-check-circle"></span></div>
-                                    </li>
-                                    <li class="chat-right">
-                                        <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
-                                        <div class="chat-text">Have you faced any problems at the last phase of the project?</div>
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Jin</div>
-                                        </div>
-                                    </li>
-                                    <li class="chat-left">
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Russell</div>
-                                        </div>
-                                        <div class="chat-text">Actually everything was fine.
-                                            <br>I'm very excited to show this to our team.</div>
-                                        <div class="chat-hour">07:00 <span class="fa fa-check-circle"></span></div>
-                                    </li>
-                                </ul>
+                                    </li>                               </ul>
                                 <div class="form-group mt-3 mb-0">
-                                    <textarea class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                                    <textarea v-model="message" @keyup.enter="sendMessage"class="form-control" rows="3" placeholder="Type your message here..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -189,8 +83,111 @@
 </div>
 </template>
 <script>
+ import {route} from '../../routes.js';
     export default {
-        mounted() {
+        data(){
+            return {
+                chatUsers : [],
+                thisUserData: [],
+                thisUserId : [],
+                message:[]
+            }
+        },
+        methods: {
+            async selectUser(e){
+                this.chatUsers.forEach(el =>{
+                    if(el.selected){
+                       try{
+                        let id = 1;
+                        console.log("idv: " + id)
+                        let channel =`chat.` + id;
+                        window.Echo.leave(channel);
+                        console.log("leaving");
+                       } catch(e){
+                       console.error(e);
+                       }el.selected=false;
+                        console.log('selected: ');
+                        console.log(e.id);
+                    }
+                     else if(el.id == e.id){
+                        console.log(e);
+                        el.selected=true;
+
+                        console.log('select: ');
+                        console.log(e.id);
+                    }
+                })
+            },
+            autoSelectChat(){
+                console.log('Chat Users: ');
+                this.$set(this.chatUsers, 'selected');
+                this.$set(this.chatUsers[0], 'selected', true);
+                console.log(this.chatUsers[0]);
+            },
+            sendMessage(){
+                let msg = this.message;
+                console.log(msg);
+                let conversationId = 1;
+                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : conversationId})).then(response=>{
+                    console.log(response.data);
+                })
+                this.message= null;
+            },
+            getThisUserId(){
+               axios.get(route('thisUserId', {api_token : this.$apiKey})).then(response =>{
+                this.thisUserId = response.data;
+
+            });
+            },
+           async getChatUsers(){
+                await this.getThisUserId();
+
+                await axios.get(route('getUsersChats', {api_token : this.$apiKey})).then(response =>{
+                 response.data.forEach(e =>{
+                    e.forEach(user =>{
+                        if(user.id != this.thisUserId){
+                            this.chatUsers.push(user);
+                        }else{
+                            this.thisUserData = user;
+                        }
+
+                    })
+
+                 });
+                 try{
+                     this.socket();
+                 }catch(e){
+                     console.error(e);
+                 }
+                 console.log(this.chatUsers);
+            this.autoSelectChat();
+            });
+            },
+              socket(){
+                var id = 1;
+
+                console.log("idv: " + id)
+                    let channel =`chat.` + id;
+                    console.log(channel);
+                window.Echo.join(channel).here((users)=>{
+                    console.log(users);
+                }).joining((user)=>{
+                    console.log(user);
+                } ).leaving((user)=>{
+                    console.log(user);
+                } ).error((error)=>{
+                    console.error(error);
+                })
+            }
+        },
+
+        async mounted() {
+            try{
+              await  this.getChatUsers();
+              await this.socket();
+            }catch(e){
+                console.error(e);
+            }
             console.log('Component Chat App mounted.')
         }
     }

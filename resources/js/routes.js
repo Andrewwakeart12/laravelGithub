@@ -1,8 +1,8 @@
 const routes = {
-    "generated::v6zvVn2ZvDbgIbMY": {
+    "generated::RRxpoF8c8huPuB5B": {
         "uri": "broadcasting\/auth"
     },
-    "generated::cmneHiWKFNhHk3nk": {
+    "generated::xXiS2nt4aMtHLIqQ": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -65,6 +65,12 @@ const routes = {
     "thisUserId": {
         "uri": "api\/getThisUserId"
     },
+    "getUsersChats": {
+        "uri": "api\/getUsersChats"
+    },
+    "sendMessage": {
+        "uri": "api\/sendMessage"
+    },
     "roles.index": {
         "uri": "api\/roles"
     },
@@ -110,22 +116,22 @@ const routes = {
     "events": {
         "uri": "api\/eventos"
     },
-    "generated::oK5P9Z0zoyPQsuc9": {
+    "generated::Gset2Gq7N8VAXvNY": {
         "uri": "\/"
     },
-    "generated::bZAdKoDJ305iDIom": {
+    "generated::iWR1AkSmTxtamvwd": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
-    "generated::bgqDW3sd8DSgqoDM": {
+    "generated::i4W2ypTJTjrgpIzy": {
         "uri": "admin\/{any}"
     },
     "login": {
         "uri": "login"
     },
-    "generated::Re5kAY2Yv9QBKtmK": {
+    "generated::iwqpHjsldClbftfG": {
         "uri": "login"
     },
     "logout": {
@@ -134,7 +140,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::Z3keR2nVK1mleqib": {
+    "generated::L8LRLtbGHfqfG1fl": {
         "uri": "register"
     },
     "password.request": {
@@ -152,7 +158,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::XkLoGx30dnP5sjvs": {
+    "generated::oRoXrxOeQJzC4rJk": {
         "uri": "password\/confirm"
     },
     "home": {
@@ -161,11 +167,26 @@ const routes = {
     "getApiKey": {
         "uri": "getApiKey"
     },
-    "generated::JEjCjjQiBiUVhXSD": {
+    "generated::TcFP8PGLk1kL90JA": {
         "uri": "test"
     },
-    "generated::CtlOizy7fX2nwEG8": {
-        "uri": "testingCicle"
+    "chat": {
+        "uri": "chat\/{id}"
+    },
+    "group.chat": {
+        "uri": "group\/chat\/{id}"
+    },
+    "chat.send": {
+        "uri": "chat\/message\/send"
+    },
+    "chat.send.file": {
+        "uri": "chat\/message\/send\/file"
+    },
+    "group.send": {
+        "uri": "group\/chat\/message\/send"
+    },
+    "group.send.file": {
+        "uri": "group\/chat\/message\/send\/file"
     }
 };
 

@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 @section('scripts')
+<script src="{{asset('js/tinymce.min.js')}}">
 
+</script>
 
 @endsection
 @section('content')

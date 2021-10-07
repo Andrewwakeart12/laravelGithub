@@ -10106,25 +10106,32 @@ body{margin-top:20px;}
 .users .person:hover {
     background-color: #ffffff;
     /* Fallback Color */
-    /* Saf4+, Chrome */
-    /* Chrome 10+, Saf5.1+, iOS 5+ */
-    /* FF3.6 */
-    /* IE10 */
-    /* Opera 11.10+ */
-    background-image: linear-gradient(right, #e9eff5, #ffffff);
-}
+     /* Saf4+, Chrome */
 
+    /* Chrome 10+, Saf5.1+, iOS 5+ */
+
+    /* FF3.6 */
+
+    /* IE10 */
+
+    /* Opera 11.10+ */
+
+}
 .users .person.active-user {
     background-color: #ffffff;
     /* Fallback Color */
-    /* Saf4+, Chrome */
-    /* Chrome 10+, Saf5.1+, iOS 5+ */
-    /* FF3.6 */
-    /* IE10 */
-    /* Opera 11.10+ */
-    background-image: linear-gradient(right, #f7f9fb, #ffffff);
-}
 
+    /* Saf4+, Chrome */
+
+    /* Chrome 10+, Saf5.1+, iOS 5+ */
+
+    /* FF3.6 */
+
+    /* IE10 */
+
+    /* Opera 11.10+ */
+
+}
 .users .person:last-child {
     border-bottom: 0;
 }
@@ -10367,5 +10374,11 @@ ul {
     border-radius: 2px;
     margin-bottom: 2rem;
     box-shadow: none;
+}
+.chatSelected{
+    background-color: #eaeaea;
+}
+.person:hover{
+    background-color: #969595;
 }
 

@@ -118,7 +118,6 @@ import {route} from '../../routes.js';
             this.getApiKey();
         },
         mounted() {
-
             console.log('Component Notifications mounted.')
         }
     }

@@ -8,6 +8,8 @@ use App\Http\Controllers\api\RolesApiController;
 use App\Http\Controllers\api\EventApiController;
 use App\Http\Controllers\api\UsersApiController;
 use App\Http\Controllers\api\ApiTaskController;
+use App\Http\Controllers\api\ChatApiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,8 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::get('/readNotifications/{notifications}', [UsersApiController::class, 'readNotifications'] )->name('readNotifications');
     Route::get('/getLastNotification', [UsersApiController::class, 'getLastNotification'] )->name('getLastNotification');
     Route::get('/getThisUserId', [UsersApiController::class, 'getThisUserId'] )->name('thisUserId');
+    Route::get('/getUsersChats', [ChatApiController::class, 'getUsersChats'] )->name('getUsersChats');
+    Route::post('/sendMessage', [ChatApiController::class, 'sendMessage'] )->name('sendMessage');
     Route::resource('/roles', RolesApiController::class);
     Route::resource('/task', ApiTaskController::class);
 });

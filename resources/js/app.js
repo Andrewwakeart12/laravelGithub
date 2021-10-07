@@ -71,7 +71,7 @@ import Echo from 'laravel-echo';
     console.log('io connected');
     console.log(window.Echo);
  }
-
+ tinyMCE.init({selector:'#mytextarea'})
 const app = new Vue({
     el:'#appAdminPage',
     router: router

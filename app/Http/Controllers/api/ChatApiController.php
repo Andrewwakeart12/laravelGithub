@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\api;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use PhpJunior\LaravelVideoChat\Facades\Chat;
-use PhpJunior\LaravelVideoChat\Models\File\File;
-
-class ChatController extends Controller
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+class ChatApiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -84,38 +84,33 @@ class ChatController extends Controller
     {
         //
     }
-    public function chat($id)
-    {
-        $conversation = Chat::getConversationMessageById($id);
-        return view('admin.chat', compact('conversation'));
+    public function getUsersChats(){
+
+        $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
+        json_decode($isAdmin);
+        $admins= [];
+        foreach($isAdmin as $role_id){
+            $user = User::where(['role_id'=> $role_id->id])->get(['id', 'username', 'firstName', 'lastName']);
+            array_push($admins,$user);
+
+        }
+        return $admins;
     }
 
-    public function groupChat($id)
-    {
-        $conversation = Chat::getGroupConversationMessageById($id);
+public function sendMessage(Request $request){
+    $message = $request['message'];
+    $from = Auth::user();
+    $conversationId = $request['conversationId'];
+    if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
+        return response()->json(['data' => 'conversation Does exist']);
+    }else{
+        return response()->json(['data' => 'conversation Does Not exist']);
 
-        return view('group_chat')->with([
-            'conversation' => $conversation
-        ]);
     }
 
-    public function send(Request $request)
-    {
-        Chat::sendConversationMessage($request->input('conversationId'), $request->input('text'));
-    }
-
-    public function groupSend(Request $request)
-    {
-        Chat::sendGroupConversationMessage($request->input('groupConversationId'), $request->input('text'));
-    }
-
-    public function sendFilesInConversation(Request $request)
-    {
-        Chat::sendFilesInConversation($request->input('conversationId') , $request->file('files'));
-    }
-
-    public function sendFilesInGroupConversation(Request $request)
-    {
-        Chat::sendFilesInGroupConversation($request->input('groupConversationId') , $request->file('files'));
-    }
 }
+
+}
+
+
+

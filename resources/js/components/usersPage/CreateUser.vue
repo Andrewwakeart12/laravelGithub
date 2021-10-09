@@ -9,6 +9,7 @@
      <table class="table table-dark responsive table-striped ">
 
     <thead>
+        <th>Profile Photo</th>
         <th>UserName</th>
         <th>FirstName</th>
         <th>LastName</th>
@@ -21,11 +22,11 @@
     </thead>
     <tbody>
             <tr>
+            <td><input name="file" type="file" class="userInputInTable" v-on:change="insertedFile" ></td>
             <td><input name="usernam" class="userInputInTable" placeholder="username" v-model="user.username" /></td>
             <td><input name="firstName" class="userInputInTable" placeholder="firstName" v-model="user.firstName" /></td>
 
             <td><input name="lastName" class="userInputInTable" placeholder="lastName" v-model="user.lastName"  /></td>
-
             <td><input name="email" type="email" class="userInputInTable email" placeholder="email" v-model="user.email" /></td>
             <td><input name="password" type="password" class="userInputInTable email" placeholder="password" v-model="user.password" /></td>
             <td><input name="password_confirmation" type="password" class="userInputInTable email" placeholder="password_confirmation" v-model="user.password_confirmation" /></td>
@@ -57,12 +58,32 @@ import {route} from '../../routes.js';
                     console.log('token : ' + token);
                     return {api_token : token};
                 },
+                insertedFile(file){
+                     if(file){
+                        this.formObj = new FormData()
+                        this.formObj.append('photo_id', file.srcElement.files.item(0));
+                        return 0;
+                    }
+                },
                 createUser(){
-                console.log(this.user);
+                console.log(this.formObj.get('photo_id'));
                   var token = this.getTokenJson(this.$apiKey);
+                  this.formObj.append('username', this.user.username);
+                  this.formObj.append('email', this.user.email);
+                  this.formObj.append('firstName', this.user.firstName);
+                  this.formObj.append('lastName', this.user.lastName);
+                  this.formObj.append('password', this.user.password);
+                  this.formObj.append('password_confirmation', this.user.password_confirmation);
+                  this.formObj.append('role_id', this.user.role_id);
+                  this.formObj.append('is_active', this.user.is_active);
+
+
+
                      axios
-                .post(route('users.store', token), this.user)
-                .then(response=> { this.ServerMessage = response.data }
+                .post(route('users.store', token), this.formObj)
+                .then(response=> { this.ServerMessage = response.data
+                    console.log(response.data)
+                }
 
                 )},
                   getRoles(){
@@ -82,8 +103,11 @@ import {route} from '../../routes.js';
             return {
                 user: {
                     is_active:false,
-                    role_id:[]
+                    role_id:[],
+                    photo_id:[],
+
                 },
+                formObj: [],
                 role: [],
                 roles:[],
                 ServerMessage: []

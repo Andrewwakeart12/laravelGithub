@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\api;
-
+use App\Models\Photo;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,13 +28,39 @@ class UsersApiController extends Controller
     }
      public function store(Request $request){
         $permissions= Auth::user()->role->permissions;
-        if($permissions['users']['create']){
-            $user=$request->all();
-            $user['api_token'] = Str::random(60);
 
-            $user = User::create($user);
+        if($permissions['users']['create'])
+        {
+            $user=$request->all();
+
+            if($file = $request->file('photo_id'))
+            {
+                $name = time() . $file->getClientOriginalName();
+
+                $file->move('images', $name);
+
+                $photo = Photo::create(['file'=>$name]);
+
+                $user['photo_id'] = $photo->id;
+            }
+            if($user['is_active']=== true){
+                $user['is_active'] = 0;
+            }else{
+                $user['is_active']= 1;
+            }
+            try {
+                $user['api_token'] = Str::random(60);
+
+                $user = User::create($user);
+            } catch (\Throwable $th) {
+               return $th;
+            }
+
+
             return response()->json(['Success'=> 'User Created']);
-        }else{
+        }
+        else
+        {
             return response()->json(['Error'=> 'You dont have permission to create users']);
 
         }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Message;
 class Conversation extends Model
 {
-    protected $fillable = ['first_user_id', 'secont_user_id'];
+    protected $fillable = ['first_user_id', 'second_user_id'];
     public function firstUser(){
         return $this->belongsTo('App\Models\User', 'first_user_id');
     }

@@ -84,28 +84,36 @@
 </template>
 <script>
  import {route} from '../../routes.js';
+
     export default {
         data(){
             return {
                 chatUsers : [],
                 thisUserData: [],
                 thisUserId : [],
+                channelId:[],
                 message:[]
             }
         },
         methods: {
-            async selectUser(e){
-                this.chatUsers.forEach(el =>{
-                    if(el.selected){
-                       try{
-                        let id = 1;
+            async selectUser(e)
+            {
+                this.chatUsers.forEach(el =>
+                {
+                    if(el.selected)
+                    {
+                       try
+                       {
+                        let id = e.channelId;
                         console.log("idv: " + id)
                         let channel =`chat.` + id;
                         window.Echo.leave(channel);
                         console.log("leaving");
-                       } catch(e){
+                       } catch(e)
+                       {
                        console.error(e);
-                       }el.selected=false;
+                       }
+                       el.selected=false;
                         console.log('selected: ');
                         console.log(e.id);
                     }
@@ -118,13 +126,18 @@
                     }
                 })
             },
-            autoSelectChat(){
+            async autoSelectChat()
+            {
+
+
                 console.log('Chat Users: ');
-                this.$set(this.chatUsers, 'selected');
+                console.log(this.chatUsers[0].channelId);
                 this.$set(this.chatUsers[0], 'selected', true);
-                console.log(this.chatUsers[0]);
+                await this.socket(this.chatUsers[0].channelId);
+
             },
-            sendMessage(){
+            sendMessage()
+            {
                 let msg = this.message;
                 console.log(msg);
                 let conversationId = 1;
@@ -133,20 +146,26 @@
                 })
                 this.message= null;
             },
-            getThisUserId(){
+            getThisUserId()
+            {
                axios.get(route('thisUserId', {api_token : this.$apiKey})).then(response =>{
                 this.thisUserId = response.data;
 
             });
             },
-           async getChatUsers(){
+           async getChatUsers()
+           {
                 await this.getThisUserId();
 
-                await axios.get(route('getUsersChats', {api_token : this.$apiKey})).then(response =>{
+                 await axios.get(route('getUsersChats', {api_token : this.$apiKey})).then(response =>{
                  response.data.forEach(e =>{
                     e.forEach(user =>{
                         if(user.id != this.thisUserId){
+                            this.$set(user, 'channelId');
                             this.chatUsers.push(user);
+                            console.log('User');
+                            console.log(user);
+
                         }else{
                             this.thisUserData = user;
                         }
@@ -154,17 +173,34 @@
                     })
 
                  });
-                 try{
-                     this.socket();
-                 }catch(e){
-                     console.error(e);
-                 }
-                 console.log(this.chatUsers);
-            this.autoSelectChat();
+
             });
+
             },
-              socket(){
-                var id = 1;
+             async getChannels()
+             {
+               await this.chatUsers.forEach(user =>
+               {
+                    let thisUserId = this.thisUserId;
+                    let otherUserId = user.id;
+                    if(thisUserId != user.id){
+                        var channelId= [];
+                        axios.get(route('getChannels', {api_token: this.$apiKey, thisUserId : thisUserId, otherUserId: otherUserId})).then(response=>{
+                            let channelID= response.data;
+
+                                this.channelId.push( channelID);
+                                  console.log('CHANNEL ID');
+                                user.channelId = this.channelId[0];
+                                this.channelId = [];
+
+                            });
+
+                    }
+
+                });
+            },
+              socket(channelId){
+                var id = channelId;
 
                 console.log("idv: " + id)
                     let channel =`chat.` + id;
@@ -180,14 +216,17 @@
                 })
             }
         },
-
-        async mounted() {
-            try{
-              await  this.getChatUsers();
-              await this.socket();
+        async beforeMount() {
+             try{
+              await this.getChatUsers();
+              await this.getChannels();
+              await this.autoSelectChat();
             }catch(e){
                 console.error(e);
             }
+        },
+        async mounted() {
+
             console.log('Component Chat App mounted.')
         }
     }

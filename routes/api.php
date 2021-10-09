@@ -36,6 +36,7 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::get('/getThisUserId', [UsersApiController::class, 'getThisUserId'] )->name('thisUserId');
     Route::get('/getUsersChats', [ChatApiController::class, 'getUsersChats'] )->name('getUsersChats');
     Route::post('/sendMessage', [ChatApiController::class, 'sendMessage'] )->name('sendMessage');
+    Route::get('/getChannels', [ChatApiController::class, 'getChannels'] )->name('getChannels');
     Route::resource('/roles', RolesApiController::class);
     Route::resource('/task', ApiTaskController::class);
 });

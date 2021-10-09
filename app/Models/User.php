@@ -54,6 +54,9 @@ public function posts(){
 public function role(){
     return $this->belongsTo('App\Models\Role');
 }
+public function photo(){
+    return $this->belongsTo('App\Models\Photo');
+}
 public function isAdmin(){
     if($this->role->permissions['especials']['isAdmin']){
     return true;

@@ -67,8 +67,8 @@ import {route} from '../../routes.js';
                 },
                 createUser(){
                 console.log(this.formObj.get('photo_id'));
-                  var token = this.getTokenJson(this.$apiKey);
-                  this.formObj.append('username', this.user.username);
+                if(this.formObj){
+                this.formObj.append('username', this.user.username);
                   this.formObj.append('email', this.user.email);
                   this.formObj.append('firstName', this.user.firstName);
                   this.formObj.append('lastName', this.user.lastName);
@@ -76,6 +76,20 @@ import {route} from '../../routes.js';
                   this.formObj.append('password_confirmation', this.user.password_confirmation);
                   this.formObj.append('role_id', this.user.role_id);
                   this.formObj.append('is_active', this.user.is_active);
+
+                }else{
+                    this.formObj = new FormData();
+                    this.formObj.append('username', this.user.username);
+                  this.formObj.append('email', this.user.email);
+                  this.formObj.append('firstName', this.user.firstName);
+                  this.formObj.append('lastName', this.user.lastName);
+                  this.formObj.append('password', this.user.password);
+                  this.formObj.append('password_confirmation', this.user.password_confirmation);
+                  this.formObj.append('role_id', this.user.role_id);
+                  this.formObj.append('is_active', this.user.is_active);
+
+                }
+                  var token = this.getTokenJson(this.$apiKey);
 
 
 

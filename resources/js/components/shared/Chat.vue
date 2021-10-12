@@ -92,6 +92,7 @@
                 thisUserData: [],
                 thisUserId : [],
                 channelId:[],
+                channelSelected : [],
                 message:[]
             }
         },
@@ -104,7 +105,7 @@
                     {
                        try
                        {
-                        let id = e.channelId;
+                        let id = this.channelSelected;
                         console.log("idv: " + id)
                         let channel =`chat.` + id;
                         window.Echo.leave(channel);
@@ -113,27 +114,29 @@
                        {
                        console.error(e);
                        }
-                       el.selected=false;
+                        el.selected=false;
                         console.log('selected: ');
                         console.log(e.id);
                     }
-                     else if(el.id == e.id){
+                     else if(el.id == e.id && el.selected == false){
                         console.log(e);
                         el.selected=true;
 
                         console.log('select: ');
+
                         console.log(e.id);
+                         this.socket(el.channelId);
                     }
                 })
             },
-            async autoSelectChat()
+             autoSelectChat()
             {
 
 
                 console.log('Chat Users: ');
                 console.log(this.chatUsers[0].channelId);
                 this.$set(this.chatUsers[0], 'selected', true);
-                await this.socket(this.chatUsers[0].channelId);
+                 this.socket(this.chatUsers[0].channelId);
 
             },
             sendMessage()
@@ -157,48 +160,26 @@
            {
                 await this.getThisUserId();
 
-                 await axios.get(route('getUsersChats', {api_token : this.$apiKey})).then(response =>{
-                 response.data.forEach(e =>{
-                    e.forEach(user =>{
-                        if(user.id != this.thisUserId){
-                            this.$set(user, 'channelId');
-                            this.chatUsers.push(user);
-                            console.log('User');
-                            console.log(user);
+                let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey}));
 
+                response.data.forEach(user =>{
+
+                        if(user.id != this.thisUserId){
+
+                            this.chatUsers.push(user);
+                            console.log('OtherUsers');
+                            this.$set(user, 'selected', false);
+                            console.log(user);
                         }else{
+                            console.log('thisUser');
+                            console.log(user);
                             this.thisUserData = user;
                         }
 
-                    })
-
-                 });
-
-            });
-
+                    });
+                    await this.autoSelectChat()
             },
-             async getChannels()
-             {
-               await this.chatUsers.forEach(user =>
-               {
-                    let thisUserId = this.thisUserId;
-                    let otherUserId = user.id;
-                    if(thisUserId != user.id){
-                        var channelId= [];
-                        axios.get(route('getChannels', {api_token: this.$apiKey, thisUserId : thisUserId, otherUserId: otherUserId})).then(response=>{
-                            let channelID= response.data;
 
-                                this.channelId.push( channelID);
-                                  console.log('CHANNEL ID');
-                                user.channelId = this.channelId[0];
-                                this.channelId = [];
-
-                            });
-
-                    }
-
-                });
-            },
               socket(channelId){
                 var id = channelId;
 
@@ -216,16 +197,16 @@
                 })
             }
         },
-        async beforeMount() {
+         async beforeMount() {
              try{
-              await this.getChatUsers();
-              await this.getChannels();
-              await this.autoSelectChat();
+               await this.getChatUsers();
             }catch(e){
                 console.error(e);
             }
         },
-        async mounted() {
+         mounted() {
+
+
 
             console.log('Component Chat App mounted.')
         }

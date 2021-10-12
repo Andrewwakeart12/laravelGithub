@@ -11,9 +11,16 @@ use Illuminate\Support\Facades\Auth;
 class UsersApiController extends Controller
 {
     public function index(){
+
         $users= User::all();
+
         foreach($users as $user){
-            $user->role = Role::find($user->role_id);
+            $user->role = $user->role;
+            if($user->photo_id){
+                $user->profilePhoto = $user->getPhotoFileDir();
+            }else{
+                $user->profilePhoto = null;
+            }
         }
         return response()->json($users);
     }
@@ -68,9 +75,25 @@ class UsersApiController extends Controller
      public function update(Request $request, $id)
      {
          $permissions= Auth::user()->role->permissions;
+
          if($permissions['users']['update']){
             $user = User::find($id);
-            $user->update($request->all());
+            $newUserInfo = $request->all();
+            if($file = $request->file('new_photo_id'))
+            {
+                $name = time() . $file->getClientOriginalName();
+
+                $file->move('images', $name);
+
+                $photo = Photo::create(['file'=>$name]);
+
+                $newUserInfo['photo_id'] = $photo->id;
+                if($request['old_photo_id']){
+                    $user->photo()->delete();
+                }
+            }
+
+            $user->update($newUserInfo);
 
             return response()->json(['Success'=>'User updated']);
 

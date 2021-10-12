@@ -88,12 +88,12 @@ class ChatApiController extends Controller
     public function getUsersChats(){
 
         $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
-        json_decode($isAdmin);
-        $admins= [];
-        foreach($isAdmin as $role_id){
-            $user = User::where(['role_id'=> $role_id->id])->get(['id', 'username', 'firstName', 'lastName']);
-            array_push($admins,$user);
-
+        $thisUserId = Auth::user()->id;
+        $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName'])->all();
+        foreach($admins as $user){
+            if($user->id != $thisUserId){
+               $user['channelId'] = $user->getChannel($thisUserId,$user->id);
+            }
         }
         return $admins;
     }

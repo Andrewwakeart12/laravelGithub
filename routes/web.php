@@ -85,12 +85,4 @@ Route::get('/test',function(){
    $notifications = Auth::user()->notifications;
    dd("$notifications");
 });
-Route::get('/chat/{id}', [ChatController::class, 'chat'])->name('chat');
-Route::get('/group/chat/{id}',[ChatController::class, 'groupChat'])->name('group.chat');
-Route::post('/chat/message/send',[ChatController::class, 'send'])->name('chat.send');
-Route::post('/chat/message/send/file', [ChatController::class, 'sendFilesInConversation'])->name('chat.send.file');
-Route::post('/group/chat/message/send', [ChatController::class, 'groupSend'])->name('group.send');
-Route::post('/group/chat/message/send/file',[ChatController::class, 'sendFilesInGroupConversation'])->name('group.send.file');
-Route::get('/home', 'HomeController@index')->name('home');
-
 Broadcast::routes();

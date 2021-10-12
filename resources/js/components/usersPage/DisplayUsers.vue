@@ -10,6 +10,7 @@
      <table class="table table-dark responsive table-striped ">
 
     <thead>
+        <th>Profile Image</th>
         <th>Id</th>
         <th>UserName</th>
         <th>FirstName</th>
@@ -22,6 +23,16 @@
     </thead>
     <tbody>
             <tr v-for="user of users">
+            <input name="old_photo_id" type="hidden"  v-model="user.photo_id"/>
+            <td>
+            <div>
+            <input name="file" type="file" class="userInputInTable" v-on:change="insertedFile" >
+            </div>
+            <div v-if="user.profilePhoto">
+                <img class="img img-fluid" :src="user.profilePhoto"/>
+            </div>
+            </td>
+
             <td>{{user.id}}</td>
             <td><input name="usernam" class="userInputInTable" placeholder="username" v-model="user.username" v-on:blur="user"/></td>
             <td><input name="firstName" class="userInputInTable" placeholder="username" v-model="user.firstName" v-on:blur="user"/></td>
@@ -56,6 +67,13 @@ import {route} from '../../routes.js';
     export default {
           methods:
           {
+              insertedFile(file){
+                     if(file){
+                        this.formObj = new FormData()
+                        this.formObj.append('new_photo_id', file.srcElement.files.item(0));
+                        return 0;
+                    }
+                },
             setViewData()
                 {
                         var token =this.getTokenJson(this.$apiKey);
@@ -74,12 +92,42 @@ import {route} from '../../routes.js';
                     },
 
                     usersUpdate(apiKey,user){
-                        var token = this.getTokenJson(apiKey, user.id);
-                        var routeR= route('users.update', token);
-                        console.log(user);
+                         if(this.formObj != null){
+                            this.formObj.append('username', user.username);
+                            this.formObj.append('email', user.email);
+                            this.formObj.append('firstName', user.firstName);
+                            this.formObj.append('lastName', user.lastName);
+                            this.formObj.append('password', user.password);
+                            this.formObj.append('password_confirmation', user.password_confirmation);
+                            this.formObj.append('role_id', user.role_id);
+                            this.formObj.append('old_photo_id', user.photo_id);
+
+                            this.formObj.append('is_active', user.is_active);
+                            this.formObj.append('_method', 'PATCH');
+                         }else{
+                             console.log("else");
+                             this.formObj= new FormData();
+
+                            this.formObj.append('username', user.username);
+                            this.formObj.append('email', user.email);
+                            this.formObj.append('firstName', user.firstName);
+                            this.formObj.append('lastName', user.lastName);
+                            this.formObj.append('password', user.password);
+                            this.formObj.append('password_confirmation', user.password_confirmation);
+                            this.formObj.append('role_id', user.role_id);
+                            this.formObj.append('old_photo_id', user.photo_id);
+
+                            this.formObj.append('is_active', user.is_active);
+                            this.formObj.append('_method', 'PATCH');
+                         }
+
+                        var token = {'api_token': this.$apiKey, 'user' : user.id};
+
+
                         axios
-                        .patch(routeR, user)
+                        .post(route('users.update', token), this.formObj)
                         .then(response=> {
+                            console.log(response.data);
                             this.serverMessage=response.data;
                             });
                     },
@@ -87,7 +135,10 @@ import {route} from '../../routes.js';
                   {
                         axios
                 .get(route('users.index', apiKey ))
-                .then(response=> {this.users=response.data;});
+                .then(response=> {
+                    console.log(response.data);
+                    this.users=response.data;
+                });
                     },
 
                 getTokenJson(apiKey,id)
@@ -119,6 +170,7 @@ import {route} from '../../routes.js';
        data: function(){
            return {
                 api_key: this.$apiKey,
+                 formObj: null,
                 apiToken: [],
                 users: [],
                 roles:[],

@@ -338,7 +338,6 @@
         data() {
             return {
                 api_key: [],
-                PostIndex:[],
                 users: []
         }
             }
@@ -347,18 +346,7 @@
                     console.log('COMPONENT ADMIN MOUNTED');
                     },
         methods:{
-            getApiKey(PostBool){
 
-                       axios
-                .post(route('getApiKey'))
-                .then(response=> {
-                    Vue.prototype.$apiKey = response.data;
-                    this.api_key=response.data;
-                    this.PostIndex = route('Posts.index', this.getTokenJson(this.api_key));
-                    console.log('apiKey "global : "' + ' ' + this.$apiKey);
-                });
-
-                    },
                 getTokenJson(apiKey){
                     var token = apiKey;
                     console.log('token : ' + token);

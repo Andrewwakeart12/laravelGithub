@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use App\Models\Message;
 class ChatApiController extends Controller
 {
     /**
@@ -89,10 +90,13 @@ class ChatApiController extends Controller
 
         $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
         $thisUserId = Auth::user()->id;
-        $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName'])->all();
+        $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName','photo_id'])->all();
         foreach($admins as $user){
+            $user['profilePhoto'] = $user->getPhotoFileDir();
             if($user->id != $thisUserId){
                $user['channelId'] = $user->getChannel($thisUserId,$user->id);
+
+
             }
         }
         return $admins;
@@ -103,7 +107,8 @@ public function sendMessage(Request $request){
     $from = Auth::user();
     $conversationId = $request['conversationId'];
     if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
-        return response()->json(['data' => 'conversation Does exist']);
+            Message::create(['text'=> $message , 'conversation_id'=> $conversationId,'user_id'=> $from->id , 'conversation_type'=>'conversation']);
+
     }else{
         return response()->json(['data' => 'conversation Does Not exist']);
 

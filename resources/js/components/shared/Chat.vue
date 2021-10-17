@@ -28,7 +28,7 @@
                                 <ul class="users" v-for="user of this.chatUsers">
                                   <li class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
                                         <div class="user">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
+                                            <img :src="user.profilePhoto" alt="Retail Admin">
                                             <span class="status busy"></span>
                                         </div>
                                         <p class="name-time">
@@ -90,7 +90,7 @@
             return {
                 chatUsers : [],
                 thisUserData: [],
-                thisUserId : [],
+                thisUserId : this.$this_user_id,
                 channelId:[],
                 channelSelected : [],
                 message:[]
@@ -106,25 +106,20 @@
                        try
                        {
                         let id = this.channelSelected;
-                        console.log("idv: " + id)
                         let channel =`chat.` + id;
-                        window.Echo.leave(channel);
+                        window.Echo.leaveChannel(channel);
                         console.log("leaving");
                        } catch(e)
                        {
                        console.error(e);
                        }
                         el.selected=false;
-                        console.log('selected: ');
-                        console.log(e.id);
                     }
                      else if(el.id == e.id && el.selected == false){
                         console.log(e);
                         el.selected=true;
 
-                        console.log('select: ');
 
-                        console.log(e.id);
                          this.socket(el.channelId);
                     }
                 })
@@ -137,6 +132,7 @@
                 console.log(this.chatUsers[0].channelId);
                 this.$set(this.chatUsers[0], 'selected', true);
                  this.socket(this.chatUsers[0].channelId);
+                 this.channelSelected= this.chatUsers[0].channelId;
 
             },
             sendMessage()
@@ -144,21 +140,13 @@
                 let msg = this.message;
                 console.log(msg);
                 let conversationId = 1;
-                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : conversationId})).then(response=>{
+                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected})).then(response=>{
                     console.log(response.data);
                 })
                 this.message= null;
             },
-            getThisUserId()
-            {
-               axios.get(route('thisUserId', {api_token : this.$apiKey})).then(response =>{
-                this.thisUserId = response.data;
-
-            });
-            },
            async getChatUsers()
            {
-                await this.getThisUserId();
 
                 let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey}));
 
@@ -209,6 +197,8 @@
 
 
             console.log('Component Chat App mounted.')
+            console.log('this user id');
+            console.log(this.$this_user_id);
         }
     }
 </script>

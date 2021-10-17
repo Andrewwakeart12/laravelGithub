@@ -104,8 +104,7 @@ class UsersApiController extends Controller
 
      }
      public function getThisUserId(){
-        $userID=Auth::user()->id;
-         return response()->json($userID);
+         return response()->json(Auth::user()->id);
      }
      public function getUsersInfo(){
 

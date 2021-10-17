@@ -9,7 +9,7 @@
 
 @csrf
 <div id="appAdminPage" >
-    <app api_token="{{$api_token}}"></app>
+    <app api_token="{{Auth::user()->api_token}}" this_user_id="{{$thisUserId}}"></app>
 </div>
 
 @endsection

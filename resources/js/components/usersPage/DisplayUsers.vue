@@ -97,8 +97,6 @@ import {route} from '../../routes.js';
                             this.formObj.append('email', user.email);
                             this.formObj.append('firstName', user.firstName);
                             this.formObj.append('lastName', user.lastName);
-                            this.formObj.append('password', user.password);
-                            this.formObj.append('password_confirmation', user.password_confirmation);
                             this.formObj.append('role_id', user.role_id);
                             this.formObj.append('old_photo_id', user.photo_id);
 
@@ -112,8 +110,6 @@ import {route} from '../../routes.js';
                             this.formObj.append('email', user.email);
                             this.formObj.append('firstName', user.firstName);
                             this.formObj.append('lastName', user.lastName);
-                            this.formObj.append('password', user.password);
-                            this.formObj.append('password_confirmation', user.password_confirmation);
                             this.formObj.append('role_id', user.role_id);
                             this.formObj.append('old_photo_id', user.photo_id);
 

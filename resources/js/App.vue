@@ -1,7 +1,5 @@
 <template>
 <div>
-{{this.this_user_id}}
-{{this.api_token}}
        <router-view> </router-view>
 
 </div>

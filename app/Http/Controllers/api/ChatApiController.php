@@ -16,80 +16,10 @@ class ChatApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-    public function getUsersChats(){
+    public function getUsersChats(Request $request){
 
         $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
-        $thisUserId = Auth::user()->id;
+        $thisUserId = $request['thisUserId'];
         $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName','photo_id'])->all();
         foreach($admins as $user){
             $user['profilePhoto'] = $user->getPhotoFileDir();
@@ -104,15 +34,24 @@ class ChatApiController extends Controller
 
 public function sendMessage(Request $request){
     $message = $request['message'];
-    $from = Auth::user();
     $conversationId = $request['conversationId'];
-    if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
-            Message::create(['text'=> $message , 'conversation_id'=> $conversationId,'user_id'=> $from->id , 'conversation_type'=>'conversation']);
+    $from = $request['thisUserId'];
+    try {
+        if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
+            Message::create(['text'=> $message ,
+            'conversation_id'=> $conversationId,
+            'user_id'=> $from ,
+            'conversation_type'=>'conversation'
+            ]);
 
     }else{
         return response()->json(['data' => 'conversation Does Not exist']);
 
     }
+    } catch (\Throwable $th) {
+        return $th;
+    }
+
 
 }
 

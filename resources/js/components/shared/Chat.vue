@@ -93,34 +93,31 @@
                 thisUserId : this.$this_user_id,
                 channelId:[],
                 channelSelected : [],
-                message:[]
+                message:[],
+                messagesInChat:[],
             }
         },
         methods: {
             async selectUser(e)
             {
-                this.chatUsers.forEach(el =>
+                //e is the user send by the click event
+                this.chatUsers.forEach(user =>
                 {
-                    if(el.selected)
+                    if(user.selected)
                     {
-                       try
-                       {
-                        let id = this.channelSelected;
-                        let channel =`chat.` + id;
-                        window.Echo.leaveChannel(channel);
-                        console.log("leaving");
-                       } catch(e)
-                       {
-                       console.error(e);
-                       }
-                        el.selected=false;
+                        let id = user.channelId;
+                        let channel =`chat.${id}`;
+                        window.Echo.leave(channel);
+                        console.log(`leaving ${channel}`);
+
+                        user.selected=false;
                     }
-                     else if(el.id == e.id && el.selected == false){
-                        console.log(e);
-                        el.selected=true;
+                     else if(user.id == e.id && user.selected == false){
+                        console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
+                        user.selected=true;
 
 
-                         this.socket(el.channelId);
+                         this.socket(user.channelId);
                     }
                 })
             },
@@ -139,8 +136,9 @@
             {
                 let msg = this.message;
                 console.log(msg);
-                let conversationId = 1;
-                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected})).then(response=>{
+                let conversationId = this.channelSelected;
+                let thisUserId = this.thisUserId;
+                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId})).then(response=>{
                     console.log(response.data);
                 })
                 this.message= null;
@@ -148,7 +146,7 @@
            async getChatUsers()
            {
 
-                let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey}));
+                let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey, thisUserId: this.thisUserId}));
 
                 response.data.forEach(user =>{
 

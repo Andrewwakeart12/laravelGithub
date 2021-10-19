@@ -112,7 +112,7 @@ import {route} from '../../routes.js';
        data() {
 
             return {
-                api_key: [],
+                api_key: this.$apiKey,
                 roles :[],
                 dataEditableTest:{},
 

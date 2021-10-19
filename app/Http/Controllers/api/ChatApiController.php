@@ -36,21 +36,26 @@ public function sendMessage(Request $request){
     $message = $request['message'];
     $conversationId = $request['conversationId'];
     $from = $request['thisUserId'];
-    try {
-        if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
-            Message::create(['text'=> $message ,
-            'conversation_id'=> $conversationId,
-            'user_id'=> $from ,
-            'conversation_type'=>'conversation'
-            ]);
+    if(trim($message != '')){
 
-    }else{
-        return response()->json(['data' => 'conversation Does Not exist']);
+        try {
+            if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
+                $newMessage = Message::create(['text'=> $message ,
+                'conversation_id'=> $conversationId,
+                'user_id'=> $from ,
+                'conversation_type'=>'conversation'
+                ]);
+                return $newMessage;
+        }else{
+            return response()->json(['error' => 'conversation Does Not exist']);
 
-    }
-    } catch (\Throwable $th) {
-        return $th;
-    }
+        }
+        } catch (\Throwable $th) {
+            return $th;
+        }
+        }else{
+            return response()->json(['emptyMesssage' => true]);
+        }
 
 
 }
@@ -71,7 +76,17 @@ public function getChannels(Request $request){
             return response()->json($newChat);
         }
 }
+public function getMessagesInChat(Request $request){
+    $conversationId = $request['conversationId'];
+    try {
+        $messagesInConversation = Message::where('conversation_id', $conversationId)->orderBy('created_at', 'asc')->limit(8)->get();
+        return $messagesInConversation;
+    } catch (\Throwable $th) {
+        return $th;
+    }
 }
+}
+
 
 
 

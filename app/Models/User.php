@@ -66,7 +66,11 @@ public function isAdmin(){
 }
 }
 public function getPhotoFileDir(){
+    if($this->photo){
     return $this->directory . $this->photo->file;
+    }else{
+        return asset('img/undraw_profile_1.svg');
+    }
 }
 public function isThisUser($userID){
     if($userID == Auth::user()->id){

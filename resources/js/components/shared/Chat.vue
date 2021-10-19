@@ -40,27 +40,23 @@
                             </div>
                         </div>
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
-                            <div class="selected-user">
-                                <span>To: <span class="name">Emily Russell</span></span>
-                            </div>
+
                             <div class="chat-container">
-                                <ul class="chat-box chatContainerScroll">
-                                 <li class="chat-right">
-                                        <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
-                                        <div class="chat-text">Well I am not sure.
-                                            <br>I have results to show you.</div>
-                                        <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Joyse</div>
-                                        </div>
+                                <ul class="chat-box chatContainerScroll" v-for="message of messagesInChat">
+                                     <li v-if="message.user_id != thisUserData.id" class="chat-right">
+                                            <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
+                                            <div class="chat-text">{{message.text}}</div>
+                                            <div class="chat-avatar">
+                                                <img :src="participant2.profilePhoto" alt="Retail Admin">
+                                                <div class="chat-name">{{participant2.username}}</div>
+                                            </div>
                                     </li>
-                                    <li class="chat-left">
+                                    <li v-if="message.user_id === thisUserData.id" class="chat-left">
                                         <div class="chat-avatar">
-                                            <img src="/img/undraw_profile_3.svg" alt="Retail Admin">
-                                            <div class="chat-name">Russell</div>
+                                            <img :src="thisUserData.profilePhoto" alt="Retail Admin">
+                                            <div class="chat-name">{{thisUserData.username}}</div>
                                         </div>
-                                        <div class="chat-text">The rest of the team is not here yet.
-                                            <br>Maybe in an hour or so?</div>
+                                        <div class="chat-text">{{message.text}}</div>
                                         <div class="chat-hour">08:57 <span class="fa fa-check-circle"></span></div>
                                     </li>                               </ul>
                                 <div class="form-group mt-3 mb-0">
@@ -94,6 +90,8 @@
                 channelId:[],
                 channelSelected : [],
                 message:[],
+                participant1: [],
+                participant2: [],
                 messagesInChat:[],
             }
         },
@@ -116,7 +114,7 @@
                         console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
                         user.selected=true;
 
-
+                        this.participant2 = user;
                          this.socket(user.channelId);
                     }
                 })
@@ -125,22 +123,29 @@
             {
 
 
-                console.log('Chat Users: ');
-                console.log(this.chatUsers[0].channelId);
                 this.$set(this.chatUsers[0], 'selected', true);
-                 this.socket(this.chatUsers[0].channelId);
-                 this.channelSelected= this.chatUsers[0].channelId;
+                this.participant1 = this.thisUserData;
+                this.participant2 = this.chatUsers[0];
+                console.log('parcipants: ');
+                console.log(this.participant1);
+                console.log(this.participant2);
+                this.socket(this.chatUsers[0].channelId);
+                this.getMessagesInChat(this.chatUsers[0].channelId);
+                this.channelSelected= this.chatUsers[0].channelId;
 
             },
-            sendMessage()
+            async sendMessage()
             {
                 let msg = this.message;
                 console.log(msg);
                 let conversationId = this.channelSelected;
                 let thisUserId = this.thisUserId;
-                axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId})).then(response=>{
-                    console.log(response.data);
-                })
+
+                let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId}));
+                if(response.data.emptyMesssage != true){
+                    await this.messagesInChat.push(response.data);
+                }
+
                 this.message= null;
             },
            async getChatUsers()
@@ -181,7 +186,15 @@
                 } ).error((error)=>{
                     console.error(error);
                 })
-            }
+            },
+                 getMessagesInChat(conversationId)
+                 {
+                     axios.post(route('getMessagesInChat',{api_token : this.$apiKey, conversationId: conversationId})).then(response=>{
+                         this.messagesInChat = response.data;
+                         console.log('log from getMessages function');
+                         console.log(response.data)
+                     })
+                 },
         },
          async beforeMount() {
              try{

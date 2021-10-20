@@ -92,6 +92,9 @@ public function canJoinRoom($roomId){
         return true;
     }
 }
+public function groups(){
+    return $this->belongsToMany('App\Models\GroupConversations','group_users');
+}
 public function getChannel($thisUserId,$otherUserId){
     $firstPossiblyRelation = DB::table('conversations')->where(['first_user_id'=>$thisUserId, 'second_user_id'=> $otherUserId])->get();
     $secondPossiblyRelation = DB::table('conversations')->where(['first_user_id'=> $otherUserId, 'second_user_id'=> $thisUserId])->get();

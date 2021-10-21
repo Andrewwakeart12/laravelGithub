@@ -104,7 +104,8 @@
                      else if(user.id == e.id && user.selected == false){
                         console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
                         user.selected=true;
-
+                        this.$set(this,'messagesInChat', null);
+                        this.getMessagesInChat(user.channelId);
                         this.participant2 = user;
                          this.socket(user.channelId);
                     }
@@ -131,8 +132,8 @@
                 console.log(msg);
                 let conversationId = this.channelSelected;
                 let thisUserId = this.thisUserId;
-
-                let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId}));
+                let toUser = this.participant2;
+                let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
                 if(response.data.emptyMesssage != true){
                     await this.messagesInChat.push(response.data);
                     console.log(response.data);
@@ -184,7 +185,8 @@
                  getMessagesInChat(conversationId)
                  {
                      axios.post(route('getMessagesInChat',{api_token : this.$apiKey, conversationId: conversationId})).then(response=>{
-                         this.messagesInChat = response.data;
+
+                         this.$set(this,'messagesInChat', response.data)
                          console.log('log from getMessages function');
                          console.log(response.data)
                      })

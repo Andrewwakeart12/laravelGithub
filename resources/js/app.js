@@ -33,13 +33,14 @@ Vue.component('postPage', require('./components/postPage/PostPage.vue').default)
 Vue.component('createUser', require('./components/usersPage/CreateUser.vue').default);
 Vue.component('admin', require('./components/Admin.vue').default);
 Vue.component('notifications', require('./components/shared/Notifications.vue').default);
-
+Vue.component('messagesNotifications', require('./components/shared/MessageNotifications.vue').default);
 Vue.component('chat', require('./components/shared/Chat.vue').default);
 import {routesVue} from './routesVue';
 import {route} from './routes';
 import App from './App.vue';
 import MenuOptions from './components/shared/MenuOptions';
 import Notifications from './components/shared/Notifications';
+import MessageNotifications from './components/shared/MessageNotifications';
 import Vue from 'vue';
 import axios from 'vue-axios';
 import VueAxios from 'axios';
@@ -86,3 +87,8 @@ const notifications = new Vue({
     render : h => h(Notifications)
 });
 
+const messageNotifications = new Vue({
+    el : '#messageNotifications',
+    router:router,
+    render : h => h(MessageNotifications)
+});

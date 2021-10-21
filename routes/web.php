@@ -37,7 +37,9 @@ Route::group(['middleware'=>'admin'],function(){
         return view('admin.index',compact(['api_token','thisUserId']));
     })->name('adminPage');
     Route::get('/admin/{any}',function(){
-        return redirect(route('adminPage'));
+        $api_token = Auth::user()->api_token;
+        $thisUserId = Auth::user()->id;
+        return view('admin.index',compact(['api_token','thisUserId']));
     })->where('any', '.*');
 
 });

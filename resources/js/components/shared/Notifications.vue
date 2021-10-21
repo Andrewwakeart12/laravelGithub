@@ -108,6 +108,7 @@ import {route} from '../../routes.js';
                 console.log("id: " + id)
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
+                    console.log(e);
                     this.notifications.push(e)
                     this.newNotificationsNumber++;
                                 });

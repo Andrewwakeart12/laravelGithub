@@ -84,9 +84,7 @@ public function tasks(){
     return $this->hasMany('App\Models\Task');
 }
 
-public function receiveBroadcastNotificationOn(){
-    return 'notifications-tasks.' . $this->id;
-}
+
 public function canJoinRoom($roomId){
     if(Auth::user() != null){
         return true;

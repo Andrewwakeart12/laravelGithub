@@ -24,7 +24,8 @@ Broadcast::channel('news', function($user,$id){
 Broadcast::channel('notifications-tasks.{id}', function($id){
     return true;
 });
-Broadcast::channel('notifications-tasks.{id}', function($id){
+
+Broadcast::channel('messageCenter.{id}', function($id){
     return true;
 });
 

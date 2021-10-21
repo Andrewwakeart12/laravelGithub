@@ -4,9 +4,11 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Events\MessageSent;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
+use App\Events\MessageSend;
 class MessageSended extends Notification
 {
     use Queueable;
@@ -31,14 +33,22 @@ class MessageSended extends Notification
         return ['database','broadcast'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
+
  public function toDatabase($notifiable){
-     return [];
+     return [
+         'type'=> 'messageCenter',
+         'messageContent' => $this->message->text,
+         'from'=> $this->message->user_id,
+         'forUser_id' => $this->message->forUserId
+     ];
+ }
+ public function toBroadcast($notifiable){
+     return [
+        'type'=> 'messageCenter',
+        'messageContent' => $this->message->text,
+        'from'=> $this->message->user_id,
+        'forUser_id' => $this->message->forUserId
+    ];
  }
     /**
      * Get the array representation of the notification.
@@ -46,10 +56,14 @@ class MessageSended extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
+
     public function toArray($notifiable)
     {
         return [
-            //
+            'type'=> 'messageCenter',
+            'messageContent' => $this->message->text,
+            'from'=> $this->message->user_id,
+            'forUser_id' => $this->message->forUserId
         ];
     }
 }

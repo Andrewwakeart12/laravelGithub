@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\api;
+
+use App\Events\MessageSend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Conversation;
@@ -9,6 +11,9 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use App\Models\Message;
+use App\Notifications\MessageSended;
+use Illuminate\Support\Facades\Notification;
+
 class ChatApiController extends Controller
 {
     /**
@@ -36,6 +41,8 @@ public function sendMessage(Request $request){
     $message = $request['message'];
     $conversationId = $request['conversationId'];
     $from = $request['thisUserId'];
+    $to = User::find($request['toUser']);
+
     if(trim($message != '')){
 
         try {
@@ -43,8 +50,17 @@ public function sendMessage(Request $request){
                 $newMessage = Message::create(['text'=> $message ,
                 'conversation_id'=> $conversationId,
                 'user_id'=> $from ,
-                'conversation_type'=>'conversation'
+                'conversation_type'=>'conversation',
+
                 ]);
+                $newMessage['forUserId'] = $to->id;
+                $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
+                Notification::send($to, new MessageSended($newMessage));
+                if($lastNotification->isEmpty()){
+
+                }else{
+                    return $lastNotification;
+                }
                 return $newMessage;
         }else{
             return response()->json(['error' => 'conversation Does Not exist']);
@@ -79,7 +95,7 @@ public function getChannels(Request $request){
 public function getMessagesInChat(Request $request){
     $conversationId = $request['conversationId'];
     try {
-        $messagesInConversation = Message::where('conversation_id', $conversationId)->orderBy('created_at', 'asc')->limit(8)->get();
+        $messagesInConversation = Message::where('conversation_id', $conversationId)->oldest()->get();
         return $messagesInConversation;
     } catch (\Throwable $th) {
         return $th;

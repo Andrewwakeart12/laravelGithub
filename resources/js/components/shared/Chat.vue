@@ -105,8 +105,11 @@
                         console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
                         user.selected=true;
                         this.$set(this,'messagesInChat', null);
-                        this.getMessagesInChat(user.channelId);
+
+                        this.channelSelected = e.channelId;
                         this.participant2 = user;
+                        this.getMessagesInChat(user.channelId);
+
                          this.socket(user.channelId);
                     }
                 })
@@ -136,6 +139,15 @@
                 let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
                 if(response.data.emptyMesssage != true){
                     await this.messagesInChat.push(response.data);
+                    console.log(response.data);
+                }else {
+                    console.log("ThisUserId sended:");
+                    console.log(thisUserId);
+
+                    console.log("toUser sended:");
+                    console.log(toUser);
+
+                    console.log("response received in sended:");
                     console.log(response.data);
                 }
 
@@ -182,10 +194,10 @@
                     console.error(error);
                 })
             },
-                 getMessagesInChat(conversationId)
+                 async getMessagesInChat(conversationId)
                  {
                      axios.post(route('getMessagesInChat',{api_token : this.$apiKey, conversationId: conversationId})).then(response=>{
-
+                        console.log(conversationId);
                          this.$set(this,'messagesInChat', response.data)
                          console.log('log from getMessages function');
                          console.log(response.data)

@@ -109,8 +109,10 @@ import {route} from '../../routes.js';
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
                     console.log(e);
+                    if(e.type == "task"){
                     this.notifications.push(e)
                     this.newNotificationsNumber++;
+                    }
                                 });
             }
         },

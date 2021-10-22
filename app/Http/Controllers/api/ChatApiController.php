@@ -55,11 +55,13 @@ public function sendMessage(Request $request){
                 ]);
                 $newMessage['forUserId'] = $to->id;
                 $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
-                Notification::send($to, new MessageSended($newMessage));
-                if($lastNotification->isEmpty()){
 
+                if($lastNotification->isEmpty()){
+                    Notification::send($to, new MessageSended($newMessage));
                 }else{
-                    return $lastNotification;
+                    DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->delete();
+                    Notification::send($to, new MessageSended($newMessage));
+
                 }
                 return $newMessage;
         }else{

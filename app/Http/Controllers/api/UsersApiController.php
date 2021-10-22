@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 class UsersApiController extends Controller
 {
     public function index(){
@@ -89,6 +90,12 @@ class UsersApiController extends Controller
 
                 $newUserInfo['photo_id'] = $photo->id;
                 if($request['old_photo_id']){
+                    if(file_exists(public_path() . $user->directory . $user->photo->file)){
+                        $fileInDb=$user->directory . $user->photo->file;
+                        $user->photo()->delete();
+
+                        unlink(public_path() . $fileInDb );
+                    }
                     $user->photo()->delete();
                 }
             }
@@ -124,16 +131,42 @@ class UsersApiController extends Controller
          $Dbnotifications = Auth::user()->notifications()->orderBy('created_at')->limit(4)->get();
          $notifications = [];
          foreach ($Dbnotifications as $notification){
+             if($notification->data['type'] == 'task'){
+
              $id_noty = $notification->id;
              $data = $notification->data;
              $data['id_noty']= $id_noty;
              $data['isRead'] = $notification->read_at;
              array_push($notifications,$data);
+             }
 
          }
          return response()->json($notifications);
      }
+     public function getChatNotifications(Request $request){
+         try {
+            $this_user_id = $request['this_user_id'];
+            $notifications= [];
+           $Dbnotifications= DB::table('notifications')->where('data->type','messageCenter')->where('notifiable_id',$this_user_id)->orderBy('updated_at', 'desc')->get();
+           foreach ($Dbnotifications as $notification){
+                $data = json_decode($notification->data);
+                $user = User::find($data->from);
+                $data->from= $user->get('username');
+                $data->firstName= $user->firstName;
+                $data->lastName= $user->lastName;
 
+                $data->userPhoto = $user->getPhotoFileDir();
+                $data->isRead = $notification->read_at;
+                array_push($notifications,$data);
+
+             }
+            return $notifications;
+         } catch (\Throwable $th) {
+             return $th;
+         }
+
+
+}
      public function readNotifications($notifications){
           $notification= Auth::user()->notifications()->where(['id' => $notifications])->get();
                 $notification->markAsRead();

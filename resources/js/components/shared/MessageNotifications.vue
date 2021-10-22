@@ -4,62 +4,111 @@
                                 <h6 class="dropdown-header">
                                     Message Center
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_1.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_2.svg"
-                                            alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="img/undraw_profile_3.svg"
-                                            alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
+                                <div v-for="notification of notifications">
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <div class="dropdown-list-image mr-3">
+                                            <img class="rounded-circle" :src="notification.userPhoto"
+                                                alt="...">
+                                            <div class="status-indicator"></div>
+                                        </div>
+                                        <div>
+                                            <div class="text-truncate">{{notification.messageContent}}</div>
+                                            <div class="small text-gray-500">{{notification.firstName + " " + notification.lastName}} · 1d</div>
+                                        </div>
+                                    </a>
+                                </div>
+
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
 </template>
 
 <script>
+import {route} from '../../routes.js';
+
+
     export default {
+        data(){
+            return {
+                api_key : this.$apiKey,
+                notifications: [],
+                thisUserId:this.$this_user_id,
+                newNotificationsNumber : []  ,
+            }
+        },
+        methods:{
+            readNotifications(){
+
+                this.notifications.forEach(e =>{
+                    if(e.isRead == null){
+
+                    var token = this.$apiKey;
+                    token= {api_token: token, notifications : e.id_noty};
+                    axios.get(route('readNotifications', token)).then(response =>{
+                    console.log(response.data);
+                })
+                    }
+                })
+
+                this.newNotificationsNumber = 0;
+            },
+              getApiKey(){
+
+                       axios
+                .post(route('getApiKey'))
+                .then(response=> {
+                    Vue.prototype.$apiKey = response.data;
+                    this.getNotifications();
+                    this.getThisUserId();
+                });
+
+                    },
+            getTokenJson(){
+                var token = this.$apiKey;
+                token= {api_token: token};
+                return token;
+            },
+            getNotifications(){
+                var token = this.$apiKey;
+                token= {api_token: token, this_user_id: this.thisUserId};
+
+                axios.get(route('getChatNotifications', token )).then(response =>{
+
+                    this.notifications = response.data;
+                    console.log('Logs get Chat notifications: ');
+                    console.log(response.data);
+
+                })
+                 this.getTokenJson();
+            },
+            getThisUserId(){
+             var token = this.$apiKey;
+                token= {api_token: token};
+
+                axios.get(route('thisUserId',token)).then(response =>{
+                this.thisUserId = response.data;
+                this.socket();
+                console.log(response.data)
+                })
+            },
+            socket(){
+                var id = this.thisUserId;
+                console.log("id: " + id)
+                    let channel ="App.Models.User." + id;
+                window.Echo.private(channel).notification( e =>{
+                    console.log(e);
+                    if(e.type == "messageCenter"){
+                    this.notifications.push(e)
+                    this.newNotificationsNumber++;
+                    }
+                                });
+            }
+        },
+
+        beforeMount(){
+            this.getApiKey();
+        },
         mounted() {
-            console.log('Component Exaple App mounted.')
+            console.log('Component Notifications mounted.')
         }
     }
 </script>

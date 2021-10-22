@@ -30,7 +30,8 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::resource('/users', UsersApiController::class);
     Route::get('/getRoles', [UsersApiController::class, 'getRoles'] )->name('getRoles');
     Route::get('/getUsers', [UsersApiController::class, 'getUsersInfo'] )->name('getUsers');
-    Route::get('/getNotifications', [UsersApiController::class, 'getNotifications'] )->name('getNotifications');
+    Route::get('/getNotifications', [UsersApiController::class, 'getChatNotifications'] )->name('getChatNotifications');
+    Route::get('/getChatNotifications', [UsersApiController::class, 'getNotifications'] )->name('getNotifications');
     Route::get('/readNotifications/{notifications}', [UsersApiController::class, 'readNotifications'] )->name('readNotifications');
     Route::get('/getLastNotification', [UsersApiController::class, 'getLastNotification'] )->name('getLastNotification');
     Route::get('/getThisUserId', [UsersApiController::class, 'getThisUserId'] )->name('thisUserId');

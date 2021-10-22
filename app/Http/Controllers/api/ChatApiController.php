@@ -59,8 +59,16 @@ public function sendMessage(Request $request){
                 if($lastNotification->isEmpty()){
                     Notification::send($to, new MessageSended($newMessage));
                 }else{
-                    DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->delete();
+                    $DbNoficationsFromMessage =DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->where('data->from',$from);
+                    if($DbNoficationsFromMessage->get()->isEmpty()){
                     Notification::send($to, new MessageSended($newMessage));
+
+                    }else{
+                        $DbNoficationsFromMessage->delete();
+                    Notification::send($to, new MessageSended($newMessage));
+
+                    }
+
 
                 }
                 return $newMessage;

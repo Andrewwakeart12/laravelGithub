@@ -86,6 +86,12 @@
                 messagesInChat:[],
             }
         },
+        watch:{
+        messagesInChat: function(val){
+            console.log('log in watcher: ');
+            console.log(Vue.prototype.$forceUpdate());
+        }
+        },
         methods: {
             async selectUser(e)
             {
@@ -138,8 +144,8 @@
                 let toUser = this.participant2;
                 let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
                 if(response.data.emptyMesssage != true){
-                    await this.messagesInChat.push(response.data);
-                    console.log(response.data);
+                    this.messagesInChat.push(response.data);
+                    console.log(this.messagesInChat);
                 }else {
                     console.log("ThisUserId sended:");
                     console.log(thisUserId);

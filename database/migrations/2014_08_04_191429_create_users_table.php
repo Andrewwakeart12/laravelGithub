@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
+require('helpers/rm_dir_rf.php');
 class CreateUsersTable extends Migration
 {
     /**
@@ -38,6 +38,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        rmDir_rf(public_path() . '/images');
         Schema::dropIfExists('users');
     }
 }

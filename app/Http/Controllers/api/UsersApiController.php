@@ -80,29 +80,42 @@ class UsersApiController extends Controller
          if($permissions['users']['update']){
             $user = User::find($id);
             $newUserInfo = $request->all();
-            if($file = $request->file('new_photo_id'))
-            {
-                $name = time() . $file->getClientOriginalName();
+            try {
+                if($request['user_id_for_photo'] == $id){
+                    if( $file = $request->file('new_photo_id'))
+                    {
 
-                $file->move('images', $name);
+                        $name = time() . $file->getClientOriginalName();
 
-                $photo = Photo::create(['file'=>$name]);
+                        $file->move('images', $name);
 
-                $newUserInfo['photo_id'] = $photo->id;
-                if($request['old_photo_id']){
-                    if(file_exists(public_path() . $user->directory . $user->photo->file)){
-                        $fileInDb=$user->directory . $user->photo->file;
-                        $user->photo()->delete();
+                        $photo = Photo::create(['file'=>$name]);
 
-                        unlink(public_path() . $fileInDb );
+                        $newUserInfo['photo_id'] = $photo->id;
+                        if($request['old_photo_id'] != null){
+                            if($user->photo != null){
+
+                                if(file_exists(public_path() . $user->directory . $user->photo->file)){
+                                    $fileInDb=$user->directory . $user->photo->file;
+                                    $user->photo()->delete();
+
+                                    unlink(public_path() . $fileInDb );
+                                }
+
+                            }
+                            $user->photo()->delete();
+                        }
                     }
-                    $user->photo()->delete();
                 }
+
+
+                $user->update($newUserInfo);
+
+                return response()->json(['Success'=>'User updated']);
+
+            } catch (\Throwable $th) {
+                return $th;
             }
-
-            $user->update($newUserInfo);
-
-            return response()->json(['Success'=>'User updated']);
 
          }else{
              return response()->json(['Success' => 'No tienes permisos para cambiar la informacion de usuario']);
@@ -150,8 +163,8 @@ class UsersApiController extends Controller
            $Dbnotifications= DB::table('notifications')->where('data->type','messageCenter')->where('notifiable_id',$this_user_id)->orderBy('updated_at', 'desc')->get();
            foreach ($Dbnotifications as $notification){
                 $data = json_decode($notification->data);
-                $user = User::find($data->from);
-                $data->from= $user->get('username');
+                $user = User::find($data->from_id);
+                $data->from= $user->username;
                 $data->firstName= $user->firstName;
                 $data->lastName= $user->lastName;
 

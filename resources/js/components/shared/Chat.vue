@@ -33,7 +33,7 @@
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
 
                             <div class="chat-container">
-                                <ul class="chat-box chatContainerScroll" v-for="message of messagesInChat">
+                                <ul class="chat-box chatContainerScroll" v-for="message of this.messagesInChat">
                                      <li v-if="message.user_id != thisUserData.id" class="chat-right">
                                             <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
                                             <div class="chat-text">{{message.text}}</div>

@@ -51,15 +51,15 @@ public function sendMessage(Request $request){
                 'conversation_id'=> $conversationId,
                 'user_id'=> $from ,
                 'conversation_type'=>'conversation',
-
                 ]);
+                $newMessage['username']=User::find($request['thisUserId'])->username;
                 $newMessage['forUserId'] = $to->id;
                 $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
 
                 if($lastNotification->isEmpty()){
                     Notification::send($to, new MessageSended($newMessage));
                 }else{
-                    $DbNoficationsFromMessage =DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->where('data->from',$from);
+                    $DbNoficationsFromMessage =DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->where('data->from_id',$from);
                     if($DbNoficationsFromMessage->get()->isEmpty()){
                     Notification::send($to, new MessageSended($newMessage));
 

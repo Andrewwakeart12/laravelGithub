@@ -8,6 +8,7 @@ use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\User;
 use App\Events\MessageSend;
 class MessageSended extends Notification
 {
@@ -35,19 +36,23 @@ class MessageSended extends Notification
 
 
  public function toDatabase($notifiable){
-     return [
-         'type'=> 'messageCenter',
-         'messageContent' => $this->message->text,
-         'from'=> $this->message->user_id,
-         'forUser_id' => $this->message->forUserId
-     ];
- }
- public function toBroadcast($notifiable){
-     return [
+    return [
         'type'=> 'messageCenter',
         'messageContent' => $this->message->text,
-        'from'=> $this->message->user_id,
+        'from_id'=> $this->message->user_id,
+        'from'=> $this->message->username,
         'forUser_id' => $this->message->forUserId
+    ];
+ }
+ public function toBroadcast($notifiable){
+    return [
+        'type'=> 'messageCenter',
+        'messageContent' => $this->message->text,
+        'from_id'=> $this->message->user_id,
+        'from'=> $this->message->username,
+        'forUser_id' => $this->message->forUserId,
+        'isRead'=> null,
+        'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()
     ];
  }
     /**
@@ -62,8 +67,11 @@ class MessageSended extends Notification
         return [
             'type'=> 'messageCenter',
             'messageContent' => $this->message->text,
-            'from'=> $this->message->user_id,
-            'forUser_id' => $this->message->forUserId
+            'from_id'=> $this->message->user_id,
+            'from'=> $this->message->username,
+            'forUser_id' => $this->message->forUserId,
+            'isRead'=> null,
+            'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()
         ];
     }
 }

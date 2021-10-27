@@ -26,7 +26,7 @@
             <input name="old_photo_id" type="hidden"  v-model="user.photo_id"/>
             <td>
             <div>
-            <input name="file" type="file" class="userInputInTable" v-on:change="insertedFile" >
+            <input name="file" type="file" class="userInputInTable" v-on:change="insertedFile" :userId="user.id">
             </div>
             <div v-if="user.profilePhoto">
                 <img class="img img-fluid" :src="user.profilePhoto"/>
@@ -71,6 +71,7 @@ import {route} from '../../routes.js';
                      if(file){
                         this.formObj = new FormData()
                         this.formObj.append('new_photo_id', file.srcElement.files.item(0));
+                        this.formObj.append('user_id_for_photo', file.srcElement.getAttribute('userId'))
                         return 0;
                     }
                 },
@@ -93,6 +94,7 @@ import {route} from '../../routes.js';
 
                     usersUpdate(apiKey,user){
                          if(this.formObj != null){
+                             console.log(this.formObj.get('new_photo_id'));
                             this.formObj.append('username', user.username);
                             this.formObj.append('email', user.email);
                             this.formObj.append('firstName', user.firstName);
@@ -116,10 +118,9 @@ import {route} from '../../routes.js';
                             this.formObj.append('is_active', user.is_active);
                             this.formObj.append('_method', 'PATCH');
                          }
-
                         var token = {'api_token': this.$apiKey, 'user' : user.id};
 
-
+                        console.log(this.formObj.get('old_photo_id'));
                         axios
                         .post(route('users.update', token), this.formObj)
                         .then(response=> {

@@ -50,6 +50,8 @@ class MessageSended extends Notification
         'messageContent' => $this->message->text,
         'from_id'=> $this->message->user_id,
         'from'=> $this->message->username,
+        'firstName' => $this->message->firstName,
+        'lastName' => $this->message->lastName,
         'forUser_id' => $this->message->forUserId,
         'isRead'=> null,
         'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()
@@ -69,6 +71,8 @@ class MessageSended extends Notification
             'messageContent' => $this->message->text,
             'from_id'=> $this->message->user_id,
             'from'=> $this->message->username,
+            'firstName' => $this->message->firstName,
+            'lastName' => $this->message->lastName,
             'forUser_id' => $this->message->forUserId,
             'isRead'=> null,
             'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()

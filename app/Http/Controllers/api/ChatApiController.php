@@ -52,7 +52,10 @@ public function sendMessage(Request $request){
                 'user_id'=> $from ,
                 'conversation_type'=>'conversation',
                 ]);
-                $newMessage['username']=User::find($request['thisUserId'])->username;
+                $tempUser=User::find($request['thisUserId']);
+                $newMessage['username']=$tempUser->username;
+                $newMessage['firstName']=$tempUser->firstName;
+                $newMessage['lastName']=$tempUser->lastName;
                 $newMessage['forUserId'] = $to->id;
                 $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
 

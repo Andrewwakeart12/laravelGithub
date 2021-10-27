@@ -109,8 +109,9 @@ import {route} from '../../routes.js';
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
 
-                    if(e.type == "task"){
+                    if(e.type == "App\\Notifications\\TaskNotification"){
                     this.notifications.push(e)
+                    console.log(this.notifications);
                     this.newNotificationsNumber++;
                     }
                     console.log(this.notifications);

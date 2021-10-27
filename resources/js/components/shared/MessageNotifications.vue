@@ -108,11 +108,12 @@ import {route} from '../../routes.js';
                 window.Echo.private(channel).notification( e =>{
                     console.log(e);
                     if(e.type == "messageCenter"){
+
                     this.notifications.push(e)
                     this.newNotificationsNumber++;
                     console.log(this.notifications);
+
                     }
-                    console.log(this.notifications);
                                 });
             }
         },

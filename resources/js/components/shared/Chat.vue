@@ -33,7 +33,7 @@
                         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-9 col-9">
 
                             <div class="chat-container">
-                                <ul class="chat-box chatContainerScroll" v-for="message of this.messagesInChat">
+                                <ul class="chat-box chatContainerScroll" v-for="message in this.messagesInChat">
                                      <li v-if="message.user_id != thisUserData.id" class="chat-right">
                                             <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
                                             <div class="chat-text">{{message.text}}</div>
@@ -85,12 +85,6 @@
                 participant2: [],
                 messagesInChat:[],
             }
-        },
-        watch:{
-        messagesInChat: function(val){
-            console.log('log in watcher: ');
-            console.log(Vue.prototype.$forceUpdate());
-        }
         },
         methods: {
             async selectUser(e)
@@ -144,8 +138,8 @@
                 let toUser = this.participant2;
                 let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
                 if(response.data.emptyMesssage != true){
-                    this.messagesInChat.push(response.data);
-                    console.log(this.messagesInChat);
+                    this.$set(this.messagesInChat, this.messagesInChat.length, response.data);
+                     console.log(this.messagesInChat);
                 }else {
                     console.log("ThisUserId sended:");
                     console.log(thisUserId);

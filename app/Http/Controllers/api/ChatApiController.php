@@ -71,7 +71,7 @@ public function sendMessage(Request $request){
 
 
                 }
-                return $newMessage;
+                return response()->json($newMessage);
         }else{
             return response()->json(['error' => 'conversation Does Not exist']);
 

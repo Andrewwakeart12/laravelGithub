@@ -74,7 +74,7 @@ public function sendMessage(Request $request){
 
 
                 }
-                return response()->json($newMessage);
+                return Message::find($newMessage['id']);
         }else{
             return response()->json(['error' => 'conversation Does Not exist']);
 

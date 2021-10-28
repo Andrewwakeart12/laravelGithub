@@ -108,8 +108,27 @@ import {route} from '../../routes.js';
                 window.Echo.private(channel).notification( e =>{
                     if(e.type == "App\\Notifications\\MessageSended"){
                     console.log(e);
-                    this.notifications.push(e)
-                    this.newNotificationsNumber++;
+                    let isNotificationInNotifications = false;
+                    let i = 0;
+                    if(this.notifications.length != 0){
+
+                        while(isNotificationInNotifications == false && i <= this.notifications.length){
+                            if(this.notifications[i].from_id == e.from_id){
+                                isNotificationInNotifications = true;
+                                this.notifications[i] = e;
+                                this.newNotificationsNumber++;
+                                break;
+                            }
+                            i++;
+                        }
+                    }
+                    if(isNotificationInNotifications == false){
+                        this.notifications.unshift(e)
+                        this.newNotificationsNumber++;
+
+                    }
+
+
                     console.log(this.notifications);
 
                     }

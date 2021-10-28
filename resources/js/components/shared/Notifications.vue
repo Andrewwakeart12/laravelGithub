@@ -110,7 +110,7 @@ import {route} from '../../routes.js';
                 window.Echo.private(channel).notification( e =>{
 
                     if(e.type == "App\\Notifications\\TaskNotification"){
-                    this.notifications.push(e)
+                    this.notifications.unshift(e)
                     console.log(this.notifications);
                     this.newNotificationsNumber++;
                     }

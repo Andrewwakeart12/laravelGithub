@@ -139,6 +139,8 @@
                 let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
                 if(response.data.emptyMesssage != true){
                     this.$set(this.messagesInChat, this.messagesInChat.length, response.data);
+                     console.log('log from send message function');
+
                      console.log(this.messagesInChat);
                 }else {
                     console.log("ThisUserId sended:");
@@ -152,8 +154,7 @@
                 }
 
 
-
-                this.message= null;
+                    this.message= null;
             },
            async getChatUsers()
            {

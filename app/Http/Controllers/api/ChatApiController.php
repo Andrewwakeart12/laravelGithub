@@ -115,6 +115,20 @@ public function getMessagesInChat(Request $request){
         return $th;
     }
 }
+public function preselectedSecondUser(Request $request){
+    $conversation = Conversation::find($request['channel']);
+    if($conversation->first_user_id == $request['thisUserId']){
+        $user = User::find($conversation->second_user_id);
+        $user['profilePhoto'] = $user->getPhotoFileDir();
+        return $user;
+    }else if($conversation->second_user_id == $request['thisUserId']){
+
+        $user = User::find($conversation->first_user_id);
+        $user['profilePhoto'] = $user->getPhotoFileDir();
+        return $user;
+    }
+
+}
 }
 
 

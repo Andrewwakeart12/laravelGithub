@@ -38,4 +38,10 @@ export const routesVue = [
         path: '/admin/chat/',
         component: Chat
     }
+,
+    {
+        name: 'chatPreselect',
+        path: '/admin/chat/:preselectedChannel',
+        component: Chat
+    }
 ];

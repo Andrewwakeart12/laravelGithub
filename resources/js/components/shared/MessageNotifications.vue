@@ -15,7 +15,7 @@
                                     Message Center
                                 </h6>
                                 <div v-for="notification of this.notifications">
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <router-link :to="'/admin/chat/' + notification.channelId" class="dropdown-item d-flex align-items-center" href="#">
                                         <div class="dropdown-list-image mr-3">
                                             <img class="rounded-circle" :src="notification.userPhoto"
                                                 alt="...">
@@ -25,7 +25,7 @@
                                             <div class="text-truncate">{{notification.messageContent}}</div>
                                             <div class="small text-gray-500">{{notification.firstName + " " + notification.lastName}} · 1d</div>
                                         </div>
-                                    </a>
+                                    </router-link >
                                 </div>
 
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
@@ -126,9 +126,6 @@ import {route} from '../../routes.js';
                         this.newNotificationsNumber++;
 
                     }
-
-
-
                     }
                                 });
             }

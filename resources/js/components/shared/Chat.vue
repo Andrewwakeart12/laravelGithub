@@ -76,6 +76,7 @@
         data(){
             return {
                 chatUsers : [],
+                preselectedChannel : this.$route.params.preselectedChannel,
                 thisUserData: [],
                 thisUserId : this.$this_user_id,
                 channelId:[],
@@ -117,7 +118,21 @@
              autoSelectChat()
             {
 
-
+               if(this.preselectedChannel != null){
+                    console.log(`preselected channel = ${this.preselectedChannel}`)
+                      this.$set(this.chatUsers[0], 'selected', true);
+                    this.participant1 = this.thisUserData;
+                    this.participant2 = this.chatUsers[0];
+                    console.log('parcipants: ');
+                    console.log(this.participant1);
+                    console.log(this.participant2);
+                    this.preselectSecondUser(this.preselectedChannel);
+                    this.connectWithChat(this.preselectedChannel);
+                    this.getMessagesInChat(this.preselectedChannel);
+                    this.channelSelected= this.preselectedChannel;
+                    this.getChatMessages();
+                    return 0;
+               }
                 this.$set(this.chatUsers[0], 'selected', true);
                 this.participant1 = this.thisUserData;
                 this.participant2 = this.chatUsers[0];
@@ -213,6 +228,11 @@
                         }
                     console.log(this.messagesInChat);
                     });
+            },
+             preselectSecondUser(channel){
+                 axios.get(route('preselectedSecondUser', {api_token: this.$apiKey, channel:channel, thisUserId : this.thisUserId})).then(response=>{
+                     this.participant2 = response.data;
+                 })
             },
                  async getMessagesInChat(conversationId)
                  {

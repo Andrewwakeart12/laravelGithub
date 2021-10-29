@@ -35,6 +35,7 @@ Vue.component('admin', require('./components/Admin.vue').default);
 Vue.component('notifications', require('./components/shared/Notifications.vue').default);
 Vue.component('messagesNotifications', require('./components/shared/MessageNotifications.vue').default);
 Vue.component('chat', require('./components/shared/Chat.vue').default);
+Vue.component('chatPreselect', require('./components/shared/Chat.vue').default);
 import {routesVue} from './routesVue';
 import {route} from './routes';
 import App from './App.vue';

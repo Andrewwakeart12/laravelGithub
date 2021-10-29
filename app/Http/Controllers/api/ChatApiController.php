@@ -57,6 +57,7 @@ public function sendMessage(Request $request){
                 $newMessage['firstName']=$tempUser->firstName;
                 $newMessage['lastName']=$tempUser->lastName;
                 $newMessage['forUserId'] = $to->id;
+                $newMessage['channelId'] = $tempUser->getChannel($tempUser->id, $to->id);
                 $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
 
                 if($lastNotification->isEmpty()){

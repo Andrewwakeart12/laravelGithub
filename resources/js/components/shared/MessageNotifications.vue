@@ -103,7 +103,6 @@ import {route} from '../../routes.js';
             },
             socket(){
                 var id = this.thisUserId;
-                console.log("id: " + id)
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
                     if(e.type == "App\\Notifications\\MessageSended"){
@@ -129,7 +128,6 @@ import {route} from '../../routes.js';
                     }
 
 
-                    console.log(this.notifications);
 
                     }
                                 });

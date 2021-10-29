@@ -42,6 +42,7 @@ class MessageSended extends Notification
         'from_id'=> $this->message->user_id,
         'from'=> $this->message->username,
         'forUser_id' => $this->message->forUserId
+        ,'channelId' => $this->message->channelId
     ];
  }
  public function toBroadcast($notifiable){
@@ -55,6 +56,7 @@ class MessageSended extends Notification
         'forUser_id' => $this->message->forUserId,
         'isRead'=> null,
         'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()
+        ,'channelId' => $this->message->channelId
     ];
  }
     /**
@@ -75,7 +77,8 @@ class MessageSended extends Notification
             'lastName' => $this->message->lastName,
             'forUser_id' => $this->message->forUserId,
             'isRead'=> null,
-            'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir()
+            'userPhoto' => User::find($this->message->user_id)->getPhotoFileDir(),
+            'channelId' => $this->message->channelId
         ];
     }
 }

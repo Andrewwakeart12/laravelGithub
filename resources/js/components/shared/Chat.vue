@@ -110,7 +110,7 @@
                         this.participant2 = user;
                         this.getMessagesInChat(user.channelId);
 
-                         this.socket(user.channelId);
+                         this.connectWithChat(user.channelId);
                     }
                 })
             },
@@ -124,9 +124,10 @@
                 console.log('parcipants: ');
                 console.log(this.participant1);
                 console.log(this.participant2);
-                this.socket(this.chatUsers[0].channelId);
+                this.connectWithChat(this.chatUsers[0].channelId);
                 this.getMessagesInChat(this.chatUsers[0].channelId);
                 this.channelSelected= this.chatUsers[0].channelId;
+                this.getChatMessages();
 
             },
             async sendMessage()
@@ -179,7 +180,7 @@
                     await this.autoSelectChat()
             },
 
-              socket(channelId){
+              connectWithChat(channelId){
                 var id = channelId;
 
                 console.log("idv: " + id)
@@ -194,6 +195,24 @@
                 } ).error((error)=>{
                     console.error(error);
                 })
+            },
+            getChatMessages(){
+                     var id = this.thisUserId;
+                     let channel ="App.Models.User." + id;
+                window.Echo.private(channel).notification( e =>{
+
+                    if(e.type == "App\\Notifications\\MessageSended"){
+                        console.log(e);
+
+                    if(this.participant2.id == e.from_id){
+                        e.text = e.messageContent;
+                        e.text = e.messageContent;
+                        this.messagesInChat.push(e);
+
+                    }
+                        }
+                    console.log(this.messagesInChat);
+                    });
             },
                  async getMessagesInChat(conversationId)
                  {
@@ -213,7 +232,6 @@
             }
         },
          mounted() {
-
 
 
             console.log('Component Chat App mounted.')

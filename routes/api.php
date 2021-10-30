@@ -32,7 +32,8 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::get('/getUsers', [UsersApiController::class, 'getUsersInfo'] )->name('getUsers');
     Route::get('/getNotifications', [UsersApiController::class, 'getChatNotifications'] )->name('getChatNotifications');
     Route::get('/getChatNotifications', [UsersApiController::class, 'getNotifications'] )->name('getNotifications');
-    Route::get('/readNotifications/{notifications}', [UsersApiController::class, 'readNotifications'] )->name('readNotifications');
+    Route::get('/readMessagesNotifications/{notification_id}', [UsersApiController::class, 'readNotifications'] )->name('readNotifications');
+    Route::get('/readNotifications/{notification_id}', [UsersApiController::class, 'readMessagesNotifications'] )->name('readMessagesNotifications');
     Route::get('/getLastNotification', [UsersApiController::class, 'getLastNotification'] )->name('getLastNotification');
     Route::get('/getThisUserId', [UsersApiController::class, 'getThisUserId'] )->name('thisUserId');
     Route::get('/getUsersChats', [ChatApiController::class, 'getUsersChats'] )->name('getUsersChats');

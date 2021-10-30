@@ -48,11 +48,11 @@ import {route} from '../../routes.js';
         methods:{
             readNotifications(){
 
-                this.notifications.forEach(e =>{
-                    if(e.isRead == null){
+                this.notifications.forEach(notification =>{
+                    if(notification.isRead == null){
 
                     var token = this.$apiKey;
-                    token= {api_token: token, notifications : e.id_noty};
+                    token= {api_token: token, notification_id : notification.id_noty};
                     axios.get(route('readNotifications', token)).then(response =>{
                     console.log(response.data);
                 })
@@ -84,7 +84,7 @@ import {route} from '../../routes.js';
                 axios.get(route('getNotifications', token )).then(response =>{
 
                     this.notifications = response.data;
-                    console.log(response.data);
+
                     this.notifications.forEach(e =>{
                         if(e.isRead == null){
                             this.newNotificationsNumber++;

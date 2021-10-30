@@ -106,7 +106,7 @@
                         console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
                         user.selected=true;
                         this.$set(this,'messagesInChat', null);
-
+                        this.$router.push({path: `/admin/chat/${e.channelId}`})
                         this.channelSelected = e.channelId;
                         this.participant2 = user;
                         this.getMessagesInChat(user.channelId);
@@ -115,18 +115,16 @@
                     }
                 })
             },
-             autoSelectChat()
+           async  autoSelectChat()
             {
 
                if(this.preselectedChannel != null){
                     console.log(`preselected channel = ${this.preselectedChannel}`)
-                      this.$set(this.chatUsers[0], 'selected', true);
                     this.participant1 = this.thisUserData;
-                    this.participant2 = this.chatUsers[0];
                     console.log('parcipants: ');
                     console.log(this.participant1);
                     console.log(this.participant2);
-                    this.preselectSecondUser(this.preselectedChannel);
+                    await this.preselectSecondUser(this.preselectedChannel);
                     this.connectWithChat(this.preselectedChannel);
                     this.getMessagesInChat(this.preselectedChannel);
                     this.channelSelected= this.preselectedChannel;
@@ -231,7 +229,21 @@
             },
              preselectSecondUser(channel){
                  axios.get(route('preselectedSecondUser', {api_token: this.$apiKey, channel:channel, thisUserId : this.thisUserId})).then(response=>{
-                     this.participant2 = response.data;
+
+                    console.log('log from preselectedSecondUser');
+                     this.$set(this,'participant2', response.data);
+                      this.$set(this.participant2,'selected', true);
+                        this.chatUsers.forEach(user =>{
+                        if(user.id == this.participant2.id){
+                            user.selected=true;
+                        }else{
+                            user.selected=false;
+                        }
+                        console.log("log from cycle");
+                        console.log(user);
+                    })
+                    console.log(this.participant2);
+
                  })
             },
                  async getMessagesInChat(conversationId)

@@ -180,11 +180,21 @@ class UsersApiController extends Controller
 
 
 }
-     public function readNotifications($notifications){
-          $notification= Auth::user()->notifications()->where(['id' => $notifications])->get();
+     public function readNotifications($notification_id){
+          $notification= Auth::user()->notifications()->where(['id' => $notification_id])->get();
                 $notification->markAsRead();
-             return response()->json($notification);
+             return $notification;
     }
+
+    public function readMessagesNotifications($notification_id){
+      try {
+        $notification= Auth::user()->notifications()->where(['data->from_id' => $notification_id])->get();
+              $notification->markAsRead();
+        return $notification[0]->read_at;
+      } catch (\Throwable $th) {
+        return $th;
+    }
+  }
      public function destroy($id){
 
         $permissions= Auth::user()->role->permissions;

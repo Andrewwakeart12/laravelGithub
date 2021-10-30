@@ -1,6 +1,6 @@
 <template>
  <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" @click="readNotifications" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
@@ -38,7 +38,8 @@ import {route} from '../../routes.js';
 
 
     export default {
-        data(){
+        data()
+        {
             return {
                 api_key : this.$apiKey,
                 notifications: [],
@@ -47,87 +48,121 @@ import {route} from '../../routes.js';
             }
         },
         methods:{
-            readNotifications(){
+            readNotifications()
+            {
 
-                this.notifications.forEach(e =>{
-                    if(e.isRead == null){
+                this.notifications.forEach(notification =>
+                {
+                    if(notification.isRead == null)
+                    {
 
                     var token = this.$apiKey;
-                    token= {api_token: token, notifications : e.id_noty};
-                    axios.get(route('readNotifications', token)).then(response =>{
-                    console.log(response.data);
-                })
+                    token= {api_token: token, notification_id : notification.from_id};
+                    axios.get(route('readMessagesNotifications', token)).then(response =>
+                        {
+                           notification.readAt = response.data;
+                           this.newNotificationsNumber = this.newNotificationsNumber - 1;
+                        })
                     }
                 })
 
                 this.newNotificationsNumber = 0;
             },
-              getApiKey(){
+            getApiKey()
+            {
 
                        axios
                 .post(route('getApiKey'))
-                .then(response=> {
-                    Vue.prototype.$apiKey = response.data;
-                    this.getNotifications();
-                    this.getThisUserId();
-                });
+                    .then(response=>
+                        {
+                            Vue.prototyp
+                            this.$apiKey = response.data;
+                            this.getNotifications();
+                            this.getThisUserId();
+                        });
 
-                    },
-            getTokenJson(){
+            },
+            getTokenJson()
+            {
                 var token = this.$apiKey;
                 token= {api_token: token};
                 return token;
             },
-            getNotifications(){
+            getNotifications()
+            {
                 var token = this.$apiKey;
                 token= {api_token: token, this_user_id: this.thisUserId};
 
-                axios.get(route('getChatNotifications', token )).then(response =>{
+                axios.get(route('getChatNotifications', token ))
+                    .then(response =>
+                        {
 
-                    this.$set(this,"notifications", response.data);
-                    console.log('Logs get Chat notifications: ');
-                    console.log(response.data);
+                            this.$set(this,"notifications", response.data);
+                            console.log('Logs get Chat notifications: ');
+                            console.log(response.data);
 
-                })
-                 this.getTokenJson();
+                        })
+                this.getTokenJson();
             },
-            getThisUserId(){
+            getThisUserId()
+            {
              var token = this.$apiKey;
                 token= {api_token: token};
 
-                axios.get(route('thisUserId',token)).then(response =>{
-                this.thisUserId = response.data;
-                this.socket();
-                console.log(response.data)
-                })
+                axios.get(route('thisUserId',token))
+                    .then(response =>
+                    {
+                        this.thisUserId = response.data;
+                        this.socket();
+                        console.log(response.data)
+                    })
             },
-            socket(){
+            socket()
+            {
                 var id = this.thisUserId;
-                    let channel ="App.Models.User." + id;
-                window.Echo.private(channel).notification( e =>{
-                    if(e.type == "App\\Notifications\\MessageSended"){
-                    console.log(e);
-                    let isNotificationInNotifications = false;
-                    let i = 0;
-                    if(this.notifications.length != 0){
+                let channel ="App.Models.User." + id;
 
-                        while(isNotificationInNotifications == false && i <= this.notifications.length){
-                            if(this.notifications[i].from_id == e.from_id){
-                                isNotificationInNotifications = true;
-                                this.notifications[i] = e;
-                                this.newNotificationsNumber++;
-                                break;
+                window.Echo.private(channel).notification( echoNotification =>
+                {
+                    if(echoNotification.type == "App\\Notifications\\MessageSended")
+                    {
+                        console.log(echoNotification);
+                        let isNotificationInNotifications = false;
+                        let i = 0;
+
+                        if(this.notifications.length != 0)
+                        {
+                            this.newNotificationsNumber = 0;
+                            while(isNotificationInNotifications == false && i <= this.notifications.length)
+                            {
+                                if(this.notifications[i].from_id == echoNotification.from_id)
+                                {
+
+                                    isNotificationInNotifications = true;
+                                    this.notifications.shift(i);
+                                    this.notifications.unshift(echoNotification)
+                                    this.notifications.forEach(notification =>
+                                    {
+
+                                        if(notification.isRead == null){
+                                            console.log('console log from socket')
+                                            console.log(notification)
+                                            this.newNotificationsNumber++;
+                                        }
+                                    })
+                                    break;
+                                }
+                                i++;
                             }
-                            i++;
                         }
-                    }
-                    if(isNotificationInNotifications == false){
-                        this.notifications.unshift(e)
-                        this.newNotificationsNumber++;
+                         if(isNotificationInNotifications == false)
+                         {
+                             this.notifications.unshift(e)
+                             this.newNotificationsNumber++;
 
+                         }
                     }
-                    }
-                                });
+                });
             }
         },
 

@@ -16,8 +16,8 @@
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
                             <div class="users-container">
 
-                                <ul class="users" v-for="user of this.chatUsers">
-                                  <li class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
+                                <ul class="users" >
+                                  <li v-for="user of this.CHAT.chatUsers" class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
                                         <div class="user">
                                             <img :src="user.profilePhoto" alt="Retail Admin">
                                             <span class="status busy"></span>
@@ -27,6 +27,17 @@
                                             <span class="time">({{user.firstName + " " + user.lastName}})</span>
                                         </p>
                                     </li>
+
+                                     <li v-for="group of this.CHAT.groups" class="person">
+                                        <div class="user">
+                                        <img :src="group.groupPhoto" alt="Retail Admin">
+                                        </div>
+                                        <p class="name-time">
+                                            <span class="name">{{group.name}} </span>
+                                        </p>
+                                    </li>
+
+
                                 </ul>
                             </div>
                         </div>
@@ -81,7 +92,9 @@
                 thisUserId : this.$this_user_id,
                 channelId:[],
                 channelSelected : [],
+                CHAT: [],
                 message:[],
+                chatGroups:[],
                 participant1: [],
                 participant2: [],
                 messagesInChat:[],
@@ -91,7 +104,7 @@
             async selectUser(e)
             {
                 //e is the user send by the click event
-                this.chatUsers.forEach(user =>
+                this.CHAT.chatUsers.forEach(user =>
                 {
                     if(user.selected)
                     {
@@ -175,9 +188,10 @@
 
                 let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey, thisUserId: this.thisUserId}));
 
-                response.data.forEach(user =>{
+                response.data.admins.forEach(user =>{
 
-                        if(user.id != this.thisUserId){
+                        if(user.id != this.thisUserId)
+                        {
 
                             this.chatUsers.push(user);
                             console.log('OtherUsers');
@@ -190,6 +204,13 @@
                         }
 
                     });
+                    response.data.groups.forEach(group=>{
+                        this.chatGroups = group;
+                    });
+                    this.$set(this.CHAT, 'chatUsers' , this.chatUsers)
+                    this.$set(this.CHAT, 'groups' , this.chatGroups)
+                    console.log('Test Log from new method to get the group chats');
+                    console.log(this.CHAT);
                     await this.autoSelectChat()
             },
 

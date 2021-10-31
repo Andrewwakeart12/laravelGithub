@@ -26,15 +26,23 @@ class ChatApiController extends Controller
         $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
         $thisUserId = $request['thisUserId'];
         $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName','photo_id'])->all();
+        $groups = [];
         foreach($admins as $user){
             $user['profilePhoto'] = $user->getPhotoFileDir();
             if($user->id != $thisUserId){
                $user['channelId'] = $user->getChannel($thisUserId,$user->id);
+            }else if($user->id == $thisUserId){
 
-
+                if(!$user->groups->isEmpty())
+                {
+                $groups = $user->groups;
+                    foreach ($groups as $group) {
+                        $group['channelId'] = $group->pivot->group_conversations_id;
+                    }
+                }
             }
         }
-        return $admins;
+        return response()->json(['admins'=>$admins, 'groups' => [$groups]]);
     }
 
 public function sendMessage(Request $request){

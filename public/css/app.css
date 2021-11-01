@@ -10002,6 +10002,21 @@ h3 {
     border-color: #e3e6f0;
   }
 }
+.optionButtons {
+  transform: translateY(-10px);
+  font-size: 20pt;
+  text-decoration: none;
+  transition: 1s;
+  color: gray;
+}
+
+.optionButtons:hover {
+  transform: translateY(-10px);
+  font-size: 20pt;
+  color: blue;
+  text-decoration: none;
+}
+
 .userInputInTable, .userInputInTable:focus {
   background: none;
   border: none;

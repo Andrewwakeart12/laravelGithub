@@ -10,7 +10,7 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
                 <div class="card m-0">
- <chat-options>
+        <chat-options :participant="this.participant2">
         </chat-options>
                     <!-- Row start -->
                     <div class="row no-gutters">

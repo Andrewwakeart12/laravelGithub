@@ -5,6 +5,7 @@ import PostPage from './components/postPage/PostPage.vue';
 import RolesPage from './components/rolesPage/RolesPage.vue';
 import TaskPage from './components/taksPage/TaskPage.vue';
 import Chat from './components/shared/Chat.vue';
+import GroupChat from './components/shared/GroupChat.vue';
 
 export const routesVue = [
     {
@@ -39,6 +40,11 @@ export const routesVue = [
         component: Chat
     }
 ,
+{
+    name: 'group-chat',
+    path: '/admin/groupChat/:preselectedChannel',
+    component: GroupChat
+},
     {
         name: 'chatPreselect',
         path: '/admin/chat/:preselectedChannel',

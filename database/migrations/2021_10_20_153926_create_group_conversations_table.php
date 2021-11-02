@@ -15,6 +15,7 @@ class CreateGroupConversationsTable extends Migration
     {
         Schema::create('group_conversations', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('group_photo_id')->nullable()->unsigned();
             $table->string('name');
             $table->timestamps();
         });

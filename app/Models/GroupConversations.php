@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class GroupConversations extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name','group_photo_id'];
     use HasFactory;
 }

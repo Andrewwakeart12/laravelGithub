@@ -1,8 +1,8 @@
 const routes = {
-    "generated::WbOCFeKbnG6UFzTz": {
+    "generated::q5IAkFuXGc5nyLSZ": {
         "uri": "broadcasting\/auth"
     },
-    "generated::J4XpF9MOsn4nArtR": {
+    "generated::woy58s4TZuRbgNX3": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -86,6 +86,12 @@ const routes = {
     "getChannels": {
         "uri": "api\/getChannels"
     },
+    "getAvaibleUsersForGroups": {
+        "uri": "api\/getAvaibleUsersForGroups"
+    },
+    "createGroupChat": {
+        "uri": "api\/createGroupChat"
+    },
     "roles.index": {
         "uri": "api\/roles"
     },
@@ -131,22 +137,22 @@ const routes = {
     "events": {
         "uri": "api\/eventos"
     },
-    "generated::dYmMhiojntDOBQyT": {
+    "generated::jmZIWnRUpybaA5Tr": {
         "uri": "\/"
     },
-    "generated::irM7BkZFmZRB5M5i": {
+    "generated::ZruCG0Wrw5E7w0Bk": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
-    "generated::H1kH6UyjLXbxYjOJ": {
+    "generated::OyoBGWmSX131yhiH": {
         "uri": "admin\/{any}"
     },
     "login": {
         "uri": "login"
     },
-    "generated::lhTd4GvEoUwljF4P": {
+    "generated::wIEZ1wavf5X2bfEi": {
         "uri": "login"
     },
     "logout": {
@@ -155,7 +161,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::W4pC9o1NCW8j16RF": {
+    "generated::rIXP8f7AoYgCot6o": {
         "uri": "register"
     },
     "password.request": {
@@ -173,7 +179,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::FKfgKfnSCGX5WQdq": {
+    "generated::fEKII0PkyzPESJ4T": {
         "uri": "password\/confirm"
     },
     "home": {
@@ -182,11 +188,11 @@ const routes = {
     "getApiKey": {
         "uri": "getApiKey"
     },
-    "generated::QmD2n6rlkCs7Ip79": {
+    "generated::jFVrfzJZDOmXBfPf": {
         "uri": "test"
     },
-    "generated::vKpGvS8pwo294Biu": {
-        "uri": "admin\/chatOptions"
+    "generated::DmoQaQiK6hFPZMgl": {
+        "uri": "chatOptions"
     }
 };
 

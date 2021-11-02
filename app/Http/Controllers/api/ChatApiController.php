@@ -98,22 +98,7 @@ public function sendMessage(Request $request){
 
 }
 
-public function getChannels(Request $request){
-        $thisUserId = $request['thisUserId'];
-        $otherUserId = $request['otherUserId'];
-        $firstPossiblyRelation = DB::table('conversations')->where(['first_user_id'=>$thisUserId, 'second_user_id'=> $otherUserId])->get();
-        $secondPossiblyRelation = DB::table('conversations')->where(['first_user_id'=> $otherUserId, 'second_user_id'=> $thisUserId])->get();
 
-        //DB::table('conversations')->where(['first_user_id'=>1, 'second_user_id'=> 2])->get()
-        if($firstPossiblyRelation->isEmpty() != true){
-            return $firstPossiblyRelation[0]->id;
-        }else if($secondPossiblyRelation->isEmpty() != true){
-            return $secondPossiblyRelation[0]->id;
-        }else{
-            $newChat = Conversation::create(['first_user_id'=> $thisUserId , 'second_user_id'=> $otherUserId]);
-            return response()->json($newChat);
-        }
-}
 public function getMessagesInChat(Request $request){
     $conversationId = $request['conversationId'];
     try {

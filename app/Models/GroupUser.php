@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class GroupUser extends Model
 {
-    protected $fillable = ['user_id','group_id'];
+    protected $fillable = ['user_id','group_conversations_id'];
 
     use HasFactory;
 }

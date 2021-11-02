@@ -9,7 +9,7 @@ use App\Http\Controllers\api\EventApiController;
 use App\Http\Controllers\api\UsersApiController;
 use App\Http\Controllers\api\ApiTaskController;
 use App\Http\Controllers\api\ChatApiController;
-
+use App\Http\Controllers\api\GroupChatApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +41,8 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::post('/getMessagesInChat', [ChatApiController::class, 'getMessagesInChat'] )->name('getMessagesInChat');
     Route::post('/sendMessage', [ChatApiController::class, 'sendMessage'] )->name('sendMessage');
     Route::get('/getChannels', [ChatApiController::class, 'getChannels'] )->name('getChannels');
+    Route::get('/getAvaibleUsersForGroups', [GroupChatApiController::class, 'getAvaibleUsersForGroups'] )->name('getAvaibleUsersForGroups');
+    Route::post('/createGroupChat', [GroupChatApiController::class, 'createGroupChat'] )->name('createGroupChat');
     Route::resource('/roles', RolesApiController::class);
     Route::resource('/task', ApiTaskController::class);
 });

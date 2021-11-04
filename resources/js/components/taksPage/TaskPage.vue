@@ -1,9 +1,6 @@
 <template>
     <div class="container-fluid">
-        <h1> Tasks </h1>
-        <div class="row">
-        <div class="col-md-6"> <h3>Task Creator here</h3></div>
-    <div class="col-md-6"> <calendar :prop="prop"></calendar></div>
+    <div class="col-md-12"> <calendar :prop="prop"></calendar></div>
 
 
     </div>

@@ -14,6 +14,7 @@ class CreateGroupUsersTable extends Migration
     public function up()
     {
         Schema::create('group_users', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id');
             $table->integer('group_conversations_id');
             $table->timestamps();

@@ -50,6 +50,24 @@
          <label for="title">Name</label>
         <b-form-input class="form-group h3" type="text" v-model="group.groupName" placeholdre="title"/>
                     <input name="file" type="file" class="userInputInTable" v-on:change="insertedFile">
+            <h3>Users Avaibles for groups</h3>
+
+            <div class="users-container">
+                <ul class="users" v-for="user in usersAvaibleForGroups">
+                    <li class="person">
+                        <div class="user">
+                            <img :src="user.profilePhoto" alt="Retail Admin">
+                            <span class="status busy"></span>
+                        </div>
+                        <p class="name-time"><span class="name">{{user.username}} </span>
+                                <span class="time">({{user.firstName + " " + user.lastName }})</span>
+                        </p>
+                    <input type="checkbox" v-model="user.added" :checked="user.added">
+
+                    </li>
+                </ul>
+            </div>
+
 <template #modal-footer="{guardar,cancel}">
      <b-button size="sm" variant="success" @click="createGroupChat()">Create</b-button>
    </template>
@@ -68,17 +86,18 @@ import {route} from '../../routes.js';
                 modalShow:false,
                 group:[],
                 formObj: [],
+                usersAdded: [],
                 usersAvaibleForGroups: [],
             }
         },
         methods : {
-
+            addUser(user){
+                this.usersAdded.push(user);
+            },
                 insertedFile(file){
                      if(file){
                         this.formObj = new FormData()
                         this.formObj.append('group_photo_id', file.srcElement.files.item(0));
-                        console.log('Log from form object set')
-                        console.log(this.formObj.get('group_photo_id'));
                         return 0;
                     }
                 },
@@ -89,13 +108,24 @@ import {route} from '../../routes.js';
                 })
             },
             createGroupChat(){
-                if(this.formObj != null){
+                if(this.formObj.length != 0){
+                    this.formObj.append('thisUserId',this.$this_user_id)
                     this.formObj.append('groupName',this.group.groupName)
                 }else{
                     this.formObj = new FormData();
+                    this.formObj.append('thisUserId',this.$this_user_id)
                     this.formObj.append('groupName',this.group.groupName)
                 }
-                axios.post(route('createGroupChat',{api_token: this.$apiKey}),this.formObj).then(response=>{
+                let usersAdded = [];
+                this.usersAvaibleForGroups.forEach(user=>{
+                    if(user.added){
+                        usersAdded.push(user);
+                    }
+                });
+                usersAdded = JSON.stringify(usersAdded);
+                this.formObj.append('newUsers',usersAdded);
+                axios.post(route('createGroupChat',{api_token: this.$apiKey}),
+                this.formObj).then(response=>{
                     console.log('Log from group chat');
                     console.log(response.data);
                 })

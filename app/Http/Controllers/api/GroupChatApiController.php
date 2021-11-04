@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Message;
 use App\Notifications\MessageSended;
 use Illuminate\Support\Facades\Notification;
+use App\Models\GroupConversations;
+use App\Models\Photo;
+use App\Models\GroupUser;
 class GroupChatApiController extends Controller
 {
 
@@ -112,16 +115,44 @@ public function createGroupChat(Request $request){
     $thisUserId = $request['thisUserId'];
     $groupName = $request['groupName'];
     $groupPhoto = $request['group_photo_id'];
-    $newUsers = $request['newUsers'];
+    $newUsers = json_decode($request->newUsers);
+    try {
+        if( $file = $request->file('group_photo_id'))
+        {
+
+            $name = time() . $file->getClientOriginalName();
+
+            $file->move('images', $name);
+
+            $photo = Photo::create(['file'=>$name]);
+
+            $groupPhoto = $photo->id;
+        }else{
+            return response()->json(['error' => 'The photo is required']);
+        }
+        $newGroup=GroupConversations::create(['group_photo_id'=> $groupPhoto,'name'=> $groupName]);
+        foreach ($newUsers as $user) {
+            GroupUser::create(['group_conversations_id'=> $newGroup->id, 'user_id'=>$user->id]);
+        }
+        GroupUser::create(['group_conversations_id' => $newGroup->id, 'user_id' => $thisUserId]);
+
+    } catch (\Throwable $th) {
+        return $th;
+    }
+    return response()->json(['success'=> 'the group has been created']);
 }
 public function getAvaibleUsersForGroups(Request $request){
     $thisUserId = $request['thisUserId'];
     $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");
     $admins=User::where(['role_id'=> $isAdmin[0]->id])->orWhere(['role_id'=> $isAdmin[1]->id])->get(['id', 'username', 'firstName', 'lastName','photo_id'])->all();
+    $avaibleUsers= [];
     foreach($admins as $user){
-        $user['profilePhoto'] = $user->getPhotoFileDir();
+        if($user->id != $thisUserId){
+            $user['profilePhoto'] = $user->getPhotoFileDir();
+            array_push($avaibleUsers, $user);
+        }
     }
-    return $admins;
+    return $avaibleUsers;
 }
 public function preselectedSecondUser(Request $request){
     $conversation = Conversation::find($request['channel']);

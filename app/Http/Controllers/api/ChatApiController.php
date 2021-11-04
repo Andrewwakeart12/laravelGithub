@@ -38,6 +38,8 @@ class ChatApiController extends Controller
                 $groups = $user->groups;
                     foreach ($groups as $group) {
                         $group['channelId'] = $group->pivot->group_conversations_id;
+                        $group['groupPhoto'] = $group->getPhotoFileDir();
+
                     }
                 }
             }

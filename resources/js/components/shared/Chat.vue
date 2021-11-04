@@ -29,7 +29,7 @@
                                         </p>
                                     </li>
 
-                                     <li v-for="group of this.CHAT.groups" class="person">
+                                     <li v-for="group of this.CHAT.groups" @click="selectGroup(group)" class="person">
                                         <div class="user">
                                         <img :src="group.groupPhoto" alt="Retail Admin">
                                         </div>
@@ -127,6 +127,14 @@
 
                          this.connectWithChat(user.channelId);
                     }
+                })
+            },
+            async selectGroup(group)
+            {
+                //e is the user send by the click event
+                this.CHAT.groups.forEach(group =>
+                {
+                        this.$router.push({path: `/admin/groupChat/${group.channelId}`});
                 })
             },
            async  autoSelectChat()

@@ -154,6 +154,11 @@ public function getAvaibleUsersForGroups(Request $request){
     }
     return $avaibleUsers;
 }
+public function getUsersInGroup(Request $request){
+    $groupConversationId = $request['groupConversationId'];
+    return GroupUser::find($groupConversationId)->getUsersInGroup;
+
+}
 public function preselectedSecondUser(Request $request){
     $conversation = Conversation::find($request['channel']);
     if($conversation->first_user_id == $request['thisUserId']){

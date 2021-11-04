@@ -18,7 +18,8 @@
                             <div class="users-container">
 
                                 <ul class="users" >
-                                  <li v-for="user of this.CHAT.chatUsers" class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
+                                <li v-for="user of this.CHAT.chatUsers" class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
+                                        <router-link :to="'/admin/chat/' + user.channelId" class="person">
                                         <div class="user">
                                             <img :src="user.profilePhoto" alt="Retail Admin">
                                             <span class="status busy"></span>
@@ -27,17 +28,19 @@
                                             <span class="name">{{user.username}} </span>
                                             <span class="time">({{user.firstName + " " + user.lastName}})</span>
                                         </p>
-                                    </li>
 
-                                     <li v-for="group of this.CHAT.groups" @click="selectGroup(group)" class="person">
-                                        <div class="user">
-                                        <img :src="group.groupPhoto" alt="Retail Admin">
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">{{group.name}} </span>
-                                        </p>
+                                        </router-link>
                                     </li>
-
+                                    <li class="person"  v-for="group of this.CHAT.groups">
+                                        <router-link :to="'/admin/groupChat/' + group.channelId" class="person">
+                                            <div class="user">
+                                            <img :src="group.groupPhoto" alt="Retail Admin">
+                                            </div>
+                                            <p class="name-time">
+                                                <span class="name">{{group.name}} </span>
+                                            </p>
+                                        </router-link>
+                                    </li>
 
                                 </ul>
                             </div>
@@ -127,14 +130,6 @@
 
                          this.connectWithChat(user.channelId);
                     }
-                })
-            },
-            async selectGroup(group)
-            {
-                //e is the user send by the click event
-                this.CHAT.groups.forEach(group =>
-                {
-                        this.$router.push({path: `/admin/groupChat/${group.channelId}`});
                 })
             },
            async  autoSelectChat()

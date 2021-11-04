@@ -42,6 +42,7 @@ Route::group(['middleware'=>['auth:api']], function(){
     Route::post('/sendMessage', [ChatApiController::class, 'sendMessage'] )->name('sendMessage');
     Route::get('/getChannels', [ChatApiController::class, 'getChannels'] )->name('getChannels');
     Route::get('/getAvaibleUsersForGroups', [GroupChatApiController::class, 'getAvaibleUsersForGroups'] )->name('getAvaibleUsersForGroups');
+    Route::get('/getUsersInGroup', [GroupChatApiController::class, 'getUsersInGroup'] )->name('getUsersInGroup');
     Route::post('/createGroupChat', [GroupChatApiController::class, 'createGroupChat'] )->name('createGroupChat');
     Route::resource('/roles', RolesApiController::class);
     Route::resource('/task', ApiTaskController::class);

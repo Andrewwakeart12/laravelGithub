@@ -10,8 +10,8 @@
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
                 <div class="card m-0">
-  <chat-options :participant="this.participant2">
-        </chat-options>
+  <group-chat-options :participant="this.participant2">
+        </group-chat-options>
                     <!-- Row start -->
                     <div class="row no-gutters">
                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
@@ -19,6 +19,7 @@
 
                                 <ul class="users" >
                                   <li v-for="user of this.CHAT.chatUsers" class="person" @click="selectUser(user)" :class="[user.selected ? 'chatSelected' : 'not_selected']">
+                                        <router-link :to="'/admin/chat/' + user.channelId" class="person">
                                         <div class="user">
                                             <img :src="user.profilePhoto" alt="Retail Admin">
                                             <span class="status busy"></span>
@@ -27,17 +28,20 @@
                                             <span class="name">{{user.username}} </span>
                                             <span class="time">({{user.firstName + " " + user.lastName}})</span>
                                         </p>
+
+                                        </router-link>
                                     </li>
 
-                                     <li v-for="group of this.CHAT.groups" class="person">
-                                        <div class="user">
-                                        <img :src="group.groupPhoto" alt="Retail Admin">
-                                        </div>
-                                        <p class="name-time">
-                                            <span class="name">{{group.name}} </span>
-                                        </p>
+                                  <li class="person"  v-for="group of this.CHAT.groups" @click="selectChat":class="[group.selected ? 'chatSelected' : 'not_selected']">
+                                        <router-link :to="'/admin/groupChat/' + group.channelId" class="person">
+                                            <div class="user">
+                                            <img :src="group.groupPhoto" alt="Retail Admin">
+                                            </div>
+                                            <p class="name-time">
+                                                <span class="name">{{group.name}} </span>
+                                            </p>
+                                        </router-link>
                                     </li>
-
 
                                 </ul>
                             </div>
@@ -96,65 +100,39 @@
                 CHAT: [],
                 message:[],
                 chatGroups:[],
+                thisUserData: [],
                 participant1: [],
                 participant2: [],
+                participants: [],
                 messagesInChat:[],
             }
         },
         methods: {
-            async selectUser(e)
+
+           async  selectChat()
             {
-                //e is the user send by the click event
-                this.CHAT.chatUsers.forEach(user =>
-                {
-                    if(user.selected)
-                    {
-                        let id = user.channelId;
-                        let channel =`chat.${id}`;
-                        window.Echo.leave(channel);
-                        console.log(`leaving ${channel}`);
+            this.preselectedChannel= this.$route.params.preselectedChannel;
+            this.CHAT.groups.forEach(group=>{
+                if(group.channelId == this.preselectedChannel){
+                    this.channelId = group.channelId;
+                    group.selected=true;
+                    this.participant2 = group;
+                }else if(group.selected == true){
+                    group.selected= false;
+                }
+            });
 
-                        user.selected=false;
-                    }
-                     else if(user.id == e.id && user.selected == false){
-                        console.log(`Event info in the internal selectUserFunction id: ${e.id}, channelId: ${e.channelId}`);
-                        user.selected=true;
-                        this.$set(this,'messagesInChat', null);
-                        this.$router.push({path: `/admin/chat/${e.channelId}`})
-                        this.channelSelected = e.channelId;
-                        this.participant2 = user;
-                        this.getMessagesInChat(user.channelId);
-
-                         this.connectWithChat(user.channelId);
-                    }
-                })
             },
            async  autoSelectChat()
             {
 
-               if(this.preselectedChannel != null){
-                    console.log(`preselected channel = ${this.preselectedChannel}`)
-                    this.participant1 = this.thisUserData;
-                    console.log('parcipants: ');
-                    console.log(this.participant1);
-                    console.log(this.participant2);
-                    await this.preselectSecondUser(this.preselectedChannel);
-                    this.connectWithChat(this.preselectedChannel);
-                    this.getMessagesInChat(this.preselectedChannel);
-                    this.channelSelected= this.preselectedChannel;
-                    this.getChatMessages();
-                    return 0;
-               }
-                this.$set(this.chatUsers[0], 'selected', true);
-                this.participant1 = this.thisUserData;
-                this.participant2 = this.chatUsers[0];
-                console.log('parcipants: ');
-                console.log(this.participant1);
-                console.log(this.participant2);
-                this.connectWithChat(this.chatUsers[0].channelId);
-                this.getMessagesInChat(this.chatUsers[0].channelId);
-                this.channelSelected= this.chatUsers[0].channelId;
-                this.getChatMessages();
+            this.CHAT.groups.forEach(group=>{
+                if(group.channelId == this.preselectedChannel){
+                    this.channelId = group.channelId;
+                    group.selected=true;
+                    this.participant2 = group;
+                }
+            });
 
             },
             async sendMessage()

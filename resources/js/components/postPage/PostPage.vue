@@ -1,13 +1,6 @@
 <template>
     <div class="container-fluid">
         <h1>Posts</h1>
-         <article data-editable v-for="post of posts">
-            <div class ="card">
-                <textarea id="mytextarea"></textarea>
-
-            </div>
-
-         </article>
         <editor api-key="no-api-key" :init="{
             height:500,
             plugins:['advlist autolink lists link image charmap print preview anchor',

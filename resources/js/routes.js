@@ -1,8 +1,8 @@
 const routes = {
-    "generated::JoA5f7STlQ86joBu": {
+    "generated::4sBgvh4XCD47c3pg": {
         "uri": "broadcasting\/auth"
     },
-    "generated::ULWTkbmY2JXI2fyU": {
+    "generated::ZV9KwY6TtTXSY2au": {
         "uri": "api\/user"
     },
     "Posts.index": {
@@ -92,6 +92,9 @@ const routes = {
     "getUsersInGroup": {
         "uri": "api\/getUsersInGroup"
     },
+    "getMessagesInChatGroup": {
+        "uri": "api\/getMessagesInChatGroup"
+    },
     "createGroupChat": {
         "uri": "api\/createGroupChat"
     },
@@ -140,22 +143,22 @@ const routes = {
     "events": {
         "uri": "api\/eventos"
     },
-    "generated::Z4yUqHavUcuJZeSb": {
+    "generated::6NQn5CeqWxKqNT6M": {
         "uri": "\/"
     },
-    "generated::9zLiwdNVVIRx7AkS": {
+    "generated::A9qGL7O6yRROdTTZ": {
         "uri": "mucks"
     },
     "adminPage": {
         "uri": "admin"
     },
-    "generated::GPBzvN1dwT6YyRpu": {
+    "generated::nh2SpAY7n7KgLBfP": {
         "uri": "admin\/{any}"
     },
     "login": {
         "uri": "login"
     },
-    "generated::1GZLWlFqxKnlHS2s": {
+    "generated::YLWe9pxBbLqHRCnG": {
         "uri": "login"
     },
     "logout": {
@@ -164,7 +167,7 @@ const routes = {
     "register": {
         "uri": "register"
     },
-    "generated::80wnoJRBETZ0gMZO": {
+    "generated::PFABGgMeucMY5ogE": {
         "uri": "register"
     },
     "password.request": {
@@ -182,7 +185,7 @@ const routes = {
     "password.confirm": {
         "uri": "password\/confirm"
     },
-    "generated::QS8pHSn7hIdc6iCa": {
+    "generated::CJ7VnJkyByoNLmXu": {
         "uri": "password\/confirm"
     },
     "home": {
@@ -191,10 +194,10 @@ const routes = {
     "getApiKey": {
         "uri": "getApiKey"
     },
-    "generated::pVUtrqxnK7lFtSOP": {
+    "generated::vR9sqt62Wpoo7Bro": {
         "uri": "test"
     },
-    "generated::Mi4gjb02uMF2HtMQ": {
+    "generated::OAPZNUedxhWf4zQN": {
         "uri": "chatOptions"
     }
 };

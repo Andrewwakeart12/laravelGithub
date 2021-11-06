@@ -157,7 +157,7 @@ import {route} from '../../routes.js';
                         }
                          if(isNotificationInNotifications == false)
                          {
-                             this.notifications.unshift(e)
+                             this.notifications.unshift(echoNotification)
                              this.newNotificationsNumber++;
 
                          }

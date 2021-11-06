@@ -156,9 +156,20 @@ public function getAvaibleUsersForGroups(Request $request){
 }
 public function getUsersInGroup(Request $request){
     $groupConversationId = $request['groupConversationId'];
-    return GroupUser::find($groupConversationId)->getUsersInGroup;
+    $users = GroupUser::find($groupConversationId)->getUsersInGroup;
+    foreach ($users as $user) {
+        $user['profilePhoto'] = $user->getPhotoFileDir();
+    }
+    return $users;
 
 }
+public function getMessagesInChatGroup(Request $request){
+    $groupConversationId = $request['groupConversationId'];
+    $groupMessages = GroupConversations::find($groupConversationId)->messages;
+    return $groupMessages;
+
+}
+//getMessagesInChatGroup
 public function preselectedSecondUser(Request $request){
     $conversation = Conversation::find($request['channel']);
     if($conversation->first_user_id == $request['thisUserId']){

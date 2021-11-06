@@ -54,8 +54,9 @@
                                             <div class="chat-hour">08:59 <span class="fa fa-check-circle"></span></div>
                                             <div class="chat-text">{{message.text}}</div>
                                             <div class="chat-avatar">
-                                                <img :src="participant2.profilePhoto" alt="Retail Admin">
-                                                <div class="chat-name">{{participant2.username}}</div>
+
+                                                <img :src="comprobateUsers(message).profilePhoto" alt="Retail Admin">
+                                                <div class="chat-name">{{ comprobateUsers(message).username}}</div>
                                             </div>
                                     </li>
                                     <li v-if="message.user_id === thisUserData.id" class="chat-left">
@@ -121,7 +122,8 @@
                     group.selected= false;
                 }
             });
-
+             await this.getUsersInGroup();
+             await this.getMessagesInChatGroup();
             },
            async  autoSelectChat()
             {
@@ -131,9 +133,19 @@
                     this.channelId = group.channelId;
                     group.selected=true;
                     this.participant2 = group;
+                     this.getUsersInGroup();
+                     this.getMessagesInChatGroup();
+
                 }
             });
-
+            this.getMessagesInChatGroup();
+            },
+            getUsersInGroup(){
+                axios.get(route('getUsersInGroup', {api_token : this.$apiKey, groupConversationId : this.participant2.id})).then(response =>{
+                    this.participants = response.data;
+                    console.log('log from getUsersInGroupFunction');
+                    console.log(response.data);
+                })
             },
             async sendMessage()
             {
@@ -191,6 +203,7 @@
                     console.log('Test Log from new method to get the group chats');
                     console.log(this.CHAT);
                     await this.autoSelectChat()
+
             },
 
               connectWithChat(channelId){
@@ -246,14 +259,19 @@
 
                  })
             },
-                 async getMessagesInChat(conversationId)
+                 async getMessagesInChatGroup(conversationId)
                  {
-                     axios.post(route('getMessagesInChat',{api_token : this.$apiKey, conversationId: conversationId})).then(response=>{
+                     axios.get(route('getMessagesInChatGroup',{api_token : this.$apiKey, groupConversationId: this.preselectedChannel})).then(response=>{
                         console.log(conversationId);
                          this.$set(this,'messagesInChat', response.data)
                          console.log('log from getMessages function');
                          console.log(response.data)
                      })
+                 },
+                 comprobateUsers(msg){
+                    let participant = this.participants.find(participant => participant.id == msg.user_id )
+
+                    return participant;
                  },
         },
          async beforeMount() {
@@ -265,7 +283,7 @@
         },
          mounted() {
 
-
+            this.getMessagesInChatGroup();
             console.log('Component Chat App mounted.')
             console.log('this user id');
             console.log(this.$this_user_id);

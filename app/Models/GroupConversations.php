@@ -23,6 +23,10 @@ class GroupConversations extends Model
         return asset('img/undraw_profile_1.svg');
     }
 }
+
+public function messages(){
+    return $this->hasMany('App\Models\Message');
+}
 //DB::table('group_users')->where('group_conversations_id',1)->get('user_id')
 
     use HasFactory;

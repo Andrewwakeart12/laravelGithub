@@ -35,3 +35,9 @@ Broadcast::channel('chat.{roomId}', function($user,$roomId){
         return ['id' => $user->id, 'name' => $user->username];
     }
 });
+
+
+Broadcast::channel('groupChat.{roomId}', function($user,$roomId){
+    $user = Auth::user();
+    return true;
+});

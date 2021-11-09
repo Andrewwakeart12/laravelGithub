@@ -13,7 +13,7 @@ class Message extends Model
 
     protected $fillable = ['text',
      'conversation_id',
-     'user_id', 'group_id', 'conversation_type'];
+     'user_id', 'conversation_type','group_conversations_id'];
 
     public function user(){
         return $this->belongsTo(User::class);

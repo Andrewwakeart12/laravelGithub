@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Notification;
 use App\Models\GroupConversations;
 use App\Models\Photo;
 use App\Models\GroupUser;
+use App\Notifications\GroupMessageSended;
+
 class GroupChatApiController extends Controller
 {
 
@@ -50,41 +52,47 @@ class GroupChatApiController extends Controller
 
 public function sendGroupMessage(Request $request){
     $message = $request['message'];
-    $conversationId = $request['conversationId'];
+    $groupId = $request['group_id'];
     $from = $request['thisUserId'];
-    $to = User::find($request['toUser']);
 
     if(trim($message != '')){
 
         try {
-            if(DB::table('conversations')->where('id',  $conversationId)->get()->isEmpty() == false){
+            if(DB::table('group_conversations')->where('id',  $groupId)->get()->isEmpty() == false){
                 $newMessage = Message::create(['text'=> $message ,
-                'conversation_id'=> $conversationId,
+                'group_conversations_id'=> $groupId,
                 'user_id'=> $from ,
-                'conversation_type'=>'conversation',
+                'conversation_type'=>'group',
                 ]);
                 $tempUser=User::find($request['thisUserId']);
                 $newMessage['username']=$tempUser->username;
                 $newMessage['firstName']=$tempUser->firstName;
                 $newMessage['lastName']=$tempUser->lastName;
-                $newMessage['forUserId'] = $to->id;
-                $newMessage['channelId'] = $tempUser->getChannel($tempUser->id, $to->id);
-                $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->get();
+                $newMessage['group_id']=$groupId;
 
-                if($lastNotification->isEmpty()){
-                    Notification::send($to, new MessageSended($newMessage));
-                }else{
-                    $DbNoficationsFromMessage =DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','messageCenter')->where('data->from_id',$from);
-                    if($DbNoficationsFromMessage->get()->isEmpty()){
-                    Notification::send($to, new MessageSended($newMessage));
 
+                $groupUsers = GroupUser::find($groupId)->getUsersInGroup;
+                foreach ($groupUsers as $to) {
+                    if($to->id != $from){
+
+                    $lastNotification= DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','GroupMessageCenter')->get();
+
+                    if($lastNotification->isEmpty()){
+                        Notification::send($to, new GroupMessageSended($newMessage));
                     }else{
-                        $DbNoficationsFromMessage->delete();
-                    Notification::send($to, new MessageSended($newMessage));
+                        $DbNoficationsFromMessage =DB::table('notifications')->where('notifiable_id',$to->id)->where('data->type','GroupMessageCenter')->where('data->from_id',$from);
+                        if($DbNoficationsFromMessage->get()->isEmpty()){
+                        Notification::send($to, new GroupMessageSended($newMessage));
+
+                        }else{
+                            $DbNoficationsFromMessage->delete();
+                        Notification::send($to, new GroupMessageSended($newMessage));
+
+                        }
+
 
                     }
-
-
+                    }
                 }
                 return Message::find($newMessage['id']);
         }else{
@@ -141,6 +149,7 @@ public function createGroupChat(Request $request){
     }
     return response()->json(['success'=> 'the group has been created']);
 }
+
 public function getAvaibleUsersForGroups(Request $request){
     $thisUserId = $request['thisUserId'];
     $isAdmin = DB::table('roles')->where('permissions->especials->isAdmin',"true")->get("id");

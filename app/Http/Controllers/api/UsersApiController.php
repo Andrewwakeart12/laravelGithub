@@ -9,6 +9,7 @@ use App\Models\Role;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\GroupConversations;
 class UsersApiController extends Controller
 {
     public function index(){
@@ -140,38 +141,68 @@ class UsersApiController extends Controller
                }
             return $finalUsers;
      }
-     public function getNotifications(){
-         $Dbnotifications = Auth::user()->notifications()->orderBy('created_at')->limit(4)->get();
-         $notifications = [];
-         foreach ($Dbnotifications as $notification){
-             if($notification->data['type'] == 'task'){
+     public function getNotifications(Request $request){
+         try {
+            $thisUserId = $request['this_user_id'];
+            $Dbnotifications = User::find($thisUserId)->notifications()->orderBy('created_at')->limit(4)->get();
+            $notifications = [];
+            foreach ($Dbnotifications as $notification){
+                if($notification->data['type'] == 'task'){
 
-             $id_noty = $notification->id;
-             $data = $notification->data;
-             $data['id_noty']= $id_noty;
-             $data['isRead'] = $notification->read_at;
-             array_push($notifications,$data);
-             }
+                $id_noty = $notification->id;
+                $data = $notification->data;
+                $data['id_noty']= $id_noty;
+                if($notification->read_at != null){
+                   $data->isRead = $notification->read_at;
+               }else{
+                   $data->isRead = null;
+               }
+                array_push($notifications,$data);
+                }
 
+            }
+            return response()->json($notifications);
+
+        } catch (\Throwable $th) {
+             return $th;
          }
-         return response()->json($notifications);
-     }
+        }
+
      public function getChatNotifications(Request $request){
          try {
             $this_user_id = $request['this_user_id'];
             $notifications= [];
-           $Dbnotifications= DB::table('notifications')->where('data->type','messageCenter')->where('notifiable_id',$this_user_id)->orderBy('updated_at', 'desc')->get();
-           foreach ($Dbnotifications as $notification){
+           $Dbnotifications= DB::table('notifications')->where('data->type','messageCenter')->orWhere('data->type','GroupMessageCenter')->where('notifiable_id',$this_user_id)->orderBy('updated_at', 'desc')->get();
+           foreach ($Dbnotifications as $notification)
+           {
                 $data = json_decode($notification->data);
+                if($data->type == 'messageCenter'){
                 $user = User::find($data->from_id);
                 $data->from= $user->username;
                 $data->firstName= $user->firstName;
                 $data->lastName= $user->lastName;
-
                 $data->userPhoto = $user->getPhotoFileDir();
-                $data->isRead = $notification->read_at;
+                if($notification->read_at){
+                    $data->isRead = $notification->read_at;
+                }else{
+                    $data->isRead = null;
+                }
                 array_push($notifications,$data);
+                }else if($data->type == 'GroupMessageCenter')
+                {
+                    $user = User::find($data->from_id);
+                    $data->from= $user->username;
+                    $data->firstName= $user->firstName;
+                    $data->lastName= $user->lastName;
+                    $data->groupPhoto = GroupConversations::find($data->group_id)->getPhotoFileDir();
+                    if($notification->read_at != null){
+                        $data->isRead = $notification->read_at;
+                    }else{
+                        $data->isRead = null;
+                    }
 
+                    array_push($notifications,$data);
+                }
              }
             return $notifications;
          } catch (\Throwable $th) {

@@ -68,7 +68,7 @@
                                         <div class="chat-hour">08:57 <span class="fa fa-check-circle"></span></div>
                                     </li>                               </ul>
                                 <div class="form-group mt-3 mb-0">
-                                    <textarea v-model="message" @keyup.enter="sendMessage"class="form-control" rows="3" placeholder="Type your message here..."></textarea>
+                                    <textarea v-model="message" @keyup.enter="sendGroupMessage" class="form-control" rows="3" placeholder="Type your message here..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -110,155 +110,151 @@
         },
         methods: {
 
-           async  selectChat()
-            {
-            this.preselectedChannel= this.$route.params.preselectedChannel;
-            this.CHAT.groups.forEach(group=>{
-                if(group.channelId == this.preselectedChannel){
-                    this.channelId = group.channelId;
-                    group.selected=true;
-                    this.participant2 = group;
-                }else if(group.selected == true){
-                    group.selected= false;
-                }
-            });
-             await this.getUsersInGroup();
-             await this.getMessagesInChatGroup();
-            },
-           async  autoSelectChat()
-            {
+            async  selectChat()
+                {
+                this.preselectedChannel= this.$route.params.preselectedChannel;
+                this.CHAT.groups.forEach(group=>{
+                    if(group.channelId == this.preselectedChannel){
+                        this.channelId = group.channelId;
+                        group.selected=true;
+                        this.participant2 = group;
+                    }else if(group.selected == true){
+                        group.selected= false;
+                    }
+                });
+                await this.getUsersInGroup();
+                await this.getMessagesInChatGroup();
+                },
+            async  autoSelectChat()
+                {
 
-            this.CHAT.groups.forEach(group=>{
-                if(group.channelId == this.preselectedChannel){
-                    this.channelId = group.channelId;
-                    group.selected=true;
-                    this.participant2 = group;
-                     this.getUsersInGroup();
-                     this.getMessagesInChatGroup();
-
-                }
-            });
-            this.getMessagesInChatGroup();
-            },
-            getUsersInGroup(){
-                axios.get(route('getUsersInGroup', {api_token : this.$apiKey, groupConversationId : this.participant2.id})).then(response =>{
-                    this.participants = response.data;
-                    console.log('log from getUsersInGroupFunction');
-                    console.log(response.data);
-                })
-            },
-            async sendMessage()
-            {
-                let msg = this.message;
-                console.log(msg);
-                let conversationId = this.channelSelected;
-                let thisUserId = this.thisUserId;
-                let toUser = this.participant2;
-                let response = await axios.post(route('sendMessage', {api_token : this.$apiKey, message: msg, conversationId : this.channelSelected, thisUserId : thisUserId, toUser: this.participant2.id}));
-                if(response.data.emptyMesssage != true){
-                    this.$set(this.messagesInChat, this.messagesInChat.length, response.data);
-                     console.log('log from send message function');
-
-                     console.log(this.messagesInChat);
-                }else {
-                    console.log("ThisUserId sended:");
-                    console.log(thisUserId);
-
-                    console.log("toUser sended:");
-                    console.log(toUser);
-
-                    console.log("response received in sended:");
-                    console.log(response.data);
-                }
-
-
-                    this.message= null;
-            },
-           async getChatUsers()
-           {
-
-                let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey, thisUserId: this.thisUserId}));
-
-                response.data.admins.forEach(user =>{
-
-                        if(user.id != this.thisUserId)
-                        {
-
-                            this.chatUsers.push(user);
-                            console.log('OtherUsers');
-                            this.$set(user, 'selected', false);
-                            console.log(user);
-                        }else{
-                            console.log('thisUser');
-                            console.log(user);
-                            this.thisUserData = user;
-                        }
-
-                    });
-                    response.data.groups.forEach(group=>{
-                        this.chatGroups = group;
-                    });
-                    this.$set(this.CHAT, 'chatUsers' , this.chatUsers)
-                    this.$set(this.CHAT, 'groups' , this.chatGroups)
-                    console.log('Test Log from new method to get the group chats');
-                    console.log(this.CHAT);
-                    await this.autoSelectChat()
-
-            },
-
-              connectWithChat(channelId){
-                var id = channelId;
-
-                console.log("idv: " + id)
-                    let channel =`chat.` + id;
-                    console.log(channel);
-                window.Echo.join(channel).here((users)=>{
-                    console.log(users);
-                }).joining((user)=>{
-                    console.log(user);
-                } ).leaving((user)=>{
-                    console.log(user);
-                } ).error((error)=>{
-                    console.error(error);
-                })
-            },
-            getChatMessages(){
-                     var id = this.thisUserId;
-                     let channel ="App.Models.User." + id;
-                window.Echo.private(channel).notification( e =>{
-
-                    if(e.type == "App\\Notifications\\MessageSended"){
-                        console.log(e);
-
-                    if(this.participant2.id == e.from_id){
-                        e.text = e.messageContent;
-                        e.text = e.messageContent;
-                        this.messagesInChat.push(e);
+                this.CHAT.groups.forEach(group=>{
+                    if(group.channelId == this.preselectedChannel){
+                        this.channelId = group.channelId;
+                        group.selected=true;
+                        this.participant2 = group;
+                        this.getUsersInGroup();
+                        this.getMessagesInChatGroup();
 
                     }
-                        }
-                    console.log(this.messagesInChat);
-                    });
-            },
-             preselectSecondUser(channel){
-                 axios.get(route('preselectedSecondUser', {api_token: this.$apiKey, channel:channel, thisUserId : this.thisUserId})).then(response=>{
-
-                    console.log('log from preselectedSecondUser');
-                     this.$set(this,'participant2', response.data);
-                      this.$set(this.participant2,'selected', true);
-                        this.chatUsers.forEach(user =>{
-                        if(user.id == this.participant2.id){
-                            user.selected=true;
-                        }else{
-                            user.selected=false;
-                        }
-                        console.log("log from cycle");
-                        console.log(user);
+                });
+                this.getMessagesInChatGroup();
+                },
+                getUsersInGroup(){
+                    axios.get(route('getUsersInGroup', {api_token : this.$apiKey, groupConversationId : this.participant2.id})).then(response =>{
+                        this.participants = response.data;
+                        console.log('log from getUsersInGroupFunction');
+                        console.log(response.data);
                     })
-                    console.log(this.participant2);
+                },
+                async sendGroupMessage()
+                {
+                    let msg = this.message;
+                    console.log(msg);
+                    let conversationId = this.preselectedChannel;
+                    let thisUserId = this.thisUserId;
+                    let response = await axios.post(route('sendGroupMessage', {api_token : this.$apiKey, message: msg, group_id : this.preselectedChannel, thisUserId : thisUserId}));
+                    if(response.data.emptyMesssage != true){
+                        this.$set(this.messagesInChat, this.messagesInChat.length, response.data);
+                        console.log('log from send message function');
 
-                 })
-            },
+                        console.log(this.messagesInChat);
+                    }else {
+                        console.log("ThisUserId sended:");
+                        console.log(thisUserId);
+
+                        console.log("toUser sended:");
+                        console.log(toUser);
+
+                        console.log("response received in sended:");
+                        console.log(response.data);
+                    }
+
+
+                        this.message= null;
+                },
+                async getChatUsers()
+                {
+
+                        let response = await axios.get(route('getUsersChats', {api_token : this.$apiKey, thisUserId: this.thisUserId}));
+
+                        response.data.admins.forEach(user =>{
+
+                                if(user.id != this.thisUserId)
+                                {
+
+                                    this.chatUsers.push(user);
+                                    console.log('OtherUsers');
+                                    this.$set(user, 'selected', false);
+                                    console.log(user);
+                                }else{
+                                    console.log('thisUser');
+                                    console.log(user);
+                                    this.thisUserData = user;
+                                }
+
+                            });
+                            response.data.groups.forEach(group=>{
+                                this.chatGroups = group;
+                            });
+                            this.$set(this.CHAT, 'chatUsers' , this.chatUsers)
+                            this.$set(this.CHAT, 'groups' , this.chatGroups)
+                            console.log('Test Log from new method to get the group chats');
+                            console.log(this.CHAT);
+                            await this.autoSelectChat()
+
+                },
+
+                  connectWithChat(channelId)
+                  {
+                    var id = channelId;
+
+                    console.log("idv: " + id)
+                        let channel =`chat.` + id;
+                        console.log(channel);
+                    window.Echo.join(channel).here((users)=>{
+                        console.log(users);
+                    }).joining((user)=>{
+                        console.log(user);
+                    } ).leaving((user)=>{
+                        console.log(user);
+                    } ).error((error)=>{
+                        console.error(error);
+                    })
+                },
+               getChatMessages()
+               {
+                        var id = this.thisUserId;
+                        let channel ="App.Models.User." + id;
+                   window.Echo.private(channel).notification( newMessage =>{
+
+                       if(newMessage.type == "App\\Notifications\\GroupMessageSended"){
+                           console.log('New message notifications in group chat');
+                           console.log(newMessage);
+
+                        }
+                       });
+               },
+                 preselectSecondUser(channel)
+                 {
+                     axios.get(route('preselectedSecondUser', {api_token: this.$apiKey, channel:channel, thisUserId : this.thisUserId})).then(response=>{
+
+                        console.log('log from preselectedSecondUser');
+                         this.$set(this,'participant2', response.data);
+                          this.$set(this.participant2,'selected', true);
+                            this.chatUsers.forEach(user =>{
+                            if(user.id == this.participant2.id){
+                                user.selected=true;
+                            }else{
+                                user.selected=false;
+                            }
+                            console.log("log from cycle");
+                            console.log(user);
+                        })
+                        console.log(this.participant2);
+
+                     })
+                },
                  async getMessagesInChatGroup(conversationId)
                  {
                      axios.get(route('getMessagesInChatGroup',{api_token : this.$apiKey, groupConversationId: this.preselectedChannel})).then(response=>{
@@ -268,7 +264,8 @@
                          console.log(response.data)
                      })
                  },
-                 comprobateUsers(msg){
+                 comprobateUsers(msg)
+                 {
                     let participant = this.participants.find(participant => participant.id == msg.user_id )
 
                     return participant;
@@ -282,7 +279,7 @@
             }
         },
          mounted() {
-
+            this.getChatMessages();
             this.getMessagesInChatGroup();
             console.log('Component Chat App mounted.')
             console.log('this user id');

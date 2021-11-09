@@ -65,7 +65,7 @@ const router = new VueRouter({
     mode:'history',
     routes: routesVue
 })
-import Echo from 'laravel-echo';
+/*import Echo from 'laravel-echo';
  window.io = require('socket.io-client');
   if(io !==undefined){
     window.Echo = new Echo({
@@ -73,9 +73,21 @@ import Echo from 'laravel-echo';
         forceTLS: false,
         host :window.location.hostname + ':6001',
     });
+
     console.log('io connected');
     console.log(window.Echo);
- }
+ }*/
+ import Pusher from 'pusher-js';
+ import Echo from 'laravel-echo';
+
+ window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'd42192e879ba4cc3fc58',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+});
  tinyMCE.init({selector:'#mytextarea'})
 const app = new Vue({
     el:'#appAdminPage',

@@ -84,12 +84,16 @@ import {route} from '../../routes.js';
                 axios.get(route('getNotifications', token )).then(response =>{
 
                     this.notifications = response.data;
-
-                    this.notifications.forEach(e =>{
+                    console.log('INF received getnotifications function')
+                    console.log(this.notifications.length)
+                    if(this.notifications.length!= 0 ){
+                   this.notifications.forEach(e =>{
                         if(e.isRead == null){
                             this.newNotificationsNumber++;
                         }
                     })
+                    }
+
                 })
                  this.getTokenJson();
             },

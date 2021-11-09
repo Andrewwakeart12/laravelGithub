@@ -15,9 +15,21 @@
                                     Message Center
                                 </h6>
                                 <div v-for="notification of this.notifications">
-                                    <router-link :to="'/admin/chat/' + notification.channelId" class="dropdown-item d-flex align-items-center" href="#">
+                                    <router-link v-if="notification.type == 'messageCenter'" :to="'/admin/chat/' + notification.channelId" class="dropdown-item d-flex align-items-center" href="#">
                                         <div class="dropdown-list-image mr-3">
                                             <img class="rounded-circle" :src="notification.userPhoto"
+                                                alt="...">
+                                            <div class="status-indicator"></div>
+                                        </div>
+                                        <div>
+                                            <div class="text-truncate">{{notification.messageContent}}</div>
+                                            <div class="small text-gray-500">{{notification.firstName + " " + notification.lastName}} · 1d</div>
+                                        </div>
+                                    </router-link >
+                                     <router-link v-if="notification.type == 'GroupMessageCenter'" :to="'/admin/chat/' + notification.group_id" class="dropdown-item d-flex align-items-center" href="#">
+                                        <div class="dropdown-list-image mr-3">
+
+                                            <img class="rounded-circle" :src="notification.groupPhoto"
                                                 alt="...">
                                             <div class="status-indicator"></div>
                                         </div>
@@ -58,40 +70,23 @@ import {route} from '../../routes.js';
 
                     var token = this.$apiKey;
                     token= {api_token: token, notification_id : notification.from_id};
+                    if(notification.type == "messageCenter"){
+
                     axios.get(route('readMessagesNotifications', token)).then(response =>
                         {
-                           notification.readAt = response.data;
+
+                           notification.isRead = response.data;
                            this.newNotificationsNumber = this.newNotificationsNumber - 1;
                         })
+                            }
                     }
                 })
 
                 this.newNotificationsNumber = 0;
             },
-            getApiKey()
-            {
-
-                       axios
-                .post(route('getApiKey'))
-                    .then(response=>
-                        {
-                            Vue.prototyp
-                            this.$apiKey = response.data;
-                            this.getNotifications();
-                            this.getThisUserId();
-                        });
-
-            },
-            getTokenJson()
-            {
-                var token = this.$apiKey;
-                token= {api_token: token};
-                return token;
-            },
             getNotifications()
             {
-                var token = this.$apiKey;
-                token= {api_token: token, this_user_id: this.thisUserId};
+                let token= {api_token:  this.$apiKey, this_user_id: this.thisUserId};
 
                 axios.get(route('getChatNotifications', token ))
                     .then(response =>
@@ -102,20 +97,6 @@ import {route} from '../../routes.js';
                             console.log(response.data);
 
                         })
-                this.getTokenJson();
-            },
-            getThisUserId()
-            {
-             var token = this.$apiKey;
-                token= {api_token: token};
-
-                axios.get(route('thisUserId',token))
-                    .then(response =>
-                    {
-                        this.thisUserId = response.data;
-                        this.socket();
-                        console.log(response.data)
-                    })
             },
             socket()
             {
@@ -133,9 +114,11 @@ import {route} from '../../routes.js';
                         if(this.notifications.length != 0)
                         {
                             this.newNotificationsNumber = 0;
+                            console.log('notifications not working: ');
+                            console.log(this.notifications);
                             while(isNotificationInNotifications == false && i <= this.notifications.length)
                             {
-                                if(this.notifications[i].from_id == echoNotification.from_id)
+                                if(this.notifications[i].from_id == echoNotification.from_id && echoNotification.type == 'messageCenter')
                                 {
 
                                     isNotificationInNotifications = true;
@@ -161,15 +144,68 @@ import {route} from '../../routes.js';
                              this.newNotificationsNumber++;
 
                          }
+                    }else  if(echoNotification.type == "App\\Notifications\\GroupMessageSended")
+                    {
+                        console.log(echoNotification);
+                        let isNotificationInNotifications = false;
+                        let i = 0;
+
+                        if(this.notifications.length != 0)
+                        {
+                            console.log('notifications not working: ');
+                            console.log(this.notifications);
+                            this.newNotificationsNumber = 0;
+                            while(isNotificationInNotifications == false && i <= this.notifications.length)
+                            {
+                                console.log(notifications[i]);
+                                if(this.notifications[i].type=="GroupMessageCenter"){
+
+                                if(this.notifications[i].group_id == echoNotification.group_id && echoNotification.type == 'GroupMessageCenter')
+                                {
+
+                                    isNotificationInNotifications = true;
+                                    this.notifications.shift(i);
+                                    this.notifications.unshift(echoNotification)
+                                    this.notifications.forEach(notification =>
+                                    {
+
+                                        if(notification.isRead == null){
+                                            console.log('console log from socket')
+                                            console.log(notification)
+                                            this.newNotificationsNumber++;
+                                                                     console.log('Socket notifications');
+                             console.log(this.notifications);
+
+                                        }
+                                    })
+                                    break;
+                                }
+
+                                }
+
+                                i++;
+                            }
+                        }
+                         if(isNotificationInNotifications == false)
+                         {
+                             this.notifications.unshift(echoNotification)
+                             console.log('Socket notifications');
+                             console.log(this.notifications);
+                             this.newNotificationsNumber++;
+
+                         }
                     }
                 });
             }
         },
 
-        beforeMount(){
-            this.getApiKey();
+        async beforeMount(){
+
+      await      this.getNotifications();
+      await      this.socket();
         },
-        mounted() {
+       mounted() {
+
             console.log('Component Notifications mounted.')
         }
     }

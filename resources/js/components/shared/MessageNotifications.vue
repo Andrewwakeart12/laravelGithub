@@ -26,7 +26,7 @@
                                             <div class="small text-gray-500">{{notification.firstName + " " + notification.lastName}} · 1d</div>
                                         </div>
                                     </router-link >
-                                     <router-link v-if="notification.type == 'GroupMessageCenter'" :to="'/admin/chat/' + notification.group_id" class="dropdown-item d-flex align-items-center" href="#">
+                                     <router-link v-if="notification.type == 'GroupMessageCenter' || notification.type == 'App\\Notifications\\GroupMessageSended'" :to="'/admin/chat/' + notification.group_id" class="dropdown-item d-flex align-items-center" href="#">
                                         <div class="dropdown-list-image mr-3">
 
                                             <img class="rounded-circle" :src="notification.groupPhoto"
@@ -84,17 +84,17 @@ import {route} from '../../routes.js';
 
                 this.newNotificationsNumber = 0;
             },
-            getNotifications()
+            async getNotifications()
             {
                 let token= {api_token:  this.$apiKey, this_user_id: this.thisUserId};
 
-                axios.get(route('getChatNotifications', token ))
+               await axios.get(route('getChatNotifications', token ))
                     .then(response =>
                         {
 
-                            this.$set(this,"notifications", response.data);
+                            this.notifications = response.data;
                             console.log('Logs get Chat notifications: ');
-                            console.log(response.data);
+                            console.log(this.notifications);
 
                         })
             },
@@ -105,38 +105,36 @@ import {route} from '../../routes.js';
 
                 window.Echo.private(channel).notification( echoNotification =>
                 {
+                    let isNotificationInNotifications = false;
                     if(echoNotification.type == "App\\Notifications\\MessageSended")
                     {
-                        console.log(echoNotification);
-                        let isNotificationInNotifications = false;
-                        let i = 0;
 
                         if(this.notifications.length != 0)
                         {
-                            this.newNotificationsNumber = 0;
-                            console.log('notifications not working: ');
-                            console.log(this.notifications);
-                            while(isNotificationInNotifications == false && i <= this.notifications.length)
-                            {
-                                if(this.notifications[i].from_id == echoNotification.from_id && echoNotification.type == 'messageCenter')
-                                {
+                           this.notifications.find(function(el,index,arr){
+                               if(el.type == 'messageCenter'){
+                                   try {
+                                       console.log(echoNotification);
+                                        arr.unshift(echoNotification);
+                                        arr.shift(index);
+                                   } catch (error) {
+                                       console.error(error);
+                                   }
 
-                                    isNotificationInNotifications = true;
-                                    this.notifications.shift(i);
-                                    this.notifications.unshift(echoNotification)
-                                    this.notifications.forEach(notification =>
-                                    {
 
-                                        if(notification.isRead == null){
-                                            console.log('console log from socket')
-                                            console.log(notification)
-                                            this.newNotificationsNumber++;
-                                        }
-                                    })
-                                    break;
-                                }
-                                i++;
-                            }
+
+                                isNotificationInNotifications = true;
+                                }})
+                                let newNotificationsNumberCounter = this.newNotificationsNumber;
+
+                                  this.notifications.forEach((notification)=>{
+                                    if(notification != undefined){
+                                    if(notification.isRead === null){
+                                        newNotificationsNumberCounter++;
+                                    }
+                                    }
+                                });
+                                this.newNotificationsNumber = newNotificationsNumberCounter;
                         }
                          if(isNotificationInNotifications == false)
                          {
@@ -146,46 +144,42 @@ import {route} from '../../routes.js';
                          }
                     }else  if(echoNotification.type == "App\\Notifications\\GroupMessageSended")
                     {
-                        console.log(echoNotification);
-                        let isNotificationInNotifications = false;
-                        let i = 0;
-
-                        if(this.notifications.length != 0)
+                          if(this.notifications.length != 0)
                         {
-                            console.log('notifications not working: ');
-                            console.log(this.notifications);
-                            this.newNotificationsNumber = 0;
-                            while(isNotificationInNotifications == false && i <= this.notifications.length)
-                            {
-                                console.log(notifications[i]);
-                                if(this.notifications[i].type=="GroupMessageCenter"){
+                           this.notifications.find(function(el,index,arr){
+                               if(el.type == 'GroupMessageCenter'){
+                                   try {
 
-                                if(this.notifications[i].group_id == echoNotification.group_id && echoNotification.type == 'GroupMessageCenter')
-                                {
+                                       console.log('arr : initial');
+                                       console.log(arr);
 
-                                    isNotificationInNotifications = true;
-                                    this.notifications.shift(i);
-                                    this.notifications.unshift(echoNotification)
-                                    this.notifications.forEach(notification =>
-                                    {
+                                       console.log('Group notification from socket: ');
+                                        arr.shift(index);
+                                        console.log(echoNotification);
+                                        arr.unshift(echoNotification);
+                                       console.log('arr : status updated');
+                                       console.log(arr);
 
-                                        if(notification.isRead == null){
-                                            console.log('console log from socket')
-                                            console.log(notification)
-                                            this.newNotificationsNumber++;
-                                                                     console.log('Socket notifications');
-                             console.log(this.notifications);
+                                   } catch (error) {
+                                       console.error(error);
+                                   }
 
-                                        }
-                                    })
-                                    break;
-                                }
 
-                                }
 
-                                i++;
-                            }
+                                isNotificationInNotifications = true;
+                                }})
+                                let newNotificationsNumberCounter = this.newNotificationsNumber;
+
+                                  this.notifications.forEach((notification)=>{
+                                    if(notification != undefined){
+                                    if(notification.isRead === null){
+                                        newNotificationsNumberCounter++;
+                                    }
+                                    }
+                                });
+                                this.newNotificationsNumber = newNotificationsNumberCounter;
                         }
+
                          if(isNotificationInNotifications == false)
                          {
                              this.notifications.unshift(echoNotification)

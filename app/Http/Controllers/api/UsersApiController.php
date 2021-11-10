@@ -172,7 +172,8 @@ class UsersApiController extends Controller
          try {
             $this_user_id = $request['this_user_id'];
             $notifications= [];
-           $Dbnotifications= DB::table('notifications')->where('data->type','messageCenter')->orWhere('data->type','GroupMessageCenter')->where('notifiable_id',$this_user_id)->orderBy('updated_at', 'desc')->get();
+           $Dbnotifications= DB::table('notifications')->where('notifiable_id',$this_user_id)->where('data->type','messageCenter')->orWhere('data->type','GroupMessageCenter')->orderBy('updated_at', 'desc')->get();
+
            foreach ($Dbnotifications as $notification)
            {
                 $data = json_decode($notification->data);
@@ -190,6 +191,7 @@ class UsersApiController extends Controller
                 array_push($notifications,$data);
                 }else if($data->type == 'GroupMessageCenter')
                 {
+                    if($data->from_id != $this_user_id){
                     $user = User::find($data->from_id);
                     $data->from= $user->username;
                     $data->firstName= $user->firstName;
@@ -201,7 +203,7 @@ class UsersApiController extends Controller
                         $data->isRead = null;
                     }
 
-                    array_push($notifications,$data);
+                    array_push($notifications,$data);}
                 }
              }
             return $notifications;

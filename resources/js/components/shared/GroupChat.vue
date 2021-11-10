@@ -229,9 +229,10 @@
                    window.Echo.private(channel).notification( newMessage =>{
 
                        if(newMessage.type == "App\\Notifications\\GroupMessageSended"){
-                           console.log('New message notifications in group chat');
-                           console.log(newMessage);
-
+                           if(this.preselectedChannel == newMessage.group_id){
+                           newMessage.text = newMessage.messageContent;
+                           this.messagesInChat.push(newMessage);
+                           }
                         }
                        });
                },
@@ -239,7 +240,6 @@
                  {
                      axios.get(route('preselectedSecondUser', {api_token: this.$apiKey, channel:channel, thisUserId : this.thisUserId})).then(response=>{
 
-                        console.log('log from preselectedSecondUser');
                          this.$set(this,'participant2', response.data);
                           this.$set(this.participant2,'selected', true);
                             this.chatUsers.forEach(user =>{
@@ -248,20 +248,14 @@
                             }else{
                                 user.selected=false;
                             }
-                            console.log("log from cycle");
-                            console.log(user);
                         })
-                        console.log(this.participant2);
 
                      })
                 },
                  async getMessagesInChatGroup(conversationId)
                  {
                      axios.get(route('getMessagesInChatGroup',{api_token : this.$apiKey, groupConversationId: this.preselectedChannel})).then(response=>{
-                        console.log(conversationId);
                          this.$set(this,'messagesInChat', response.data)
-                         console.log('log from getMessages function');
-                         console.log(response.data)
                      })
                  },
                  comprobateUsers(msg)
@@ -281,9 +275,6 @@
          mounted() {
             this.getChatMessages();
             this.getMessagesInChatGroup();
-            console.log('Component Chat App mounted.')
-            console.log('this user id');
-            console.log(this.$this_user_id);
         }
     }
 </script>

@@ -15,7 +15,7 @@
                                     Message Center
                                 </h6>
                                 <div v-for="notification of this.notifications">
-                                    <router-link v-if="notification.type == 'messageCenter'" :to="'/admin/chat/' + notification.channelId" class="dropdown-item d-flex align-items-center" href="#">
+                                    <router-link v-if="notification.type == 'messageCenter'|| notification.type == 'App\\Notifications\\MessageSended'" :to="'/admin/chat/' + notification.channelId" class="dropdown-item d-flex align-items-center" href="#">
                                         <div class="dropdown-list-image mr-3">
                                             <img class="rounded-circle" :src="notification.userPhoto"
                                                 alt="...">
@@ -91,11 +91,7 @@ import {route} from '../../routes.js';
                await axios.get(route('getChatNotifications', token ))
                     .then(response =>
                         {
-
                             this.notifications = response.data;
-                            console.log('Logs get Chat notifications: ');
-                            console.log(this.notifications);
-
                         })
             },
             socket()
@@ -113,14 +109,8 @@ import {route} from '../../routes.js';
                         {
                            this.notifications.find(function(el,index,arr){
                                if(el.type == 'messageCenter'){
-                                   try {
-                                       console.log(echoNotification);
                                         arr.unshift(echoNotification);
                                         arr.shift(index);
-                                   } catch (error) {
-                                       console.error(error);
-                                   }
-
 
 
                                 isNotificationInNotifications = true;
@@ -148,24 +138,8 @@ import {route} from '../../routes.js';
                         {
                            this.notifications.find(function(el,index,arr){
                                if(el.type == 'GroupMessageCenter'){
-                                   try {
-
-                                       console.log('arr : initial');
-                                       console.log(arr);
-
-                                       console.log('Group notification from socket: ');
                                         arr.shift(index);
-                                        console.log(echoNotification);
                                         arr.unshift(echoNotification);
-                                       console.log('arr : status updated');
-                                       console.log(arr);
-
-                                   } catch (error) {
-                                       console.error(error);
-                                   }
-
-
-
                                 isNotificationInNotifications = true;
                                 }})
                                 let newNotificationsNumberCounter = this.newNotificationsNumber;
@@ -183,8 +157,6 @@ import {route} from '../../routes.js';
                          if(isNotificationInNotifications == false)
                          {
                              this.notifications.unshift(echoNotification)
-                             console.log('Socket notifications');
-                             console.log(this.notifications);
                              this.newNotificationsNumber++;
 
                          }

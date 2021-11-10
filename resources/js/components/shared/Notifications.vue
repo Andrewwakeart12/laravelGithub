@@ -32,7 +32,6 @@
 
 <script>
 var notificationContainer = document.getElementById("notificationContainer");
-console.log(notificationContainer);
 import {route} from '../../routes.js';
 
 
@@ -54,7 +53,6 @@ import {route} from '../../routes.js';
                     var token = this.$apiKey;
                     token= {api_token: token, notification_id : notification.id_noty};
                     axios.get(route('readNotifications', token)).then(response =>{
-                    console.log(response.data);
                 })
                     }
                 })
@@ -84,8 +82,6 @@ import {route} from '../../routes.js';
                 axios.get(route('getNotifications', token )).then(response =>{
 
                     this.notifications = response.data;
-                    console.log('INF received getnotifications function')
-                    console.log(response.data)
                     if(this.notifications.length!= 0 ){
                    this.notifications.forEach(e =>{
                         if(e.isRead == null){
@@ -104,21 +100,17 @@ import {route} from '../../routes.js';
                 axios.get(route('thisUserId',token)).then(response =>{
                 this.thisUserId = response.data;
                 this.socket();
-                console.log(response.data)
                 })
             },
             socket(){
                 var id = this.thisUserId;
-                console.log("id: " + id)
                     let channel ="App.Models.User." + id;
                 window.Echo.private(channel).notification( e =>{
 
                     if(e.type == "App\\Notifications\\TaskNotification"){
                     this.notifications.unshift(e)
-                    console.log(this.notifications);
                     this.newNotificationsNumber++;
                     }
-                    console.log(this.notifications);
                                 });
             }
         },

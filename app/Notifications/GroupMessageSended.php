@@ -46,6 +46,7 @@ class GroupMessageSended extends Notification
     return [
         'type'=> 'GroupMessageCenter',
         'messageContent' => $this->message->text,
+        'user_id'=> $this->message->user_id,
         'from_id'=> $this->message->user_id,
         'from'=> $this->message->username,
         'firstName' => $this->message->firstName,

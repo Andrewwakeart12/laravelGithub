@@ -66,6 +66,7 @@ public function sendGroupMessage(Request $request){
                 ]);
                 $tempUser=User::find($request['thisUserId']);
                 $newMessage['username']=$tempUser->username;
+                $newMessage['user_id']=$tempUser->id;
                 $newMessage['firstName']=$tempUser->firstName;
                 $newMessage['lastName']=$tempUser->lastName;
                 $newMessage['group_id']=$groupId;
